@@ -6,7 +6,7 @@ program into one long-lived `framex serve` process pays that initial cost once.
 Reuse a Session for a batch of queries or dataset tests. Query and mutation costs
 still depend on the rules and bindings; broad joins can remain expensive.
 
-FrameX 0.4.3 bulk loading parses bounded chunks without rebuilding the growing
+FrameX 0.4.4 bulk loading parses bounded chunks without rebuilding the growing
 knowledge base after each request. One `load_commit` builds the indexes and
 derives the closure. Rules and facts may be staged in either order, and an
 annotation may refer to a fact in another chunk of the same transaction.
@@ -27,10 +27,14 @@ import math
 import time
 from pathlib import Path
 
-from framex.framex import Client, FrameXError
+from framex import FrameXError
+
+from .client import Client
 
 from .progress import NullProgress, ProgressReporter
-from .query import DEFAULT_MAX_PROOFS, QueryError, logic_files
+from .query import (DEFAULT_MAX_FACTS, DEFAULT_MAX_MATCHES, DEFAULT_MAX_PROOFS,
+                    QueryError, logic_files)
+from .query import binary as engine_binary
 from .source import CHUNK_BYTES, _chunks, _program_chunks, _statements
 
 #: Broad queries, validation and live mutations can exceed the client's
@@ -43,7 +47,8 @@ DEFAULT_LOAD_TIMEOUT = 1800
 #: programs; see DEFAULT_MAX_PROOFS for why the proof limit in particular has
 #: to be raised here.
 LIMITS = {
-    "max_facts": 5_000_000,
+    "max_facts": DEFAULT_MAX_FACTS,
+    "max_matches": DEFAULT_MAX_MATCHES,
     "max_rounds": 2000,
     "max_proofs": DEFAULT_MAX_PROOFS,
 }
@@ -74,7 +79,7 @@ class _SessionClient(Client):
 class Session:
     """A loaded logic base; source mutations lock when journey preparation starts."""
 
-    def __init__(self, workspace: Path, *, binary: str = "framex",
+    def __init__(self, workspace: Path, *, binary: str | None = None,
                  timeout: float = 900, load_timeout: float = DEFAULT_LOAD_TIMEOUT,
                  progress: ProgressReporter | None = None,
                  max_proofs: int = DEFAULT_MAX_PROOFS):
@@ -94,7 +99,7 @@ class Session:
         self.progress = progress if progress is not None else NullProgress()
         self.files = logic_files(self.workspace)
         self.client = _SessionClient(
-            binary,
+            binary or engine_binary(),
             # Loading and closure derivation are much slower than later
             # queries. Switch back to the user-facing query timeout below.
             request_timeout=load_timeout,
@@ -131,7 +136,7 @@ class Session:
         except FrameXError as exc:
             raise QueryError(
                 f"cannot start bulk loading: {exc}\n"
-                "Session loading requires FrameX 0.4.3 or newer on PATH."
+                "Session loading requires FrameX 0.4.4 or newer; run `sh scripts/install-engine.sh`."
             ) from None
         self._capture_load_response()
 

@@ -4,18 +4,19 @@ version = "0.1.0"
 description = "Hybrid AI H1 session — tooling built on the FrameX frame-logic engine"
 readme = "README.md"
 requires-python = ">=3.10"
-# The FrameX core client is intentionally dependency-free; reasoning happens in
-# the `framex` Rust binary, not in Python.
+# The FrameX Python package is only a client; reasoning happens in the `framex`
+# Rust engine, built from the same commit by scripts/install-engine.sh.
 dependencies = [
+    "framex",
     "requests>=2.34.2",
 ]
 
-[project.optional-dependencies]
-# framex.torch wraps the engine's `dual` command as an autograd Function.
-torch = ["torch>=2.2"]
-
 [dependency-groups]
 dev = ["pytest>=8"]
+
+[tool.uv.sources]
+# Keep this rev in step with the engine: scripts/install-engine.sh reads it.
+framex = { git = "https://gitlab.com/ds-unisg/framex-core", subdirectory = "python", rev = "48b5f077f542e0c44a18874871b82a899161128a" }
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -26,4 +27,4 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 # Application packages live under src/; hatchling strips that prefix.
-packages = ["framex", "src/cli", "src/data", "src/ontology", "src/runtime"]
+packages = ["src/cli", "src/data", "src/ontology", "src/runtime"]

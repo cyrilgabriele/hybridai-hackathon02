@@ -13,6 +13,8 @@ import sys
 import time
 from pathlib import Path
 
+from framex import FrameXError
+
 from data import load_dataset
 from ontology import builder, registry
 from runtime import query
@@ -284,7 +286,8 @@ def main(argv=None) -> int:
         if args.datasets:
             return do_datasets(args)
         return 0
-    except (builder.BuildError, query.QueryError, ValueError, TimeoutError) as exc:
+    except (builder.BuildError, query.QueryError, FrameXError, ValueError,
+            TimeoutError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1
     except KeyboardInterrupt:

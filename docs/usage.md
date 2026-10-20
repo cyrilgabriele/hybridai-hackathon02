@@ -2,7 +2,8 @@
 
 [Project overview](../README.md) · [Ontology semantics](ontology.md) · [Development](development.md)
 
-Run commands from the repository root after `uv sync`.
+Run commands from the repository root after `uv sync` and
+`sh scripts/install-engine.sh`.
 `uv run python -m cli` accepts the same arguments as
 `uv run python src/main.py`. Use `--help` for all options.
 
@@ -153,8 +154,8 @@ with Session(Path("fx")) as session:
 `Session.ask()` returns an engine result dictionary and elapsed seconds.
 Bindings retain FrameX literal syntax, including quotes around string values.
 Sessions stay silent unless given a progress reporter. The context manager
-closes the engine process. See the [raw client reference](../framex/README.md)
-for lower-level calls.
+closes the engine process. For lower-level calls, use `runtime.client.Client`,
+built on the [framex-core](https://gitlab.com/ds-unisg/framex-core) client.
 
 Source mutations through `session.client` are supported before journey
 preparation. Once `prepare_journey()` validates the inputs and starts writing

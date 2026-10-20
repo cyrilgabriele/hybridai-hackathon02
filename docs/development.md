@@ -23,7 +23,10 @@ uses ontology helpers to create journey requests. `runtime.progress` defines
 a reporter interface and silent default; the CLI supplies terminal reporting.
 
 Import `Session` from `runtime.session`, `QueryError` from
-`runtime.query`, and the raw client from `framex.framex`.
+`runtime.query`, and the raw client from `runtime.client`. It extends
+framex-core's `framex.Client` with staged bulk loading (`load_begin`,
+`load_chunk`, `load_commit`, `load_abort`), `stats`, `schema`, `modules`,
+and a `retain_transcript` switch.
 
 Journey preparation asserts transfer-readiness timestamps and caches requests.
 The session's client therefore rejects source mutations once preparation starts,
@@ -58,7 +61,9 @@ facts. Use a separate `--workspace` to inspect a rebuild.
 
 ## Engine loading
 
-Persistent sessions require FrameX 0.4.3+. Files stream in bounded chunks
+Persistent sessions require FrameX 0.4.4+. The engine is looked up as
+`$FRAMEX_BINARY`, then `.venv/bin/framex` (from `sh scripts/install-engine.sh`),
+then `PATH`. Files stream in bounded chunks
 through `load_begin` and `load_chunk`; one `load_commit` builds indexes
 and derives the closure. Loading failures abort staging and close the process.
 
@@ -82,8 +87,9 @@ uv run pytest -q
 ```
 
 The default suite uses local fixtures and mocked HTTP requests, without live
-downloads. Install `framex` on `PATH` to run engine integration cases;
-they skip otherwise. Snapshot cases skip unless explicitly enabled.
+downloads. Engine integration cases need `sh scripts/install-engine.sh`;
+they skip otherwise. `tests/conftest.py` puts `.venv/bin` first on `PATH`
+so a stale global engine is never used. Snapshot cases skip unless explicitly enabled.
 
 | Test module | Coverage |
 |---|---|

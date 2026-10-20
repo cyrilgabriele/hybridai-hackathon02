@@ -67,7 +67,7 @@ def _handle_command(session: Session, line: str) -> bool:
     return True
 
 
-def run(workspace: Path, *, binary: str = "framex", timeout: float = 900,
+def run(workspace: Path, *, binary: str | None = None, timeout: float = 900,
         load_timeout: float = DEFAULT_LOAD_TIMEOUT,
         max_proofs: int = DEFAULT_MAX_PROOFS, quiet: bool = False) -> int:
     """Load the workspace once, then answer questions until the user stops."""

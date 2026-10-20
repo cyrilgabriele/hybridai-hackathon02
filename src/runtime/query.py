@@ -12,8 +12,10 @@ rather than a guess from here.
 from __future__ import annotations
 
 import json
+import os
 import shutil
 import subprocess
+import sys
 from pathlib import Path
 
 #: The engine also accepts a bare goal, but `?- goal.` is the documented query
@@ -28,18 +30,33 @@ DEFAULT_TIMEOUT = 300
 #: than answering. Raising it costs nothing when proofs are few.
 DEFAULT_MAX_PROOFS = 100_000
 
+#: The engine stops at 1,000,000 facts by default, and a full workspace asserts
+#: more than that before deriving anything.
+DEFAULT_MAX_FACTS = 5_000_000
+
+#: Journey preparation joins every stop event of the day; on a full snapshot
+#: that is far beyond the engine's default of 1,000,000 matches per join.
+DEFAULT_MAX_MATCHES = 50_000_000
+
 
 class QueryError(RuntimeError):
     pass
 
 
 def binary() -> str:
+    """Locate the engine: $FRAMEX_BINARY, then the project venv, then PATH."""
+    override = os.environ.get("FRAMEX_BINARY")
+    if override:
+        return override
+    venv = Path(sys.executable).parent / "framex"
+    if venv.is_file() and os.access(venv, os.X_OK):
+        return str(venv)
     found = shutil.which("framex")
     if not found:
         raise QueryError(
-            "the `framex` engine is not on PATH.\n"
-            "Build it with `cargo build --release` or `cargo install framex`, "
-            "or put the binary somewhere on PATH."
+            "the `framex` engine is not installed.\n"
+            "Build it into the project venv with `sh scripts/install-engine.sh`, "
+            "or set FRAMEX_BINARY to its path."
         )
     return found
 
@@ -69,6 +86,7 @@ def run(workspace: Path, query: str, command: str = "query",
     argv = [binary(), command]
     if max_proofs:
         argv += ["--max-proofs", str(max_proofs)]
+    argv += ["--max-facts", str(DEFAULT_MAX_FACTS), "--max-matches", str(DEFAULT_MAX_MATCHES)]
     argv += files
     if query:
         argv.append(query)

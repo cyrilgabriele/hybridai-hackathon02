@@ -7,7 +7,8 @@ import shutil
 from pathlib import Path
 
 import pytest
-from framex.framex import Client, FrameXError
+from framex import FrameXError
+from runtime.client import Client
 from ontology import builder, emit, mapper, registry, service
 from ontology.ids import Scope
 from runtime.query import QueryError
@@ -381,17 +382,15 @@ def test_journey_rejects_delayed_arrival_mutation_and_fresh_session_recomputes(t
     ("retract_source", ("source",), {}),
     ("world", ("closed",), {}),
     ("load", ("world open. new:Thing.",), {}),
-    ("load_program", ("world open. new:Thing.",), {}),
     ("load_begin", (), {}),
     ("load_chunk", ("new:Thing.",), {}),
     ("load_commit", (), {}),
     ("load_abort", (), {}),
-    ("run", (), {}),
     ("rdf_import", (), {"source": "rdf", "format": "turtle", "document": ""}),
     ("request", ("add",), {"source": "new:Thing."}),
     ("request", ("unknown_command",), {}),
-], ids=["add", "retract", "retract-source", "world", "load", "load-program",
-        "load-begin", "load-chunk", "load-commit", "load-abort", "run", "rdf-import",
+], ids=["add", "retract", "retract-source", "world", "load",
+        "load-begin", "load-chunk", "load-commit", "load-abort", "rdf-import",
         "raw-add", "unknown-command"])
 def test_prepared_journey_blocks_public_mutation_paths(transfer_workspace, method, args, kwargs):
     with Session(transfer_workspace) as session:
@@ -648,7 +647,7 @@ def test_session_reports_engine_without_bulk_load_support(tmp_path, monkeypatch)
             raise FrameXError({'kind': 'ProtocolError', 'message': 'unknown command'})
         def close(self): closed.append(True)
     monkeypatch.setattr(module, '_SessionClient', FakeClient)
-    with pytest.raises(QueryError, match='FrameX 0.4.3'):
+    with pytest.raises(QueryError, match='FrameX 0.4.4'):
         Session(tmp_path)
     assert closed == [True]
 

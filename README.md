@@ -7,15 +7,22 @@ unknown under an open world.
 
 ## Quick start
 
-Requires Python 3.10+, [uv](https://docs.astral.sh/uv/), and the FrameX 0.4.3+
-engine on `PATH`. Run commands from the repository root:
+Requires Python 3.10+, [uv](https://docs.astral.sh/uv/), and Rust
+([rustup](https://rustup.rs)) to build the FrameX engine. Run commands from the
+repository root:
 
 ```bash
-framex --version
 uv sync
+sh scripts/install-engine.sh
 uv run python src/main.py --init
 uv run python src/main.py --repl
 ```
+
+`uv sync` installs the FrameX Python client from
+[framex-core](https://gitlab.com/ds-unisg/framex-core). The install script builds
+the engine from the same commit into `.venv/bin/framex`, so no global install is
+needed. To move to a newer FrameX, change the `rev` in `pyproject.toml`
+(`[tool.uv.sources]`), then rerun both commands.
 
 Initialization downloads source data and writes the knowledge base to `fx/`.
 The REPL loads it once and reuses the session. For a single query:
@@ -35,7 +42,7 @@ see the development guide for setup.
 | [Ontology](docs/ontology.md) | Semantics, identities, mappings, and extensions |
 | [Data](docs/data.md) | Dataset discovery, API options, and source-data quirks |
 | [Development](docs/development.md) | Architecture, loading, publication, and testing |
-| [FrameX client](framex/README.md) | Low-level Python transport and engine API |
+| [FrameX core](https://gitlab.com/ds-unisg/framex-core) | Engine and Python client sources |
 
 ## Repository layout
 
@@ -48,4 +55,4 @@ see the development guide for setup.
 | `src/runtime/` | Engine sessions, source loading, and validation |
 | `tests/` | Regression tests and opt-in snapshot checks |
 | `docs/` | User and developer guides |
-| `framex/` | Vendored Python client; the engine is installed separately |
+| `scripts/install-engine.sh` | Builds the FrameX engine into `.venv/bin` |
