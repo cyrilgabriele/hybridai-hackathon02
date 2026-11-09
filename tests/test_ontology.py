@@ -13,7 +13,6 @@ from __future__ import annotations
 
 import shutil
 import subprocess
-from pathlib import Path
 
 import pytest
 
@@ -109,11 +108,23 @@ def test_missing_values_emit_nothing_rather_than_a_placeholder():
         assert emit.literal(empty) is None
 
 
+@pytest.mark.parametrize("missing", [None, "", "   ", float("nan")])
+def test_required_literals_reject_missing_values(missing):
+    with pytest.raises(ValueError, match="required literal cannot be missing"):
+        emit.required_literal(missing)
+
+
+def test_required_literals_preserve_false_zero_and_declared_string_types():
+    assert emit.required_literal(False) == "false"
+    assert emit.required_literal(0) == "0"
+    assert emit.required_literal("true", "String") == '"true"'
+
+
 def test_string_escaping_survives_real_station_names():
     assert emit.literal("Genève-Aéroport") == '"Genève-Aéroport"'
     assert emit.literal('quote " inside') == '"quote \\" inside"'
     assert emit.literal("back \\ slash") == '"back \\\\ slash"'
-    assert emit.literal("Chamonix-Mont-Blanc,Argentière").startswith('"Chamonix')
+    assert emit.required_literal("Chamonix-Mont-Blanc,Argentière").startswith('"Chamonix')
 
 
 def test_identifiers_are_safe_stable_and_deterministic():
@@ -253,8 +264,6 @@ def test_child_creates_one_object_per_row_with_a_back_reference(scope):
         {"bpuic": 8509000, "linie": "930", "p_nr": "2", "p_lange": 300.0},
     ]
     lines, report = mapper.map_child(spec, rows, scope, STAMP)
-    text = "\n".join(lines)
-
     assert report.resolved == 2
     children = [line.split(":")[0] for line in lines if line.endswith(":Platform.")]
     assert len(set(children)) == 2
@@ -396,11 +405,11 @@ def test_meta_model_is_sound_before_any_data_is_attached():
     files = [str(p) for p in builder.ontology_files()]
     assert files, "the meta model should ship with the package"
 
-    check = subprocess.run(["framex", "check", *files], capture_output=True, text=True)
+    check = subprocess.run(["framex", "check", *files], capture_output=True, text=True, check=False)
     assert check.returncode == 0, check.stdout + check.stderr
 
     validate = subprocess.run(["framex", "validate", *files],
-                              capture_output=True, text=True)
+                              capture_output=True, text=True, check=False)
     assert validate.returncode == 0, validate.stdout + validate.stderr
     assert '"violations":[]' in validate.stdout.replace(" ", "")
 
@@ -457,7 +466,7 @@ expect true: sp_sg:LongDistanceStation.
     )
 
     files = sorted(str(p) for p in tmp_path.glob("*.fx"))
-    result = subprocess.run(["framex", "test", *files], capture_output=True, text=True)
+    result = subprocess.run(["framex", "test", *files], capture_output=True, text=True, check=False)
     assert result.returncode == 0, result.stdout + result.stderr
 
 

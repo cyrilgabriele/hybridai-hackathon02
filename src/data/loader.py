@@ -147,7 +147,7 @@ def load_export(
     response.raise_for_status()
     records = response.json()
     if not isinstance(records, list):
-        raise ValueError(
+        raise ValueError(  # noqa: TRY004 -- invalid remote payload, not a caller type error
             f"exports endpoint returned {type(records).__name__} for "
             f"{dataset_id!r}, expected a list of records"
         )

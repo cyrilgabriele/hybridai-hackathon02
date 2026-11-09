@@ -10,7 +10,7 @@ create stop points; every LAYER joins onto the set of ids it produced.
 
 from __future__ import annotations
 
-from .spec import Attribute, Child, Observation, Relation, Spine
+from .spec import Attribute, Child, Layer, Observation, Relation, Spine
 
 # --------------------------------------------------------------------------
 # The spine
@@ -50,7 +50,7 @@ SPINE = Spine(
 # Layers, in ingestion order
 # --------------------------------------------------------------------------
 
-LAYERS: dict[str, object] = {
+LAYERS: dict[str, Layer] = {
     # ---- 1:1 attributes -------------------------------------------------
     # wifistation has no WiFi column: `standort, bpuic, geopos`. The row's
     # existence is positive evidence. Coverage of SBB stations does not

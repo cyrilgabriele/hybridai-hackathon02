@@ -42,6 +42,8 @@ see the development guide for setup.
 | [Ontology](docs/ontology.md) | Semantics, identities, mappings, and extensions |
 | [Data](docs/data.md) | Dataset discovery, API options, and source-data quirks |
 | [Development](docs/development.md) | Architecture, loading, publication, and testing |
+| [Pattern lookup](docs/patterns.md) | Targeted links to the ten Hybrid AI reference implementations |
+| [Course lookup](docs/course-lookup.md) | VL04/VL05 page index, H1 lessons, and H2 preparation gaps |
 | [FrameX core](https://gitlab.com/ds-unisg/framex-core) | Engine and Python client sources |
 
 ## Repository layout

@@ -25,15 +25,20 @@ from __future__ import annotations
 import json
 import math
 import time
+from contextlib import suppress
 from pathlib import Path
 
 from framex import FrameXError
 
 from .client import Client
-
 from .progress import NullProgress, ProgressReporter
-from .query import (DEFAULT_MAX_FACTS, DEFAULT_MAX_MATCHES, DEFAULT_MAX_PROOFS,
-                    QueryError, logic_files)
+from .query import (
+    DEFAULT_MAX_FACTS,
+    DEFAULT_MAX_MATCHES,
+    DEFAULT_MAX_PROOFS,
+    QueryError,
+    logic_files,
+)
 from .query import binary as engine_binary
 from .source import CHUNK_BYTES, _chunks, _program_chunks, _statements
 
@@ -188,10 +193,8 @@ class Session:
             )
         except BaseException:
             # Preserve the original error even if a timeout already killed the engine.
-            try:
+            with suppress(Exception):
                 self.client.load_abort()
-            except Exception:
-                pass
             raise
         self.load_seconds = time.monotonic() - started
         self.progress.message(
@@ -220,6 +223,7 @@ class Session:
         before any journey facts are written or source mutations are locked.
         """
         from datetime import date
+
         from ontology import emit
         from ontology.ids import normalise_bpuic, stop_point_id
         from ontology.service import timestamp
@@ -242,7 +246,7 @@ class Session:
                 f"unknown journey origin {number} ({station}): "
                 f"not a StopPoint in the loaded workspace {self.workspace}"
             )
-        day_literal = emit.typed_literal(day, "String")
+        day_literal = emit.required_literal(day, "String")
         trips = self.client.query(f"?- ?T[observedOn -> {day_literal}] AND ?T:Trip.")
         if not trips.get("bindings"):
             observed = self.client.query("?- ?T[observedOn -> ?Day] AND ?T:Trip.")

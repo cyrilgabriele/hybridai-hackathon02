@@ -13,7 +13,7 @@ import sys
 import time
 from pathlib import Path
 
-from framex import FrameXError
+from framex import FrameXError, FrameXTimeout
 
 from data import load_dataset
 from ontology import builder, registry
@@ -123,7 +123,7 @@ def do_query(args) -> int:
             print(f"?- {shown}")
             try:
                 result, seconds = session.ask(text)
-            except Exception as exc:
+            except (FrameXError, FrameXTimeout, RuntimeError, ValueError, OSError) as exc:
                 print(f"  error: {exc}")
                 failed += 1
                 continue

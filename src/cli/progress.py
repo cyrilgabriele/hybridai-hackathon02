@@ -142,7 +142,7 @@ class Progress:
             # Projected from the observed rate, so it sharpens as it runs.
             remaining = (elapsed / done) * (total - done) if done else estimate
             tail = f"{fraction:.0%}" if unit == "bytes" else f"{done}/{total}"
-            filled = int(round(fraction * BAR_WIDTH))
+            filled = round(fraction * BAR_WIDTH)
         else:
             # Nothing to count, so the bar tracks an estimate. Keep at least
             # one cell empty: a full bar on work that is still running reads as
@@ -150,7 +150,7 @@ class Progress:
             fraction = min(1.0, elapsed / estimate) if estimate else 0.0
             remaining = max(0.0, estimate - elapsed) if estimate else None
             tail = "working"
-            filled = min(BAR_WIDTH - 1, int(round(fraction * BAR_WIDTH)))
+            filled = min(BAR_WIDTH - 1, round(fraction * BAR_WIDTH))
         bar = FILLED * filled + EMPTY * (BAR_WIDTH - filled)
         line = f"  {label} [{bar}] {tail} · {human(elapsed)}"
         if remaining and remaining > 0.5:

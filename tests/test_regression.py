@@ -8,13 +8,14 @@ from pathlib import Path
 
 import pytest
 from framex import FrameXError
-from runtime.client import Client
+
 from ontology import builder, emit, mapper, registry, service
 from ontology.ids import Scope
-from runtime.query import QueryError
-from runtime.session import Session
-from runtime.source import _chunks, _fact_of_annotation, _program_chunks
 from ontology.spec import Child, Observation, Relation
+from runtime.client import Client
+from runtime.query import QueryError
+from runtime.session import Session, _SessionClient
+from runtime.source import _chunks, _fact_of_annotation, _program_chunks
 
 DAY = "2026-09-17"
 
@@ -101,7 +102,7 @@ def test_cancelled_train_cannot_supply_service_or_connections(client, cancelled)
 
 
 def test_partial_cancellation_and_unknown_station_break_continuity(client):
-    for middle in (dict(bpuic=2, faellt_aus_tf=True), dict(bpuic=None)):
+    for middle in ({"bpuic": 2, "faellt_aus_tf": True}, {"bpuic": None}):
         rows = [stop("t", 1, "09:00"), stop("t", 2, "10:00"), stop("t", 3, "11:00")]
         rows[1].update(middle)
         load(client, rows)
@@ -163,14 +164,18 @@ def test_cross_trip_edges_cannot_prove_service(client):
 
 @pytest.mark.parametrize("status,expected", [("BESTEHEND", "true"), ("PROJEKTIERT ABBRUCH", "true"), ("PROJEKTIERT NEU", "unknown"), (None, "unknown")])
 def test_waiting_hall_availability_requires_lifecycle_evidence(client, status, expected):
-    lines, _ = mapper.map_child(registry.LAYERS['haltestelle-wartehallen'],
+    spec = registry.LAYERS['haltestelle-wartehallen']
+    assert isinstance(spec, Child)
+    lines, _ = mapper.map_child(spec,
                                [{"bpuic": 1, "status": status}], Scope({1}), DAY)
     load(client, extra="\n".join(lines))
     assert truth(client, "sp_1[hasWaitingHall -> true]") == expected
 
 
 def test_retracting_last_platform_removes_rollup(client):
-    lines, _ = mapper.map_child(registry.LAYERS['perron'], [{"bpuic": 1, "p_nr": 1}], Scope({1}), DAY)
+    spec = registry.LAYERS['perron']
+    assert isinstance(spec, Child)
+    lines, _ = mapper.map_child(spec, [{"bpuic": 1, "p_nr": 1}], Scope({1}), DAY)
     load(client, extra="\n".join(lines))
     assert truth(client, "sp_1[hasPlatform -> true]") == "true"
     fact = next(x[:-1] for x in lines if x.endswith(":Platform."))
@@ -186,7 +191,7 @@ def test_raw_comment_data_cannot_inject_facts(client, tmp_path):
 
 
 def test_annotation_separator_in_literal_is_not_syntax(client):
-    value = emit.literal('a source b " source c \\ source d')
+    value = emit.required_literal('a source b " source c \\ source d')
     fact = emit.fact('s', 'label', value)
     annotation = emit.annotation('s', 'label', value, 'source x', DAY)
     assert _fact_of_annotation(annotation) == fact[:-1]
@@ -196,12 +201,12 @@ def test_annotation_separator_in_literal_is_not_syntax(client):
 
 
 def test_chunk_budget_counts_json_escaping_and_rejects_oversized_units():
-    lines = [emit.fact('s', f'v{i}', emit.literal('\\"'*10000)) for i in range(25)]
+    lines = [emit.fact('s', f'v{i}', emit.required_literal('\\"'*10000)) for i in range(25)]
     for chunk in _chunks(lines):
-        envelope = json.dumps(dict(command='add', source='\n'.join(chunk)), ensure_ascii=False)
+        envelope = json.dumps({"command": 'add', "source": '\n'.join(chunk)}, ensure_ascii=False)
         assert len(envelope.encode()) < 1048576
     with pytest.raises(QueryError, match='exceeds'):
-        list(_chunks([emit.fact('s', 'v', emit.literal('x'*1_100_000))]))
+        list(_chunks([emit.fact('s', 'v', emit.required_literal('x'*1_100_000))]))
 
 
 def test_bulk_chunks_preserve_multiline_rules_and_escaped_request_budget(client):
@@ -215,13 +220,13 @@ def test_bulk_chunks_preserve_multiline_rules_and_escaped_request_budget(client)
     client.load_commit()
     assert truth(client, 'item:Eligible') == 'true'
 
-    escaped = [emit.fact('s', f'v{i}', emit.literal('\\"'*10000)) for i in range(25)]
+    escaped = [emit.fact('s', f'v{i}', emit.required_literal('\\"'*10000)) for i in range(25)]
     for chunk in _program_chunks(escaped):
-        envelope = json.dumps(dict(command='load_chunk', file='60-data.fx',
-                                   source='\n'.join(chunk)), ensure_ascii=False)
+        envelope = json.dumps({"command": 'load_chunk', "file": '60-data.fx',
+                                   "source": '\n'.join(chunk)}, ensure_ascii=False)
         assert len(envelope.encode()) < 1048576
     with pytest.raises(QueryError, match='exceeds'):
-        list(_program_chunks([emit.fact('s', 'v', emit.literal('x'*1_100_000))]))
+        list(_program_chunks([emit.fact('s', 'v', emit.required_literal('x'*1_100_000))]))
 
 
 def test_session_bulk_load_resolves_annotations_across_chunks_and_keeps_provenance(
@@ -232,7 +237,7 @@ def test_session_bulk_load_resolves_annotations_across_chunks_and_keeps_provenan
         pytest.skip('framex not installed')
     monkeypatch.setattr(module, 'CHUNK_BYTES', 150)
     (tmp_path / '00-core.fx').write_text('world open.\n?X:Named <- ?X[label -> ?L].')
-    value = emit.literal('a source b " source c \\ source d')
+    value = emit.required_literal('a source b " source c \\ source d')
     fact = emit.fact('item', 'label', value)
     annotation = emit.annotation('item', 'label', value, 'original-dataset', DAY)
     lines = [fact, *[f'other_{i}:Thing.' for i in range(20)], annotation]
@@ -352,7 +357,7 @@ def transfer_workspace(tmp_path):
 
 
 def test_journey_rejects_delayed_arrival_mutation_and_fresh_session_recomputes(transfer_workspace):
-    parameters = dict(origin=1, day=DAY, not_before=DAY + "T08:00:00", transfer_seconds=300)
+    parameters = {"origin": 1, "day": DAY, "not_before": DAY + "T08:00:00", "transfer_seconds": 300}
     event_query = ('?- ?E[atStopPoint -> sp_2] AND ?E[ofTrip -> ?T] '
                    'AND ?T[tripRef -> "one"] AND ?E[arrivalEpoch -> ?A] '
                    'AND ?E[departureEpoch -> ?D].')
@@ -449,9 +454,11 @@ def test_invalid_journey_inputs_do_not_write_or_lock(transfer_workspace, origin,
 
 def test_journey_without_service_data_reports_no_available_days(transfer_workspace):
     (transfer_workspace / "60-data.fx").write_text('sp_1:StopPoint. sp_1[bpuic -> 1].')
-    with Session(transfer_workspace) as session:
-        with pytest.raises(QueryError, match=r"available operating days: none \(no dated trips loaded\)"):
-            session.prepare_journey(1, DAY, not_before=DAY + "T08:00:00", transfer_seconds=300)
+    with (
+        Session(transfer_workspace) as session,
+        pytest.raises(QueryError, match=r"available operating days: none \(no dated trips loaded\)"),
+    ):
+        session.prepare_journey(1, DAY, not_before=DAY + "T08:00:00", transfer_seconds=300)
 
 
 def test_journey_checks_loaded_data_and_lists_all_days(transfer_workspace):
@@ -655,7 +662,8 @@ def test_session_reports_engine_without_bulk_load_support(tmp_path, monkeypatch)
 def test_load_warnings_are_not_overwritten_by_query_responses():
     session = object.__new__(Session)
     session._load_warnings = [{'kind': 'load', 'message': 'warning'}]
-    session.client = type('Client', (), {'last_response': {'warnings': []}})()
+    session.client = object.__new__(_SessionClient)
+    session.client.last_response = {'warnings': []}
     assert session.warnings() == [{'kind': 'load', 'message': 'warning'}]
 
 
@@ -746,7 +754,10 @@ def test_fractional_seconds_do_not_shorten_transfer_allowance(client):
 
 
 def test_earliest_departure_rounds_up_conservatively():
-    assert service.timestamp(DAY+'T09:00:00.1', round_up=True) > service.timestamp(DAY+'T09:00:00')
+    rounded = service.timestamp(DAY+'T09:00:00.1', round_up=True)
+    exact = service.timestamp(DAY+'T09:00:00')
+    assert rounded is not None and exact is not None
+    assert rounded > exact
 
 
 @pytest.mark.parametrize('invalid_dwell', [False, True])

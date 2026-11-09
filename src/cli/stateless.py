@@ -3,6 +3,7 @@ from pathlib import Path
 
 from runtime.query import DEFAULT_MAX_PROOFS, DEFAULT_TIMEOUT, logic_files, run
 
+
 def ask(workspace: Path, query: str, timeout: int = DEFAULT_TIMEOUT,
         max_proofs: int = DEFAULT_MAX_PROOFS) -> int:
     """Answer one query, printing the engine's output. Returns an exit code."""

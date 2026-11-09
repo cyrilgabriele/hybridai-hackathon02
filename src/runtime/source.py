@@ -82,7 +82,7 @@ def _chunks(lines: Iterable[str], limit: int = CHUNK_BYTES):
         size += cost
         for part in to_add:
             if not part.startswith("annotate "):
-                asserted.add(part[:-1] if part.endswith(".") else part)
+                asserted.add(part.removesuffix("."))
 
     if buf:
         yield buf

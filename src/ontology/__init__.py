@@ -10,10 +10,10 @@ from .builder import BuildError, add, init
 from .registry import INIT_DATASETS, LAYERS, SPINE, available
 
 __all__ = [
-    "BuildError",
     "INIT_DATASETS",
     "LAYERS",
     "SPINE",
+    "BuildError",
     "add",
     "available",
     "init",

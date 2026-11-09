@@ -18,17 +18,18 @@ onto the spine without re-pulling 1,710 rows from the API.
 from __future__ import annotations
 
 import json
-import shutil
 import os
+import shutil
 import subprocess
 import tempfile
 from datetime import date
 from importlib import resources
 from pathlib import Path
 
+from runtime.query import binary
+
 from . import emit, mapper, registry, service
 from .ids import Resolution, Scope
-from runtime.query import binary
 
 MANIFEST = "manifest.json"
 SPINE_FILE = "60-spine.fx"
@@ -41,7 +42,7 @@ class BuildError(RuntimeError):
 
 def ontology_files() -> list[Path]:
     """The hand-written meta-model layers, in load order."""
-    root = resources.files(__package__) / "ontology"
+    root = resources.files("ontology") / "ontology"
     return sorted(Path(str(p)) for p in root.iterdir() if p.name.endswith(".fx"))
 
 
@@ -81,14 +82,14 @@ def _dataset_facts(dataset: str, stamp: str, statements: int,
     node = emit.identifier("ds", dataset)
     facts = [
         emit.membership(node, "Dataset"),
-        emit.fact(node, "datasetId", emit.literal(dataset)),
-        emit.fact(node, "retrievedAt", emit.literal(stamp)),
+        emit.fact(node, "datasetId", emit.required_literal(dataset)),
+        emit.fact(node, "retrievedAt", emit.required_literal(stamp)),
         emit.fact(node, "rowCount", str(row_count)),
         emit.fact(node, "statementCount", str(statements)),
-        emit.fact(node, "provenanceMode", emit.literal(provenance)),
+        emit.fact(node, "provenanceMode", emit.required_literal(provenance)),
     ]
     for slot in complete_for:
-        facts.append(emit.fact(node, "completeFor", emit.literal(slot)))
+        facts.append(emit.fact(node, "completeFor", emit.required_literal(slot)))
     return facts
 
 
@@ -114,7 +115,7 @@ def build_spine(workspace: Path, load_dataset, stamp: str,
     # The filtered spine fits the paging endpoint. Its unique national ID
     # supplies a total order: unsorted pages can overlap and omit stations.
     frame = load_dataset(spec.dataset, where=spec.where, order_by=spec.key)
-    lines, scope, resolution = mapper.map_spine(spec, frame, stamp)
+    lines, scope, _resolution = mapper.map_spine(spec, frame, stamp)
     _write_layer(
         workspace / SPINE_FILE,
         f"Spine: {spec.dataset}",
@@ -152,7 +153,7 @@ def build_layer(workspace: Path, dataset: str, load_dataset, scope: Scope,
         kwargs = {}
         if spec.where:
             kwargs["where"] = spec.where
-        if getattr(spec, "max_records", None):
+        if isinstance(spec, registry.Observation) and spec.max_records:
             kwargs["max_records"] = spec.max_records
         frame = mapper.rows_of(load_dataset(dataset, **kwargs))
         lines, resolution = mapper.map_layer(spec, frame, scope, stamp)
@@ -212,7 +213,7 @@ def _init_in_place(workspace: Path, load_dataset, datasets=None, stamp=None,
             count, resolution = build_layer(
                 workspace, dataset, load_dataset, scope, stamp
             )
-        except Exception as exc:  # one bad dataset must not lose the others
+        except Exception as exc:  # noqa: BLE001 -- isolate each dataset's failure
             progress(f"    FAILED: {type(exc).__name__}: {exc}")
             manifest["layers"][dataset] = {"status": "failed", "error": str(exc)}
             continue
@@ -286,7 +287,7 @@ def _check_syntax(workspace: Path) -> None:
     def check(paths):
         try:
             result = subprocess.run([engine, "check", *map(str, paths)],
-                                    capture_output=True, text=True, timeout=120)
+                                    capture_output=True, text=True, timeout=120, check=False)
         except subprocess.TimeoutExpired as exc:
             raise BuildError("generated logic syntax check timed out") from exc
         if result.returncode:

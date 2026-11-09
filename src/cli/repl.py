@@ -9,10 +9,13 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-from .progress import Progress
-from runtime.session import DEFAULT_LOAD_TIMEOUT, Session
-from .output import render
+from framex import FrameXError, FrameXTimeout
+
 from runtime.query import DEFAULT_MAX_PROOFS
+from runtime.session import DEFAULT_LOAD_TIMEOUT, Session
+
+from .output import render
+from .progress import Progress
 
 BANNER = """\
 FrameX session over {files} logic files in {workspace}/
@@ -50,7 +53,7 @@ def _handle_command(session: Session, line: str) -> bool:
         else:
             try:
                 print(session.explain(argument))
-            except Exception as exc:  # the engine's own diagnostic is the answer
+            except (FrameXError, FrameXTimeout, RuntimeError, ValueError, OSError) as exc:  # the engine's own diagnostic is the answer
                 print(f"error: {exc}")
     elif name == "warnings":
         warnings = session.warnings()
@@ -75,7 +78,7 @@ def run(workspace: Path, *, binary: str | None = None, timeout: float = 900,
     try:
         session = Session(workspace, binary=binary, progress=reporter, timeout=timeout,
                           load_timeout=load_timeout, max_proofs=max_proofs)
-    except Exception as exc:
+    except (FrameXError, FrameXTimeout, RuntimeError, ValueError, OSError) as exc:
         reporter.close()
         print(f"error: {exc}", file=sys.stderr)
         return 1
@@ -103,7 +106,7 @@ def run(workspace: Path, *, binary: str | None = None, timeout: float = 900,
                 continue
             try:
                 result, seconds = session.ask(line)
-            except Exception as exc:
+            except (FrameXError, FrameXTimeout, RuntimeError, ValueError, OSError) as exc:
                 print(f"error: {exc}")
                 continue
             print(render(result))

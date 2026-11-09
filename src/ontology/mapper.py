@@ -151,7 +151,7 @@ def map_spine(spec: Spine, data, stamp: str) -> tuple[list[str], Scope, Resoluti
                 if declaration not in shared:
                     shared.add(declaration)
                     lines.append(declaration)
-                    lines.append(emit.fact(target, "label", emit.literal(piece)))
+                    lines.append(emit.fact(target, "label", emit.required_literal(piece)))
                 lines.append(emit.fact(subject, slot, target))
 
     return lines, Scope.build(pairs), report
@@ -177,7 +177,7 @@ def map_attribute(spec: Attribute, data, scope: Scope,
 
         if spec.presence is not None:
             slot, raw = spec.presence
-            value = emit.literal(raw)
+            value = emit.required_literal(raw)
             statement = emit.fact(subject, slot, value)
             if statement not in seen:  # a duplicated row is not a second fact
                 seen.add(statement)

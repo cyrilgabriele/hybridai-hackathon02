@@ -11,10 +11,10 @@ String escaping is JSON-compatible (verified against the engine: `\\"` and
 from __future__ import annotations
 
 import hashlib
-from decimal import Decimal, InvalidOperation
 import json
 import math
 import re
+from decimal import Decimal, InvalidOperation
 
 #: Characters FrameX accepts in a bare identifier. Anything else must be
 #: rewritten, because a malformed identifier is a syntax error at load time.
@@ -134,6 +134,14 @@ def typed_literal(value, kind: str | None = None) -> str | None:
             raise ValueError(f"invalid boolean: {value!r}")
         return rendered
     raise ValueError(f"unknown literal type: {kind}")
+
+
+def required_literal(value, kind: str | None = None) -> str:
+    """Render a required value; missing evidence cannot form a property fact."""
+    rendered = typed_literal(value, kind)
+    if rendered is None:
+        raise ValueError("a required literal cannot be missing")
+    return rendered
 
 
 def membership(subject: str, klass: str) -> str:

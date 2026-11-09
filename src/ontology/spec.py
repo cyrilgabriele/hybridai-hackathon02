@@ -103,9 +103,9 @@ class Relation:
 
     dataset: str
     klass: str
-    key: str = "bpuic"
     #: Column naming the other end: column -> (slot, class, id prefix).
-    target: tuple[str, str, str, str] = ()
+    target: tuple[str, str, str, str]
+    key: str = "bpuic"
     subject_slot: str = "atStopPoint"
     identity: tuple[str, ...] = ()
     slots: dict[str, str] = field(default_factory=dict)

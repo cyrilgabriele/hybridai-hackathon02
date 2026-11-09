@@ -16,9 +16,9 @@ declarative spec instead of bespoke cleanup code.
 
 from __future__ import annotations
 
-from collections import Counter
 import math
 import re
+from collections import Counter
 
 #: Swiss UIC country code. A full BPUIC is <country><5-digit short number>.
 SWISS_UIC_COUNTRY = 85
@@ -135,7 +135,7 @@ class Scope:
         self.names = names or {}
 
     @classmethod
-    def build(cls, pairs: list[tuple[int, str]]) -> "Scope":
+    def build(cls, pairs: list[tuple[int, str]]) -> Scope:
         ids: set[int] = set()
         names: dict[str, int | None] = {}
         for bpuic, designation in pairs:

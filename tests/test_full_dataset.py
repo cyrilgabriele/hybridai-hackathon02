@@ -10,10 +10,10 @@ SBB_TEST_DAY overrides the detected day.
 """
 from __future__ import annotations
 
-from collections import Counter
 import os
-from pathlib import Path
 import re
+from collections import Counter
+from pathlib import Path
 
 import pytest
 
@@ -81,7 +81,7 @@ def test_snapshot_cancelled_event_has_no_connection(full_session, snapshot_event
 @pytest.fixture(scope="session")
 def snapshot_journey_parameters(snapshot_day):
     day = os.environ.get("SBB_TEST_DAY", snapshot_day)
-    return dict(origin=8509000, day=day, not_before=f"{day}T18:00:00", transfer_seconds=300)
+    return {"origin": 8509000, "day": day, "not_before": f"{day}T18:00:00", "transfer_seconds": 300}
 
 
 def _journey_diagnosis(service_layer, parameters, slot):

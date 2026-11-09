@@ -7,9 +7,9 @@ Ambiguous ordering is retained as evidence but supplies no connection edges.
 """
 from __future__ import annotations
 
+import math
 from collections import Counter
 from datetime import datetime
-import math
 from zoneinfo import ZoneInfo
 
 from . import emit
@@ -101,16 +101,17 @@ def map_service(data, scope: Scope, stamp: str) -> tuple[list[str], Resolution]:
         if not ordered:
             report.excluded["ambiguous_trip_order"] += len(unique)
         rows = sorted(unique.items(), key=lambda pair: (_order_key(pair[1]) or 0, pair[0]))
-        if not any(normalise_bpuic(r.get("bpuic")) in scope for _, r in rows):
+        if not any((number := normalise_bpuic(r.get("bpuic"))) is not None
+                   and number in scope for _, r in rows):
             continue
         lines.extend([emit.membership(trip_id, "Trip"),
-                      emit.fact(trip_id, "tripRef", emit.typed_literal(trip, "String")),
-                      emit.fact(trip_id, "observedOn", emit.typed_literal(day, "String"))])
+                      emit.fact(trip_id, "tripRef", emit.required_literal(trip, "String")),
+                      emit.fact(trip_id, "observedOn", emit.required_literal(day, "String"))])
         # Conflicting trip metadata is not resolved by picking an arbitrary row.
         for column, slot in (("verkehrsmittel_text", "serviceCategory"),
                              ("linien_text", "lineText"), ("betreiber_abk", "operator")):
-            values = {emit.typed_literal(r.get(column), "String") for _, r in rows}
-            values.discard(None)
+            values = {value for _, r in rows
+                      if (value := emit.typed_literal(r.get(column), "String")) is not None}
             if len(values) == 1:
                 lines.append(emit.fact(trip_id, slot, values.pop()))
         previous_real = previous_ride = segment = None
@@ -142,7 +143,7 @@ def map_service(data, scope: Scope, stamp: str) -> tuple[list[str], Resolution]:
             if through is True:
                 report.excluded["pass_through"] += 1
                 continue
-            if bpuic not in scope:
+            if bpuic is None or bpuic not in scope:
                 previous_real = None
                 continue
             lines.extend([emit.membership(event, "StopEvent"),
@@ -150,9 +151,9 @@ def map_service(data, scope: Scope, stamp: str) -> tuple[list[str], Resolution]:
                           emit.fact(event, "atStopPoint", stop_point_id(bpuic)),
                           emit.fact(event, "stopSequence", str(index))])
             if cancelled is not None:
-                lines.append(emit.fact(event, "cancelled", emit.literal(cancelled)))
+                lines.append(emit.fact(event, "cancelled", emit.required_literal(cancelled)))
             if through is not None:
-                lines.append(emit.fact(event, "passThrough", emit.literal(through)))
+                lines.append(emit.fact(event, "passThrough", emit.required_literal(through)))
             for column, slot in ((ARRIVAL, "scheduledArrival"), (DEPARTURE, "scheduledDeparture")):
                 value = emit.typed_literal(row.get(column), "String")
                 if value is not None:
