@@ -53,7 +53,7 @@ NODE_OF = (
     ("Assert DelayCheck", "decide"), ("Delay and policy", "decide"),
     ("Assess the open case", "handoff"), ("Handed on", "handoff"), ("Officer decided", "handoff"),
     ("Phrase the outcome", "reply"), ("Phrasing call failed", "reply"), ("Check words", "reply"),
-    ("Reply refused", "reply"), ("Fixed wording used", "reply"), ("Model call failed", "reply"),
+    ("Reply refused", "reply"), ("Fixed wording used", "reply"),
 )
 NODE_W, NODE_H, COL, ROW, PAD = 214, 136, 252, 226, 22
 WIDTH, HEIGHT = PAD * 2 + COL * 3 + NODE_W, PAD + 26 + ROW * 2 + NODE_H + 20
@@ -62,7 +62,9 @@ WORKING = {"slots": "GPT-5 mini is reading", "pick": "GPT-5 mini is picking", "r
            "trains": "FrameX is reasoning", "decide": "FrameX is reasoning", "handoff": "preparing the hand-off"}
 
 
-def _node_of(step: Step) -> str | None:
+def _node_of(step: Step, stage: str) -> str | None:
+    if step.title.startswith("Model call failed"):  # only the slot and train-pick calls let a failure through
+        return "pick" if stage == "choose_train" else "slots"
     return next((node for prefix, node in NODE_OF if step.title.startswith(prefix)), None)
 
 
@@ -72,11 +74,11 @@ def _current_turn(trace: list[Step]) -> tuple[int, list[Step]]:
     return len(starts), trace[starts[-1]:] if starts else []
 
 
-def _path(steps: list[Step], running: bool) -> list[tuple[str, str]]:
+def _path(steps: list[Step], running: bool, stage: str) -> list[tuple[str, str]]:
     """The edges this turn used, in order. A staff decision arrives after the reply went out."""
     edges, last = [], None
     for step in steps:
-        node = _node_of(step)
+        node = _node_of(step, stage)
         if step.title.startswith("Officer decided"):
             edges.append(("handoff", "out"))
             last = None
@@ -94,7 +96,7 @@ def _next_node(conv: Conversation, steps: list[Step]) -> str | None:
     last = steps[-1] if steps else None
     if last is None:
         return None
-    node = _node_of(last)
+    node = _node_of(last, conv.stage)
     if node == "passenger":
         return "pick" if conv.stage == "choose_train" else "slots"
     if last.title.startswith("Picked a train") or (node == "pick" and last.status == "ok" and conv.chosen):
@@ -104,11 +106,11 @@ def _next_node(conv: Conversation, steps: list[Step]) -> str | None:
     return {"slots": "check", "trains": "reply", "decide": "reply"}.get(node or "")
 
 
-def _node_data(steps: list[Step]) -> dict[str, dict]:
+def _node_data(steps: list[Step], stage: str) -> dict[str, dict]:
     """Per node: what went in, what came out, last status, seconds, whether it was repaired."""
     data: dict[str, dict] = {}
     for step in steps:
-        node = _node_of(step)
+        node = _node_of(step, stage)
         if node is None:
             continue
         entry = data.setdefault(node, {"in": "", "out": "", "status": "ok", "seconds": 0.0, "repaired": False, "steps": []})
@@ -207,11 +209,11 @@ def _badge(state: str, status: str) -> str:
     return f'<path class="play" d="M{x},12 l9,6 l-9,6 z"/>'
 
 
-def _inspector(steps: list[Step]) -> str:
+def _inspector(steps: list[Step], stage: str) -> str:
     """Every boundary crossing of this turn, in order, with the exact payload."""
     items = []
     for i, step in enumerate(steps, 1):
-        node = _node_of(step)
+        node = _node_of(step, stage)
         caption = NODES[node][0] if node else step.actor
         mode = "replay" if step.detail.startswith("[replay]") else "live" if step.detail.startswith("[live]") else ""
         meta = " · ".join(x for x in (step.pattern, mode, f"{step.seconds:.1f} s" if step.seconds else "") if x)
@@ -229,13 +231,13 @@ def _inspector(steps: list[Step]) -> str:
 def diagram(conv: Conversation, running: bool = False, reply: str = "") -> str:
     """The current turn on a node graph: lit wires show where the data went, nodes show what came out."""
     turn, steps = _current_turn(conv.trace)
-    data = _node_data(steps)
-    used = _path(steps, running)
+    data = _node_data(steps, conv.stage)
+    used = _path(steps, running, conv.stage)
     active = _next_node(conv, steps) if running else None
-    earlier = {node for step in conv.trace[: len(conv.trace) - len(steps)] if (node := _node_of(step))}
+    earlier = {node for step in conv.trace[: len(conv.trace) - len(steps)] if (node := _node_of(step, conv.stage))}
     wires = [_wire(a, b, "faint") for a, b in EDGES if (a, b) not in used]
     wires += [_wire(a, b, "lit") for a, b in dict.fromkeys(used)]
-    if active and steps and (last := _node_of(steps[-1])) and last != active:
+    if active and steps and (last := _node_of(steps[-1], conv.stage)) and last != active:
         wires.append(_wire(last, active, "flowing"))
     nodes = []
     for key in NODES:
@@ -258,7 +260,7 @@ def diagram(conv: Conversation, running: bool = False, reply: str = "") -> str:
     svg = (f'<svg viewBox="0 0 {WIDTH} {HEIGHT}" role="img" aria-label="Pipeline graph of the refund assistant">'
            f'{"".join(wires)}{"".join(nodes)}</svg>')
     title = f"Workflow · turn {turn}" if turn else "Workflow"
-    inspector = _inspector(steps)
+    inspector = _inspector(steps, conv.stage)
     inspector = (f'<div class="inspect"><h4>Inspector <small>what crossed each boundary, in order; click to open</small></h4>'
                  f'{inspector}</div>') if inspector else ""
     return (f'<section class="graph"><header><h3>{title}</h3>{status}</header>'
