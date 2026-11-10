@@ -14,6 +14,7 @@ EXAMPLES = [
     "I travelled from Rotkreuz to Zürich HB on 7 November 2026 at 20:48. Am I owed anything?",
     "On 7 November I was going from St. Gallen to Zürich HB at 8 o'clock. I had a delay. Do I get a refund?",
     "Ich war am 7. November unterwegs und hatte Verspätung.",
+    "My train was really late and I want my money back.",
     "On 7 November I took the 06:14 from Basel Bad Bf to Basel SBB. Do I get a refund?",
     "On 8 November I went from Bern to Zürich HB at 12:00. Do I get a refund?",
     "From Zürich to Bern on 7 November 2026 at 17:30, big delay!",

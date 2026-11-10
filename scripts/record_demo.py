@@ -35,10 +35,15 @@ CONVERSATIONS: dict[str, list[str]] = {
     ],
     "German, asks for what is missing": [
         "Ich war am 7. November unterwegs und hatte Verspätung.",
-        "St. Gallen",
-        "Zürich HB",
-        "8 Uhr",
+        "Von St. Gallen nach Zürich HB",
+        "Um 8 Uhr",
         "IC1",
+    ],
+    "English, asks for what is missing": [
+        "My train was really late and I want my money back.",
+        "I went from Rotkreuz to Zürich HB",
+        "On 7 November 2026, at about 20:48",
+        "20:48",
     ],
     "French": [
         "Le 7 novembre 2026, j'ai pris le train de Zürich HB à Oensingen à 13h29. Ai-je droit à un remboursement ?",

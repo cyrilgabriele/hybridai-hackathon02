@@ -14,7 +14,15 @@ from pipeline.assistant import Assistant, match_offer
 from pipeline.handoff import Desk
 from pipeline.knowledge import Case, Knowledge, Offer
 from pipeline.llm import LanguageModel, ModelAnswer, ModelCallFailed
-from pipeline.reply import OUTCOMES, PHRASE_PROMPT, PLACEHOLDER, critique, say
+from pipeline.reply import (
+    ASK_PROMPT,
+    OUTCOMES,
+    PHRASE_PROMPT,
+    PLACEHOLDER,
+    ask,
+    critique,
+    say,
+)
 from pipeline.slots import EXTRACT_PROMPT
 from pipeline.slots import critique as critique_slots
 from pipeline.state import Conversation
@@ -199,6 +207,7 @@ def test_a_clean_reply_passes():
     (GOOD.replace("{delay}", "65 minutes"), "refund", "digit_outside_placeholder"),
     (GOOD, "no_refund", "wrong_decision"),
     (GOOD.replace("{percent}", "{share}"), "refund", "unknown_placeholder"),
+    (GOOD.replace("{percent}", "{the refund share}"), "refund", "unknown_placeholder"),
     (GOOD.replace("{destination}", "the station"), "refund", "missing_placeholder"),
     (GOOD + " It also left on time. Have a nice day.", "refund", "too_long"),
 ])
@@ -214,6 +223,8 @@ class ScriptedModel(LanguageModel):
         self.phrase_ok = phrase_ok
         self.fail = fail
         self.phrased: list[dict] = []
+        self.asked: list[dict] = []
+        self.question = "Sorry about that. On {date}, from where to where did you travel?"
 
     def ask_json(self, system: str, user: str, *, effort: ReasoningEffort = "low") -> ModelAnswer:
         if self.fail:
@@ -225,6 +236,9 @@ class ScriptedModel(LanguageModel):
             self.phrased.append(request)
             names = " ".join("{" + name + "}" for name in request["required"])
             data = {"decision": request["decision"], "reply": names if self.phrase_ok else "65 minutes, sorry."}
+        elif system == ASK_PROMPT:
+            self.asked.append(json.loads(user))
+            data = {"decision": "question", "reply": self.question}
         else:
             data = {"verdict": "unclear", "reason": "the record is incomplete"}
         return ModelAnswer(data, json.dumps(data), "live", "now", 0.0)
@@ -255,13 +269,43 @@ def test_a_misbehaving_reply_falls_back_to_rule_written_words(workspace):
     assert any(step.status == "refused" for step in conv.trace)
 
 
-def test_only_the_missing_slot_is_asked_for(workspace):
-    partial = reply(origin={"station": "Aarau", "quote": "Aarau"})
+def test_everything_missing_is_asked_for_with_the_conversation_as_context(workspace):
+    partial = reply(date={"value": DAY, "quote": "7 November"})
     model = ScriptedModel([partial])
     conv = Conversation()
-    assistant(workspace(LATE), model).handle(conv, "from Aarau")
-    assert conv.asked_for == "destination"
-    assert model.phrased[-1]["decision"] == "question"
+    text = assistant(workspace(LATE), model).handle(conv, "On 7 November my train was late")
+    request = model.asked[-1]
+    assert request["conversation"] == ["On 7 November my train was late"]
+    assert list(request["known"]) == ["{date}"]
+    assert len(request["missing"]) == 3
+    assert text == "Sorry about that. On 07.11.2026, from where to where did you travel?"
+    assert conv.asked_for == "origin, destination, time"
+
+
+@pytest.mark.parametrize("question", [
+    "Which station did you leave on the 7th?",
+    "Tell me your station.",
+    "You will receive money. Where did you start?",
+])
+def test_a_question_that_states_a_fact_or_asks_nothing_falls_back_to_fixed_words(workspace, question):
+    partial = reply(date={"value": DAY, "quote": "7 November"})
+    model = ScriptedModel([partial])
+    model.question = question
+    conv = Conversation()
+    text = assistant(workspace(LATE), model).handle(conv, "On 7 November my train was late")
+    assert text == " ".join(OUTCOMES[f"ask_{slot}"].en for slot in ("origin", "destination", "time"))
+    assert any(step.status == "refused" for step in conv.trace)
+
+
+def test_a_failed_question_call_still_asks_with_fixed_words():
+    class Down(ScriptedModel):
+        def ask_json(self, system: str, user: str, *, effort: ReasoningEffort = "low") -> ModelAnswer:
+            raise ModelCallFailed("Timeout")
+
+    trace = []
+    text = ask(Down(), ["date"], ["my train was late"], {}, "de", trace)
+    assert text == OUTCOMES["ask_date"].de
+    assert trace[0].status == "failed"
 
 
 def test_a_technical_failure_says_so_and_gives_no_verdict(workspace):

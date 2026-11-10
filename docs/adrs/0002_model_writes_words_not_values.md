@@ -12,7 +12,9 @@ Every station, time, date, train, delay and percentage in an answer must come fr
 
 ## Decision
 
-The phrasing model receives the decision and the names and meanings of the values, never the values. It writes in the passenger's language with placeholders such as `{delay_minutes}`, and the host inserts the values (pattern 12). A reply with a digit, a station name, a wrong decision, an unknown or missing placeholder, or extra sentences is refused and repaired once (pattern 6); then a fixed sentence is used.
+The phrasing model receives the decision and the names and meanings of the values, never the values. It writes in the passenger's language with placeholders such as `{delay}`, and the host inserts the values (pattern 12). A reply with a digit, a station name, a wrong decision, an unknown or missing placeholder, or extra sentences is refused and repaired once (pattern 6); then a fixed sentence is used.
+
+Questions about missing details are written with the conversation as context: the host lists what is missing and the model asks for it naturally. The passenger's words state no fact of the case, so showing them is safe, and the same checks apply before a fixed question is used.
 
 Control flow stays in Python as a closed state machine. The rules decide refund, no refund or hand-on. Slots are repaired once, as the language contract says; a cross-check that a quote contains the stated day or hour is added to it.
 

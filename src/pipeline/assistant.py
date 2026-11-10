@@ -14,7 +14,7 @@ import re
 from .handoff import Desk, HandOff, now
 from .knowledge import Case, Knowledge, Offer, Verdict, fold
 from .llm import LanguageModel, ModelCallFailed
-from .reply import OUTCOMES, say
+from .reply import OUTCOMES, ask, say
 from .slots import REQUIRED, Reading, read_slots
 from .state import Conversation, Slot, Step
 
@@ -184,13 +184,25 @@ class Assistant:
                 if conv.unknown_asked[slot] >= 2:
                     return self._hand_off(conv, "the station named is not in the SBB data")
                 conv.asked_for = slot
-                return self._say(conv, "station_unknown", {"name": reading.unknown.get(slot, "")})
-        for slot in REQUIRED:
-            if slot not in conv.slots:
-                conv.asked_for = slot
-                return self._say(conv, f"ask_{slot}", {})
+                return self._ask(conv, [slot], situation="the station the passenger named, {name}, is not in the SBB data",
+                                 extra={"name": reading.unknown.get(slot, "")}, fallback="station_unknown")
+        missing = [slot for slot in REQUIRED if slot not in conv.slots]
+        if missing:
+            conv.asked_for = ", ".join(missing)
+            return self._ask(conv, missing)
         conv.asked_for = None
         return self._offer(conv)
+
+    def _ask(self, conv: Conversation, missing: list[str], *, situation: str = "",
+             extra: dict[str, str] | None = None, fallback: str = "") -> str:
+        """Ask for what is missing with the whole conversation as context."""
+        slots = conv.slots
+        known = {name: slots[name].value for name in ("origin", "destination", "time") if name in slots}
+        if "date" in slots:
+            known["date"] = _swiss_date(slots["date"].value)
+        question = ask(self.model, missing, conv.messages, {**known, **(extra or {})}, conv.language, conv.trace,
+                       self.stations, situation=situation, fallback=fallback)
+        return "\n\n".join([*self._interpretations(conv), question])
 
     def _case(self, conv: Conversation) -> Case:
         slots = conv.slots
@@ -216,7 +228,7 @@ class Assistant:
             conv.time_asked_again = True
             conv.slots.pop("time")
             conv.asked_for = "time"
-            return self._say(conv, "ask_time_again", {})
+            return self._ask(conv, ["time"], situation="no train departs close to the time the passenger gave", fallback="ask_time_again")
         named = conv.slots.get("train")
         matched = match_offer(named.value, result.offers) if named else None
         if matched is not None:
