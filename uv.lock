@@ -1,5 +1,5 @@
 version = 1
-revision = 3
+revision = 5
 requires-python = ">=3.10"
 resolution-markers = [
     "python_full_version >= '3.14' and sys_platform == 'win32'",
@@ -742,7 +742,9 @@ dependencies = [
     { name = "framex" },
     { name = "gradio" },
     { name = "openai" },
+    { name = "pydantic" },
     { name = "python-dotenv" },
+    { name = "pyyaml" },
     { name = "requests" },
     { name = "ruff" },
     { name = "ty" },
@@ -758,7 +760,9 @@ requires-dist = [
     { name = "framex", git = "https://gitlab.com/ds-unisg/framex-core?subdirectory=python&rev=977bb14db288caeb6bf1b253fdb8e25f83ada711" },
     { name = "gradio", specifier = ">=6.31.0" },
     { name = "openai", specifier = ">=3.49.0" },
+    { name = "pydantic", specifier = ">=2.14.3" },
     { name = "python-dotenv", specifier = ">=1.2.4" },
+    { name = "pyyaml", specifier = ">=6.0.3" },
     { name = "requests", specifier = ">=2.34.2" },
     { name = "ruff", specifier = ">=0.17.4" },
     { name = "ty", specifier = ">=0.0.99" },

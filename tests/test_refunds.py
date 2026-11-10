@@ -4,9 +4,9 @@ from __future__ import annotations
 import json
 
 import pytest
-from test_regression import DAY, client, load, stop  # noqa: F401  (client is a fixture)
 
 from ontology import service
+from tests.test_regression import DAY, client, load, stop  # noqa: F401  (client is a fixture)
 
 ORIGIN, DESTINATION, VIA = 1, 2, 3
 

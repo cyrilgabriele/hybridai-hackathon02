@@ -90,6 +90,7 @@ see the development guide for setup.
 | [Pattern lookup](docs/patterns.md) | Targeted links to the ten Hybrid AI reference implementations |
 | [Course lookup](docs/course-lookup.md) | VL04/VL05 page index, H1 lessons, and H2 preparation gaps |
 | [Refund chat](docs/refund-chat.md) | Language contract of the refund assistant |
+| [Refund evaluation](docs/evaluation.md) | Snapshot cases, independent policy checks, adapters, automated quality judging and performance reports |
 | [FrameX core](https://gitlab.com/ds-unisg/framex-core) | Engine and Python client sources |
 
 ## Repository layout
@@ -104,6 +105,8 @@ see the development guide for setup.
 | `src/refund_chat.py` | Starts the refund assistant |
 | `src/pipeline/` | Model client, slot checks, per-case worlds, control flow, replies, hand-off |
 | `src/ui/` | Gradio chat, workflow view, and customer-service desk |
+| `src/eval/` | Evaluation ports, metrics, adapters, and YAML config loaders |
+| `config/eval/` | Policy, dialogue, snapshot cases and verification records |
 | `model-answers/` | Recorded GPT-5 mini answers for replay |
 | `tests/` | Regression tests and opt-in snapshot checks |
 | `docs/` | User and developer guides |

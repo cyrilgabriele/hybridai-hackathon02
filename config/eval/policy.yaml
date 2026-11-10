@@ -1,0 +1,241 @@
+kind: policy
+version: 1
+description: Synthetic policy-only inputs, not observed journey delays or ticket fares.
+cases:
+- id: policy_0_chf_40.00
+  request:
+    synthetic_delay: 0
+    price_chf: '40.00'
+  expected:
+    decision: no_refund
+    delayMinutes: 0
+    refundStatus: notEntitled
+    refundPercent: 0
+    refundCHF: null
+    paidOut: null
+  tags:
+  - synthetic
+  - policy_boundary
+- id: policy_59_chf_40.00
+  request:
+    synthetic_delay: 59
+    price_chf: '40.00'
+  expected:
+    decision: no_refund
+    delayMinutes: 59
+    refundStatus: notEntitled
+    refundPercent: 0
+    refundCHF: null
+    paidOut: null
+  tags:
+  - synthetic
+  - policy_boundary
+- id: policy_60_chf_19.60
+  request:
+    synthetic_delay: 60
+    price_chf: '19.60'
+  expected:
+    decision: no_refund
+    delayMinutes: 60
+    refundStatus: entitled
+    refundPercent: 25
+    refundCHF: '4.90'
+    paidOut: false
+  tags:
+  - synthetic
+  - policy_boundary
+- id: policy_60_chf_19.99
+  request:
+    synthetic_delay: 60
+    price_chf: '19.99'
+  expected:
+    decision: no_refund
+    delayMinutes: 60
+    refundStatus: entitled
+    refundPercent: 25
+    refundCHF: '5.00'
+    paidOut: false
+  tags:
+  - synthetic
+  - policy_boundary
+- id: policy_60_chf_20.00
+  request:
+    synthetic_delay: 60
+    price_chf: '20.00'
+  expected:
+    decision: refund
+    delayMinutes: 60
+    refundStatus: entitled
+    refundPercent: 25
+    refundCHF: '5.00'
+    paidOut: true
+  tags:
+  - synthetic
+  - policy_boundary
+- id: policy_60_chf_20.02
+  request:
+    synthetic_delay: 60
+    price_chf: '20.02'
+  expected:
+    decision: refund
+    delayMinutes: 60
+    refundStatus: entitled
+    refundPercent: 25
+    refundCHF: '5.01'
+    paidOut: true
+  tags:
+  - synthetic
+  - policy_boundary
+- id: policy_60_chf_24.00
+  request:
+    synthetic_delay: 60
+    price_chf: '24.00'
+  expected:
+    decision: refund
+    delayMinutes: 60
+    refundStatus: entitled
+    refundPercent: 25
+    refundCHF: '6.00'
+    paidOut: true
+  tags:
+  - synthetic
+  - policy_boundary
+- id: policy_60_chf_None
+  request:
+    synthetic_delay: 60
+    price_chf: null
+  expected:
+    decision: refund
+    delayMinutes: 60
+    refundStatus: entitled
+    refundPercent: 25
+    refundCHF: null
+    paidOut: null
+  tags:
+  - synthetic
+  - policy_boundary
+- id: policy_119_chf_40.00
+  request:
+    synthetic_delay: 119
+    price_chf: '40.00'
+  expected:
+    decision: refund
+    delayMinutes: 119
+    refundStatus: entitled
+    refundPercent: 25
+    refundCHF: '10.00'
+    paidOut: true
+  tags:
+  - synthetic
+  - policy_boundary
+- id: policy_120_chf_9.80
+  request:
+    synthetic_delay: 120
+    price_chf: '9.80'
+  expected:
+    decision: no_refund
+    delayMinutes: 120
+    refundStatus: entitled
+    refundPercent: 50
+    refundCHF: '4.90'
+    paidOut: false
+  tags:
+  - synthetic
+  - policy_boundary
+- id: policy_120_chf_9.99
+  request:
+    synthetic_delay: 120
+    price_chf: '9.99'
+  expected:
+    decision: no_refund
+    delayMinutes: 120
+    refundStatus: entitled
+    refundPercent: 50
+    refundCHF: '5.00'
+    paidOut: false
+  tags:
+  - synthetic
+  - policy_boundary
+- id: policy_120_chf_10.00
+  request:
+    synthetic_delay: 120
+    price_chf: '10.00'
+  expected:
+    decision: refund
+    delayMinutes: 120
+    refundStatus: entitled
+    refundPercent: 50
+    refundCHF: '5.00'
+    paidOut: true
+  tags:
+  - synthetic
+  - policy_boundary
+- id: policy_120_chf_10.01
+  request:
+    synthetic_delay: 120
+    price_chf: '10.01'
+  expected:
+    decision: refund
+    delayMinutes: 120
+    refundStatus: entitled
+    refundPercent: 50
+    refundCHF: '5.01'
+    paidOut: true
+  tags:
+  - synthetic
+  - policy_boundary
+- id: policy_120_chf_12.00
+  request:
+    synthetic_delay: 120
+    price_chf: '12.00'
+  expected:
+    decision: refund
+    delayMinutes: 120
+    refundStatus: entitled
+    refundPercent: 50
+    refundCHF: '6.00'
+    paidOut: true
+  tags:
+  - synthetic
+  - policy_boundary
+- id: policy_120_chf_None
+  request:
+    synthetic_delay: 120
+    price_chf: null
+  expected:
+    decision: refund
+    delayMinutes: 120
+    refundStatus: entitled
+    refundPercent: 50
+    refundCHF: null
+    paidOut: null
+  tags:
+  - synthetic
+  - policy_boundary
+- id: policy_130_chf_40.00
+  request:
+    synthetic_delay: 130
+    price_chf: '40.00'
+  expected:
+    decision: refund
+    delayMinutes: 130
+    refundStatus: entitled
+    refundPercent: 50
+    refundCHF: '20.00'
+    paidOut: true
+  tags:
+  - synthetic
+  - policy_boundary
+- id: policy_None_chf_40.00
+  request:
+    synthetic_delay: null
+    price_chf: '40.00'
+  expected:
+    decision: handoff
+    refundStatus: null
+    refundPercent: null
+    refundCHF: null
+    paidOut: null
+  tags:
+  - synthetic
+  - policy_boundary
