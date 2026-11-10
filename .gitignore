@@ -10,3 +10,4 @@ fx-*/
 .*
 # Course material mirrored from Canvas/OneDrive, local only.
 local_files/
+eval-results/
