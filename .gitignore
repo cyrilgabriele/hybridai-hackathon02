@@ -8,3 +8,5 @@ fx-*/
 .sbb-build-*/
 .DS_Store
 .*
+# Course material mirrored from Canvas/OneDrive, local only.
+local_files/
