@@ -57,7 +57,7 @@ pc0(?X, ?E, ?F):PlannedConnection[connOf -> ?X; connBoard -> ?E; connAlight -> ?
     AND ?E[scheduledDepartureEpoch -> ?D] AND ?D >= ?Lo AND ?D <= ?Hi
     AND ?E[ofTrip -> ?T] AND ?T[observedOn -> ?Day] AND ?E[stopSequence -> ?I]
     AND ?F[ofTrip -> ?T] AND ?F[atStopPoint -> ?S] AND ?F[passThrough -> false]
-    AND ?F[stopSequence -> ?J] AND ?I < ?J AND ?F[scheduledArrivalEpoch -> ?A].
+    AND ?F[stopSequence -> ?J] AND ?I < ?J AND ?F[scheduledArrivalEpoch -> ?A] AND ?A > ?D.
 
 // The same conditions without the class: a change is searched only from a
 // train that does not reach the destination itself, and that test must
@@ -69,7 +69,7 @@ closed method directFrom/1.
     AND ?E[scheduledDepartureEpoch -> ?D] AND ?D >= ?Lo AND ?D <= ?Hi
     AND ?E[ofTrip -> ?T] AND ?T[observedOn -> ?Day] AND ?E[stopSequence -> ?I]
     AND ?F[ofTrip -> ?T] AND ?F[atStopPoint -> ?S] AND ?F[passThrough -> false]
-    AND ?F[stopSequence -> ?J] AND ?I < ?J AND ?F[scheduledArrivalEpoch -> ?A].
+    AND ?F[stopSequence -> ?J] AND ?I < ?J AND ?F[scheduledArrivalEpoch -> ?A] AND ?A > ?D.
 
 // Stops from which a planned train still reaches the destination within
 // the journey bound. Starting from the destination keeps the change join
@@ -97,7 +97,11 @@ pc1(?X, ?E, ?G, ?H, ?F):PlannedConnection[connOf -> ?X; connBoard -> ?E; connAli
     AND ?HD >= ?Ready AND ?HD <= ?Latest
     AND ?H[ofTrip -> ?T2] AND ?T1 != ?T2 AND ?H[stopSequence -> ?K]
     AND ?F[ofTrip -> ?T2] AND ?F[atStopPoint -> ?S] AND ?F[passThrough -> false]
-    AND ?F[stopSequence -> ?J] AND ?K < ?J AND ?F[scheduledArrivalEpoch -> ?A].
+    AND ?F[stopSequence -> ?J] AND ?K < ?J AND ?F[scheduledArrivalEpoch -> ?A] AND ?A > ?D.
+
+// A connection arrives after it departs. Two services reported under one trip
+// reference can otherwise look like a train that arrives before it leaves, and
+// such a phantom would outrun, and so hide, every real departure.
 
 // Per boarding event: the earliest planned arrival, and the fewest changes
 // that reach it. These are the departures the chat offers the passenger.

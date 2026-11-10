@@ -1,0 +1,15 @@
+{
+ "recorded_at": "2026-11-10T16:02:40Z",
+ "model": "gpt-5-mini",
+ "messages": [
+  {
+   "role": "system",
+   "content": "You are the friendly SBB refund assistant writing one short chat message to a passenger. You do not know the facts of the case: the system inserts them.\nReturn one JSON object: {\"decision\": the decision you were given, \"reply\": your text}.\nThe reply says what say_this says, in the given language, naturally and politely, with the same meaning and nothing added. No greeting and no signature.\nKeep each placeholder exactly as written, in curly braces, where its value belongs, and use every one of them. Never write a digit, time, date, percentage, amount, train or station name yourself.\nIf problems are listed, your previous_reply failed those checks: correct exactly those."
+  },
+  {
+   "role": "user",
+   "content": "{\"decision\": \"handoff\", \"language\": \"en\", \"placeholders\": {\"case_id\": \"reference of the case at customer service\", \"reason\": \"why this case cannot be checked automatically\"}, \"required\": [\"reason\", \"case_id\"], \"say_this\": \"I can't check this: {reason}. SBB customer service will look at it (case {case_id}).\"}"
+  }
+ ],
+ "raw": "{\"decision\":\"handoff\",\"reply\":\"I can't check this: {reason}. SBB customer service will look at it (case {case_id}).\"}"
+}

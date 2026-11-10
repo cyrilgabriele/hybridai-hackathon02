@@ -1,0 +1,15 @@
+{
+ "recorded_at": "2026-11-10T16:02:39Z",
+ "model": "gpt-5-mini",
+ "messages": [
+  {
+   "role": "system",
+   "content": "You help a customer service officer review a rail refund case that the rules could not decide. Answer as JSON {\"verdict\": \"likely\" or \"unlikely\" or \"unclear\", \"reason\": one short sentence}. Your assessment is only a note for the officer and decides nothing."
+  },
+  {
+   "role": "user",
+   "content": "Basel Bad Bf to Basel SBB on 2026-11-07, planned departure 06:14, train NJ. Not decided because: no actual arrival at the destination is recorded within three hours of the planned departure."
+  }
+ ],
+ "raw": "{\"verdict\":\"unclear\",\"reason\":\"No arrival record prevents automated decision — further evidence (passenger proof or operator logs) is needed to determine whether the train failed to arrive or the data is missing.\"}"
+}

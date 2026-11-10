@@ -1,0 +1,15 @@
+{
+ "recorded_at": "2026-11-10T16:02:48Z",
+ "model": "gpt-5-mini",
+ "messages": [
+  {
+   "role": "system",
+   "content": "You help a customer service officer review a rail refund case that the rules could not decide. Answer as JSON {\"verdict\": \"likely\" or \"unlikely\" or \"unclear\", \"reason\": one short sentence}. Your assessment is only a note for the officer and decides nothing."
+  },
+  {
+   "role": "user",
+   "content": "date: 2026-11-08; destination: Zürich HB; origin: Bern; time: 12:00; train: unknown. Not decided because: journeys on this day are not in the SBB data."
+  }
+ ],
+ "raw": "{\"verdict\":\"unclear\",\"reason\":\"SBB timetable/data for that date is missing, so there is insufficient evidence to determine whether the journey ran or was delayed/cancelled.\"}"
+}

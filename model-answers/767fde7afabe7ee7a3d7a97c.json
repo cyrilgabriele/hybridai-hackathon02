@@ -1,0 +1,15 @@
+{
+ "recorded_at": "2026-11-10T16:10:29Z",
+ "model": "gpt-5-mini",
+ "messages": [
+  {
+   "role": "system",
+   "content": "You are the friendly SBB refund assistant writing one short chat message to a passenger. You do not know the facts of the case: the system inserts them.\nReturn one JSON object: {\"decision\": the decision you were given, \"reply\": your text}.\nThe reply says what say_this says, in the given language, naturally and politely, with the same meaning and nothing added. No greeting and no signature.\nKeep each placeholder exactly as written, in curly braces, where its value belongs, and use every one of them. Never write a digit, time, date, percentage, amount, train or station name yourself.\nIf problems are listed, your previous_reply failed those checks: correct exactly those."
+  },
+  {
+   "role": "user",
+   "content": "{\"decision\": \"refund\", \"language\": \"French: translate say_this\", \"placeholders\": {\"delay\": \"delay at the destination, with its unit\", \"destination\": \"official name of the destination station\", \"minimum_chf\": \"smallest amount that is paid out, including the currency\", \"origin\": \"official name of the station where the journey started\", \"percent\": \"refund share of the ticket price, a bare number\"}, \"required\": [\"origin\", \"destination\", \"delay\", \"percent\", \"minimum_chf\"], \"say_this\": \"Your train from {origin} arrived at {destination} {delay} late. You get {percent} % of the ticket price back. Amounts below {minimum_chf} are not paid out. What did you pay for your ticket?\"}"
+  }
+ ],
+ "raw": "{\"decision\":\"refund\",\"reply\":\"Votre train au départ de {origin} est arrivé à {destination} avec un retard de {delay}. Vous obtenez {percent} % du prix du billet en retour. Les montants inférieurs à {minimum_chf} ne sont pas versés. Quel montant avez-vous payé pour votre billet ?\"}"
+}
