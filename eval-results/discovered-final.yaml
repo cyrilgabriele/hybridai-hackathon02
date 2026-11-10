@@ -1,0 +1,1360 @@
+kind: snapshot
+version: 1
+created: '2026-11-10T16:45:19.845122+00:00'
+snapshot:
+  00-core.fx: a7fb4d32accbd899b50a07d6991c2a50a61a7012c7913c23c64be0735736840f
+  10-geography.fx: c49532f4019d43934a1cf44ff93281bac4d3c90989b2ee0802a73a9e4ef85405
+  20-facilities.fx: e88517d8c51c5cbf953f2cc9e792c24211789fa24cdae0e54f70407fe00659a3
+  30-network.fx: cf4dcccfb10b0c3a09c1fd1fa49658f52f9842e7cb4999b05d5c330ebe39c559
+  40-service.fx: 528eef21531b161c2532d507f48f6549324aa8fddd52970044e6eccdf2a9293c
+  46-refunds.fx: ec49783a46af9c5e6d4cfe211ec1be64ba5da0ea759fb19c22f3158c4af7ee42
+  47-refund-policy.fx: f7bcd8c6ced6223cfdbcab553d77c972c52fbb5357bc633582d1f70f3f92c6e4
+  50-observations.fx: c9c5b958f574800778f75fb67632a1a9859a3fed6f03011c7aef809004cd9f8b
+  60-spine.fx: e4c6469096a52a9ca0acc1a7da9495fdd739424ec449e572294350a17493bed8
+  70-abfahrtsplakate0.fx: cfde16486e8b12525b509845c6669813a7f48ed66c9928a7c0485e854d7b3a2b
+  70-billetentwerter.fx: 6ccc4cbad9a212b84597506960a4f133ee3e0caa2c37060cab8df2402e77e86c
+  70-haltestelle-uhr.fx: 37efe8a32ededcbd908540ff02e31b5d18bde1b756e855a599a773e35987923d
+  70-haltestelle-visuell-taktile-sicherheitslinie.fx: c1d41011012d3341ef35c4e99ec9d2e3998cf1ab5e9f212f41b057e0cb769ecd
+  70-haltestelle-wartehallen.fx: 137ca7e22cf8a8c859c3b245da07120b3d5ec4a0411c1994e75ca3e532b47d10
+  70-ist-daten-sbb.fx: b3d5786685b6e3b61d63ce3386de5c2896f1a5988bcbc689da843c50476c4818
+  70-linie-mit-betriebspunkten.fx: d515162b0f4f2f21cf6775fe6e7a7e2914162c48953eac8ebd3a4c21a8122355
+  70-lorastation.fx: 0297cabec0475726ffd61cfdb2c5781df01c0d96175e6dc37f4155348309d8f0
+  70-passagierfrequenz.fx: b80fce34363332be08dd310681976907c5aa26dfd33e8a989d2c5915459d6829
+  70-perron.fx: aa1c9e96081819a2a271f7eaf6cdf3870e5d73228aaec1508f8ade7fb79cfecf
+  70-regionaler-linienplan.fx: 62ee751b413a10ba42f3b65e1452b6d2d859de86ba8ad104538aa0db922c3c23
+  70-sektortafel.fx: ae119e3959b58e384fa29124de98f7276cda7ffffa3613637d049474ec051f9a
+  70-wifistation.fx: dde384cdefdc03eccfddd4209dfb3728d1addcee545603c95c4161a1b5ed2455
+  manifest.json: 0ac8beb9c7197fb675de224365ad2216eb6e0e4b3d8ba36f9ab2901265dce373
+candidate_limit: 400
+examined: 144
+coverage:
+- 25_percent
+- 50_percent
+- cancellation
+- changed_one_transfer_route
+- handoff
+- missed_connection
+- no_refund
+unavailable: []
+verification: independent oracle only; run the FrameX adapter to cross-check
+cases:
+- id: snapshot_no_refund
+  request:
+    origin: sp_8507493
+    destination: sp_8507483
+    board_event: ev_18118061f3f3cadb1546dfb62e066586
+    day: '2026-11-07'
+    window_center: 1794067440
+    transfer_seconds: 300
+    price_chf: '40.00'
+  expected:
+    decision: no_refund
+    delayMinutes: 0
+    refundStatus: notEntitled
+    refundPercent: 0
+    refundCHF: null
+    paidOut: null
+    plannedArrival: 1794068580
+    actualArrival: 1794068568
+  tags:
+  - snapshot
+  - no_refund
+  messages:
+  - role: user
+    content: I travelled from Interlaken West to Spiez on 2026-11-07 at 17:04, train ch:1:sjyid:100001:100-002.
+      My ticket cost CHF 40.00. Can I get compensation?
+  must_say:
+  - Interlaken West
+  - Spiez
+  - '0'
+  - '60'
+  snapshot:
+    00-core.fx: a7fb4d32accbd899b50a07d6991c2a50a61a7012c7913c23c64be0735736840f
+    10-geography.fx: c49532f4019d43934a1cf44ff93281bac4d3c90989b2ee0802a73a9e4ef85405
+    20-facilities.fx: e88517d8c51c5cbf953f2cc9e792c24211789fa24cdae0e54f70407fe00659a3
+    30-network.fx: cf4dcccfb10b0c3a09c1fd1fa49658f52f9842e7cb4999b05d5c330ebe39c559
+    40-service.fx: 528eef21531b161c2532d507f48f6549324aa8fddd52970044e6eccdf2a9293c
+    46-refunds.fx: ec49783a46af9c5e6d4cfe211ec1be64ba5da0ea759fb19c22f3158c4af7ee42
+    47-refund-policy.fx: f7bcd8c6ced6223cfdbcab553d77c972c52fbb5357bc633582d1f70f3f92c6e4
+    50-observations.fx: c9c5b958f574800778f75fb67632a1a9859a3fed6f03011c7aef809004cd9f8b
+    60-spine.fx: e4c6469096a52a9ca0acc1a7da9495fdd739424ec449e572294350a17493bed8
+    70-abfahrtsplakate0.fx: cfde16486e8b12525b509845c6669813a7f48ed66c9928a7c0485e854d7b3a2b
+    70-billetentwerter.fx: 6ccc4cbad9a212b84597506960a4f133ee3e0caa2c37060cab8df2402e77e86c
+    70-haltestelle-uhr.fx: 37efe8a32ededcbd908540ff02e31b5d18bde1b756e855a599a773e35987923d
+    70-haltestelle-visuell-taktile-sicherheitslinie.fx: c1d41011012d3341ef35c4e99ec9d2e3998cf1ab5e9f212f41b057e0cb769ecd
+    70-haltestelle-wartehallen.fx: 137ca7e22cf8a8c859c3b245da07120b3d5ec4a0411c1994e75ca3e532b47d10
+    70-ist-daten-sbb.fx: b3d5786685b6e3b61d63ce3386de5c2896f1a5988bcbc689da843c50476c4818
+    70-linie-mit-betriebspunkten.fx: d515162b0f4f2f21cf6775fe6e7a7e2914162c48953eac8ebd3a4c21a8122355
+    70-lorastation.fx: 0297cabec0475726ffd61cfdb2c5781df01c0d96175e6dc37f4155348309d8f0
+    70-passagierfrequenz.fx: b80fce34363332be08dd310681976907c5aa26dfd33e8a989d2c5915459d6829
+    70-perron.fx: aa1c9e96081819a2a271f7eaf6cdf3870e5d73228aaec1508f8ade7fb79cfecf
+    70-regionaler-linienplan.fx: 62ee751b413a10ba42f3b65e1452b6d2d859de86ba8ad104538aa0db922c3c23
+    70-sektortafel.fx: ae119e3959b58e384fa29124de98f7276cda7ffffa3613637d049474ec051f9a
+    70-wifistation.fx: dde384cdefdc03eccfddd4209dfb3728d1addcee545603c95c4161a1b5ed2455
+    manifest.json: 0ac8beb9c7197fb675de224365ad2216eb6e0e4b3d8ba36f9ab2901265dce373
+  evidence:
+    delayMinutes: 0
+    plannedArrival: 1794068580
+    actualArrival: 1794068568
+    plannedChanges: 0
+    actualChanges: 0
+    planned_events:
+    - ev_18118061f3f3cadb1546dfb62e066586
+    - ev_0d6ee0b2810d1e861464dc526a0054b0
+    actual_events:
+    - ev_99322a02faffada0abc65156de569770
+    - ev_987b30c41105699658853048874f9afe
+    reasons: []
+    offered: true
+    source: Interlaken West
+    destination: Spiez
+    trip_ref: ch:1:sjyid:100001:100-002
+    ticket_price_source: synthetic passenger statement
+    oracle: independent enumeration; not production-rule output
+    search_limits_seconds:
+      start_wait: 10800
+      change_wait: 3600
+      journey: 14400
+- id: snapshot_cancellation
+  request:
+    origin: sp_8507493
+    destination: sp_8507483
+    board_event: ev_18118061f3f3cadb1546dfb62e066586
+    day: '2026-11-07'
+    window_center: 1794067440
+    transfer_seconds: 300
+    price_chf: '40.00'
+  expected:
+    decision: no_refund
+    delayMinutes: 0
+    refundStatus: notEntitled
+    refundPercent: 0
+    refundCHF: null
+    paidOut: null
+    plannedArrival: 1794068580
+    actualArrival: 1794068568
+  tags:
+  - snapshot
+  - cancellation
+  messages:
+  - role: user
+    content: I travelled from Interlaken West to Spiez on 2026-11-07 at 17:04, train ch:1:sjyid:100001:100-002.
+      My ticket cost CHF 40.00. Can I get compensation?
+  must_say:
+  - Interlaken West
+  - Spiez
+  - '0'
+  - '60'
+  snapshot:
+    00-core.fx: a7fb4d32accbd899b50a07d6991c2a50a61a7012c7913c23c64be0735736840f
+    10-geography.fx: c49532f4019d43934a1cf44ff93281bac4d3c90989b2ee0802a73a9e4ef85405
+    20-facilities.fx: e88517d8c51c5cbf953f2cc9e792c24211789fa24cdae0e54f70407fe00659a3
+    30-network.fx: cf4dcccfb10b0c3a09c1fd1fa49658f52f9842e7cb4999b05d5c330ebe39c559
+    40-service.fx: 528eef21531b161c2532d507f48f6549324aa8fddd52970044e6eccdf2a9293c
+    46-refunds.fx: ec49783a46af9c5e6d4cfe211ec1be64ba5da0ea759fb19c22f3158c4af7ee42
+    47-refund-policy.fx: f7bcd8c6ced6223cfdbcab553d77c972c52fbb5357bc633582d1f70f3f92c6e4
+    50-observations.fx: c9c5b958f574800778f75fb67632a1a9859a3fed6f03011c7aef809004cd9f8b
+    60-spine.fx: e4c6469096a52a9ca0acc1a7da9495fdd739424ec449e572294350a17493bed8
+    70-abfahrtsplakate0.fx: cfde16486e8b12525b509845c6669813a7f48ed66c9928a7c0485e854d7b3a2b
+    70-billetentwerter.fx: 6ccc4cbad9a212b84597506960a4f133ee3e0caa2c37060cab8df2402e77e86c
+    70-haltestelle-uhr.fx: 37efe8a32ededcbd908540ff02e31b5d18bde1b756e855a599a773e35987923d
+    70-haltestelle-visuell-taktile-sicherheitslinie.fx: c1d41011012d3341ef35c4e99ec9d2e3998cf1ab5e9f212f41b057e0cb769ecd
+    70-haltestelle-wartehallen.fx: 137ca7e22cf8a8c859c3b245da07120b3d5ec4a0411c1994e75ca3e532b47d10
+    70-ist-daten-sbb.fx: b3d5786685b6e3b61d63ce3386de5c2896f1a5988bcbc689da843c50476c4818
+    70-linie-mit-betriebspunkten.fx: d515162b0f4f2f21cf6775fe6e7a7e2914162c48953eac8ebd3a4c21a8122355
+    70-lorastation.fx: 0297cabec0475726ffd61cfdb2c5781df01c0d96175e6dc37f4155348309d8f0
+    70-passagierfrequenz.fx: b80fce34363332be08dd310681976907c5aa26dfd33e8a989d2c5915459d6829
+    70-perron.fx: aa1c9e96081819a2a271f7eaf6cdf3870e5d73228aaec1508f8ade7fb79cfecf
+    70-regionaler-linienplan.fx: 62ee751b413a10ba42f3b65e1452b6d2d859de86ba8ad104538aa0db922c3c23
+    70-sektortafel.fx: ae119e3959b58e384fa29124de98f7276cda7ffffa3613637d049474ec051f9a
+    70-wifistation.fx: dde384cdefdc03eccfddd4209dfb3728d1addcee545603c95c4161a1b5ed2455
+    manifest.json: 0ac8beb9c7197fb675de224365ad2216eb6e0e4b3d8ba36f9ab2901265dce373
+  evidence:
+    delayMinutes: 0
+    plannedArrival: 1794068580
+    actualArrival: 1794068568
+    plannedChanges: 0
+    actualChanges: 0
+    planned_events:
+    - ev_18118061f3f3cadb1546dfb62e066586
+    - ev_0d6ee0b2810d1e861464dc526a0054b0
+    actual_events:
+    - ev_99322a02faffada0abc65156de569770
+    - ev_987b30c41105699658853048874f9afe
+    reasons: []
+    offered: true
+    source: Interlaken West
+    destination: Spiez
+    trip_ref: ch:1:sjyid:100001:100-002
+    ticket_price_source: synthetic passenger statement
+    oracle: independent enumeration; not production-rule output
+    search_limits_seconds:
+      start_wait: 10800
+      change_wait: 3600
+      journey: 14400
+- id: snapshot_25_percent
+  request:
+    origin: sp_8507483
+    destination: sp_8503000
+    board_event: ev_0d6ee0b2810d1e861464dc526a0054b0
+    day: '2026-11-07'
+    window_center: 1794068580
+    transfer_seconds: 300
+    price_chf: '40.00'
+  expected:
+    decision: refund
+    delayMinutes: 66
+    refundStatus: entitled
+    refundPercent: 25
+    refundCHF: '10.00'
+    paidOut: true
+    plannedArrival: 1794070380
+    actualArrival: 1794074347
+  tags:
+  - snapshot
+  - 25_percent
+  messages:
+  - role: user
+    content: I travelled from Spiez to Zürich HB on 2026-11-07 at 17:23, train ch:1:sjyid:100001:100-002.
+      My ticket cost CHF 40.00. Can I get compensation?
+  must_say:
+  - Spiez
+  - Zürich HB
+  - '66'
+  - '25'
+  snapshot:
+    00-core.fx: a7fb4d32accbd899b50a07d6991c2a50a61a7012c7913c23c64be0735736840f
+    10-geography.fx: c49532f4019d43934a1cf44ff93281bac4d3c90989b2ee0802a73a9e4ef85405
+    20-facilities.fx: e88517d8c51c5cbf953f2cc9e792c24211789fa24cdae0e54f70407fe00659a3
+    30-network.fx: cf4dcccfb10b0c3a09c1fd1fa49658f52f9842e7cb4999b05d5c330ebe39c559
+    40-service.fx: 528eef21531b161c2532d507f48f6549324aa8fddd52970044e6eccdf2a9293c
+    46-refunds.fx: ec49783a46af9c5e6d4cfe211ec1be64ba5da0ea759fb19c22f3158c4af7ee42
+    47-refund-policy.fx: f7bcd8c6ced6223cfdbcab553d77c972c52fbb5357bc633582d1f70f3f92c6e4
+    50-observations.fx: c9c5b958f574800778f75fb67632a1a9859a3fed6f03011c7aef809004cd9f8b
+    60-spine.fx: e4c6469096a52a9ca0acc1a7da9495fdd739424ec449e572294350a17493bed8
+    70-abfahrtsplakate0.fx: cfde16486e8b12525b509845c6669813a7f48ed66c9928a7c0485e854d7b3a2b
+    70-billetentwerter.fx: 6ccc4cbad9a212b84597506960a4f133ee3e0caa2c37060cab8df2402e77e86c
+    70-haltestelle-uhr.fx: 37efe8a32ededcbd908540ff02e31b5d18bde1b756e855a599a773e35987923d
+    70-haltestelle-visuell-taktile-sicherheitslinie.fx: c1d41011012d3341ef35c4e99ec9d2e3998cf1ab5e9f212f41b057e0cb769ecd
+    70-haltestelle-wartehallen.fx: 137ca7e22cf8a8c859c3b245da07120b3d5ec4a0411c1994e75ca3e532b47d10
+    70-ist-daten-sbb.fx: b3d5786685b6e3b61d63ce3386de5c2896f1a5988bcbc689da843c50476c4818
+    70-linie-mit-betriebspunkten.fx: d515162b0f4f2f21cf6775fe6e7a7e2914162c48953eac8ebd3a4c21a8122355
+    70-lorastation.fx: 0297cabec0475726ffd61cfdb2c5781df01c0d96175e6dc37f4155348309d8f0
+    70-passagierfrequenz.fx: b80fce34363332be08dd310681976907c5aa26dfd33e8a989d2c5915459d6829
+    70-perron.fx: aa1c9e96081819a2a271f7eaf6cdf3870e5d73228aaec1508f8ade7fb79cfecf
+    70-regionaler-linienplan.fx: 62ee751b413a10ba42f3b65e1452b6d2d859de86ba8ad104538aa0db922c3c23
+    70-sektortafel.fx: ae119e3959b58e384fa29124de98f7276cda7ffffa3613637d049474ec051f9a
+    70-wifistation.fx: dde384cdefdc03eccfddd4209dfb3728d1addcee545603c95c4161a1b5ed2455
+    manifest.json: 0ac8beb9c7197fb675de224365ad2216eb6e0e4b3d8ba36f9ab2901265dce373
+  evidence:
+    delayMinutes: 66
+    plannedArrival: 1794070380
+    actualArrival: 1794074347
+    plannedChanges: 0
+    actualChanges: 0
+    planned_events:
+    - ev_0d6ee0b2810d1e861464dc526a0054b0
+    - ev_190e7a3fdc0e563177c09e5f2031fda4
+    actual_events:
+    - ev_ea2772f590927b766e14456f708b59ca
+    - ev_cbbe4da7667c7428768737f42fc94bab
+    reasons: []
+    offered: true
+    source: Spiez
+    destination: Zürich HB
+    trip_ref: ch:1:sjyid:100001:100-002
+    ticket_price_source: synthetic passenger statement
+    oracle: independent enumeration; not production-rule output
+    search_limits_seconds:
+      start_wait: 10800
+      change_wait: 3600
+      journey: 14400
+- id: snapshot_changed_one_transfer_route
+  request:
+    origin: sp_8505307
+    destination: sp_8505417
+    board_event: ev_1ff6b76d157d7a363397bc013e9049eb
+    day: '2026-11-07'
+    window_center: 1794035100
+    transfer_seconds: 300
+    price_chf: '40.00'
+  expected:
+    decision: no_refund
+    delayMinutes: 29
+    refundStatus: notEntitled
+    refundPercent: 0
+    refundCHF: null
+    paidOut: null
+    plannedArrival: 1794038640
+    actualArrival: 1794040436
+  tags:
+  - snapshot
+  - changed_one_transfer_route
+  messages:
+  - role: user
+    content: I travelled from Chiasso to Minusio on 2026-11-07 at 08:05, train ch:1:sjyid:100001:10-001.
+      My ticket cost CHF 40.00. Can I get compensation?
+  must_say:
+  - Chiasso
+  - Minusio
+  - '29'
+  - '60'
+  snapshot:
+    00-core.fx: a7fb4d32accbd899b50a07d6991c2a50a61a7012c7913c23c64be0735736840f
+    10-geography.fx: c49532f4019d43934a1cf44ff93281bac4d3c90989b2ee0802a73a9e4ef85405
+    20-facilities.fx: e88517d8c51c5cbf953f2cc9e792c24211789fa24cdae0e54f70407fe00659a3
+    30-network.fx: cf4dcccfb10b0c3a09c1fd1fa49658f52f9842e7cb4999b05d5c330ebe39c559
+    40-service.fx: 528eef21531b161c2532d507f48f6549324aa8fddd52970044e6eccdf2a9293c
+    46-refunds.fx: ec49783a46af9c5e6d4cfe211ec1be64ba5da0ea759fb19c22f3158c4af7ee42
+    47-refund-policy.fx: f7bcd8c6ced6223cfdbcab553d77c972c52fbb5357bc633582d1f70f3f92c6e4
+    50-observations.fx: c9c5b958f574800778f75fb67632a1a9859a3fed6f03011c7aef809004cd9f8b
+    60-spine.fx: e4c6469096a52a9ca0acc1a7da9495fdd739424ec449e572294350a17493bed8
+    70-abfahrtsplakate0.fx: cfde16486e8b12525b509845c6669813a7f48ed66c9928a7c0485e854d7b3a2b
+    70-billetentwerter.fx: 6ccc4cbad9a212b84597506960a4f133ee3e0caa2c37060cab8df2402e77e86c
+    70-haltestelle-uhr.fx: 37efe8a32ededcbd908540ff02e31b5d18bde1b756e855a599a773e35987923d
+    70-haltestelle-visuell-taktile-sicherheitslinie.fx: c1d41011012d3341ef35c4e99ec9d2e3998cf1ab5e9f212f41b057e0cb769ecd
+    70-haltestelle-wartehallen.fx: 137ca7e22cf8a8c859c3b245da07120b3d5ec4a0411c1994e75ca3e532b47d10
+    70-ist-daten-sbb.fx: b3d5786685b6e3b61d63ce3386de5c2896f1a5988bcbc689da843c50476c4818
+    70-linie-mit-betriebspunkten.fx: d515162b0f4f2f21cf6775fe6e7a7e2914162c48953eac8ebd3a4c21a8122355
+    70-lorastation.fx: 0297cabec0475726ffd61cfdb2c5781df01c0d96175e6dc37f4155348309d8f0
+    70-passagierfrequenz.fx: b80fce34363332be08dd310681976907c5aa26dfd33e8a989d2c5915459d6829
+    70-perron.fx: aa1c9e96081819a2a271f7eaf6cdf3870e5d73228aaec1508f8ade7fb79cfecf
+    70-regionaler-linienplan.fx: 62ee751b413a10ba42f3b65e1452b6d2d859de86ba8ad104538aa0db922c3c23
+    70-sektortafel.fx: ae119e3959b58e384fa29124de98f7276cda7ffffa3613637d049474ec051f9a
+    70-wifistation.fx: dde384cdefdc03eccfddd4209dfb3728d1addcee545603c95c4161a1b5ed2455
+    manifest.json: 0ac8beb9c7197fb675de224365ad2216eb6e0e4b3d8ba36f9ab2901265dce373
+  evidence:
+    delayMinutes: 29
+    plannedArrival: 1794038640
+    actualArrival: 1794040436
+    plannedChanges: 1
+    actualChanges: 0
+    planned_events:
+    - ev_1ff6b76d157d7a363397bc013e9049eb
+    - ev_8da9fb9d39ff0f8d89e3dacfea759414
+    - ev_96a7309bd9b6928cc4ef38015677d7c5
+    - ev_66b08b3dfbd18a3a7cb54bf60a28e529
+    actual_events:
+    - ev_bef1eb2188afbf73b89c5c592421568b
+    - ev_fe2762445f9d46df881d564cc8756001
+    reasons: []
+    offered: true
+    source: Chiasso
+    destination: Minusio
+    trip_ref: ch:1:sjyid:100001:10-001
+    ticket_price_source: synthetic passenger statement
+    oracle: independent enumeration; not production-rule output
+    search_limits_seconds:
+      start_wait: 10800
+      change_wait: 3600
+      journey: 14400
+- id: snapshot_missed_connection
+  request:
+    origin: sp_8505307
+    destination: sp_8505417
+    board_event: ev_1ff6b76d157d7a363397bc013e9049eb
+    day: '2026-11-07'
+    window_center: 1794035100
+    transfer_seconds: 300
+    price_chf: '40.00'
+  expected:
+    decision: no_refund
+    delayMinutes: 29
+    refundStatus: notEntitled
+    refundPercent: 0
+    refundCHF: null
+    paidOut: null
+    plannedArrival: 1794038640
+    actualArrival: 1794040436
+  tags:
+  - snapshot
+  - missed_connection
+  messages:
+  - role: user
+    content: I travelled from Chiasso to Minusio on 2026-11-07 at 08:05, train ch:1:sjyid:100001:10-001.
+      My ticket cost CHF 40.00. Can I get compensation?
+  must_say:
+  - Chiasso
+  - Minusio
+  - '29'
+  - '60'
+  snapshot:
+    00-core.fx: a7fb4d32accbd899b50a07d6991c2a50a61a7012c7913c23c64be0735736840f
+    10-geography.fx: c49532f4019d43934a1cf44ff93281bac4d3c90989b2ee0802a73a9e4ef85405
+    20-facilities.fx: e88517d8c51c5cbf953f2cc9e792c24211789fa24cdae0e54f70407fe00659a3
+    30-network.fx: cf4dcccfb10b0c3a09c1fd1fa49658f52f9842e7cb4999b05d5c330ebe39c559
+    40-service.fx: 528eef21531b161c2532d507f48f6549324aa8fddd52970044e6eccdf2a9293c
+    46-refunds.fx: ec49783a46af9c5e6d4cfe211ec1be64ba5da0ea759fb19c22f3158c4af7ee42
+    47-refund-policy.fx: f7bcd8c6ced6223cfdbcab553d77c972c52fbb5357bc633582d1f70f3f92c6e4
+    50-observations.fx: c9c5b958f574800778f75fb67632a1a9859a3fed6f03011c7aef809004cd9f8b
+    60-spine.fx: e4c6469096a52a9ca0acc1a7da9495fdd739424ec449e572294350a17493bed8
+    70-abfahrtsplakate0.fx: cfde16486e8b12525b509845c6669813a7f48ed66c9928a7c0485e854d7b3a2b
+    70-billetentwerter.fx: 6ccc4cbad9a212b84597506960a4f133ee3e0caa2c37060cab8df2402e77e86c
+    70-haltestelle-uhr.fx: 37efe8a32ededcbd908540ff02e31b5d18bde1b756e855a599a773e35987923d
+    70-haltestelle-visuell-taktile-sicherheitslinie.fx: c1d41011012d3341ef35c4e99ec9d2e3998cf1ab5e9f212f41b057e0cb769ecd
+    70-haltestelle-wartehallen.fx: 137ca7e22cf8a8c859c3b245da07120b3d5ec4a0411c1994e75ca3e532b47d10
+    70-ist-daten-sbb.fx: b3d5786685b6e3b61d63ce3386de5c2896f1a5988bcbc689da843c50476c4818
+    70-linie-mit-betriebspunkten.fx: d515162b0f4f2f21cf6775fe6e7a7e2914162c48953eac8ebd3a4c21a8122355
+    70-lorastation.fx: 0297cabec0475726ffd61cfdb2c5781df01c0d96175e6dc37f4155348309d8f0
+    70-passagierfrequenz.fx: b80fce34363332be08dd310681976907c5aa26dfd33e8a989d2c5915459d6829
+    70-perron.fx: aa1c9e96081819a2a271f7eaf6cdf3870e5d73228aaec1508f8ade7fb79cfecf
+    70-regionaler-linienplan.fx: 62ee751b413a10ba42f3b65e1452b6d2d859de86ba8ad104538aa0db922c3c23
+    70-sektortafel.fx: ae119e3959b58e384fa29124de98f7276cda7ffffa3613637d049474ec051f9a
+    70-wifistation.fx: dde384cdefdc03eccfddd4209dfb3728d1addcee545603c95c4161a1b5ed2455
+    manifest.json: 0ac8beb9c7197fb675de224365ad2216eb6e0e4b3d8ba36f9ab2901265dce373
+  evidence:
+    delayMinutes: 29
+    plannedArrival: 1794038640
+    actualArrival: 1794040436
+    plannedChanges: 1
+    actualChanges: 0
+    planned_events:
+    - ev_1ff6b76d157d7a363397bc013e9049eb
+    - ev_8da9fb9d39ff0f8d89e3dacfea759414
+    - ev_96a7309bd9b6928cc4ef38015677d7c5
+    - ev_66b08b3dfbd18a3a7cb54bf60a28e529
+    actual_events:
+    - ev_bef1eb2188afbf73b89c5c592421568b
+    - ev_fe2762445f9d46df881d564cc8756001
+    reasons: []
+    offered: true
+    source: Chiasso
+    destination: Minusio
+    trip_ref: ch:1:sjyid:100001:10-001
+    ticket_price_source: synthetic passenger statement
+    oracle: independent enumeration; not production-rule output
+    search_limits_seconds:
+      start_wait: 10800
+      change_wait: 3600
+      journey: 14400
+- id: snapshot_handoff
+  request:
+    origin: sp_8507000
+    destination: sp_8500031
+    board_event: ev_e339b8b323cedccc35a91dbae5c6f883
+    day: '2026-11-07'
+    window_center: 1794081840
+    transfer_seconds: 300
+    price_chf: '40.00'
+  expected:
+    decision: handoff
+    refundStatus: null
+    refundPercent: null
+    refundCHF: null
+    paidOut: null
+    delayMinutes: null
+  tags:
+  - snapshot
+  - handoff
+  messages:
+  - role: user
+    content: I travelled from Bern to Diepflingen on 2026-11-07 at 21:04, train ch:1:sjyid:100001:10336-006.
+      My ticket cost CHF 40.00. Can I get compensation?
+  must_say:
+  - customer service
+  snapshot:
+    00-core.fx: a7fb4d32accbd899b50a07d6991c2a50a61a7012c7913c23c64be0735736840f
+    10-geography.fx: c49532f4019d43934a1cf44ff93281bac4d3c90989b2ee0802a73a9e4ef85405
+    20-facilities.fx: e88517d8c51c5cbf953f2cc9e792c24211789fa24cdae0e54f70407fe00659a3
+    30-network.fx: cf4dcccfb10b0c3a09c1fd1fa49658f52f9842e7cb4999b05d5c330ebe39c559
+    40-service.fx: 528eef21531b161c2532d507f48f6549324aa8fddd52970044e6eccdf2a9293c
+    46-refunds.fx: ec49783a46af9c5e6d4cfe211ec1be64ba5da0ea759fb19c22f3158c4af7ee42
+    47-refund-policy.fx: f7bcd8c6ced6223cfdbcab553d77c972c52fbb5357bc633582d1f70f3f92c6e4
+    50-observations.fx: c9c5b958f574800778f75fb67632a1a9859a3fed6f03011c7aef809004cd9f8b
+    60-spine.fx: e4c6469096a52a9ca0acc1a7da9495fdd739424ec449e572294350a17493bed8
+    70-abfahrtsplakate0.fx: cfde16486e8b12525b509845c6669813a7f48ed66c9928a7c0485e854d7b3a2b
+    70-billetentwerter.fx: 6ccc4cbad9a212b84597506960a4f133ee3e0caa2c37060cab8df2402e77e86c
+    70-haltestelle-uhr.fx: 37efe8a32ededcbd908540ff02e31b5d18bde1b756e855a599a773e35987923d
+    70-haltestelle-visuell-taktile-sicherheitslinie.fx: c1d41011012d3341ef35c4e99ec9d2e3998cf1ab5e9f212f41b057e0cb769ecd
+    70-haltestelle-wartehallen.fx: 137ca7e22cf8a8c859c3b245da07120b3d5ec4a0411c1994e75ca3e532b47d10
+    70-ist-daten-sbb.fx: b3d5786685b6e3b61d63ce3386de5c2896f1a5988bcbc689da843c50476c4818
+    70-linie-mit-betriebspunkten.fx: d515162b0f4f2f21cf6775fe6e7a7e2914162c48953eac8ebd3a4c21a8122355
+    70-lorastation.fx: 0297cabec0475726ffd61cfdb2c5781df01c0d96175e6dc37f4155348309d8f0
+    70-passagierfrequenz.fx: b80fce34363332be08dd310681976907c5aa26dfd33e8a989d2c5915459d6829
+    70-perron.fx: aa1c9e96081819a2a271f7eaf6cdf3870e5d73228aaec1508f8ade7fb79cfecf
+    70-regionaler-linienplan.fx: 62ee751b413a10ba42f3b65e1452b6d2d859de86ba8ad104538aa0db922c3c23
+    70-sektortafel.fx: ae119e3959b58e384fa29124de98f7276cda7ffffa3613637d049474ec051f9a
+    70-wifistation.fx: dde384cdefdc03eccfddd4209dfb3728d1addcee545603c95c4161a1b5ed2455
+    manifest.json: 0ac8beb9c7197fb675de224365ad2216eb6e0e4b3d8ba36f9ab2901265dce373
+  evidence:
+    delayMinutes: null
+    plannedArrival: 1794084780
+    actualArrival: null
+    plannedChanges: 1
+    actualChanges: null
+    planned_events:
+    - ev_e339b8b323cedccc35a91dbae5c6f883
+    - ev_3835939ec9ba0d2d6ff4d1838c03562d
+    - ev_abb6dc5b684fd9c55d46a81bc2f71b09
+    - ev_936aa56c529a9419f5f5612623371a46
+    actual_events: []
+    reasons:
+    - the planned train's arrival at the destination has no recorded actual time
+    - no actual arrival at the destination is recorded within three hours of the planned departure
+    offered: true
+    source: Bern
+    destination: Diepflingen
+    trip_ref: ch:1:sjyid:100001:10336-006
+    ticket_price_source: synthetic passenger statement
+    oracle: independent enumeration; not production-rule output
+    search_limits_seconds:
+      start_wait: 10800
+      change_wait: 3600
+      journey: 14400
+- id: snapshot_50_percent
+  request:
+    origin: sp_8503129
+    destination: sp_8503528
+    board_event: ev_d306139e2aff66e0a4c64ddc2f583a3e
+    day: '2026-11-07'
+    window_center: 1794017340
+    transfer_seconds: 300
+    price_chf: '40.00'
+  expected:
+    decision: refund
+    delayMinutes: 149
+    refundStatus: entitled
+    refundPercent: 50
+    refundCHF: '20.00'
+    paidOut: true
+    plannedArrival: 1794020220
+    actualArrival: 1794029215
+  tags:
+  - snapshot
+  - 50_percent
+  messages:
+  - role: user
+    content: I travelled from Wallisellen to Otelfingen on 2026-11-07 at 03:09, train ch:1:sjyid:100001:13784-001.
+      My ticket cost CHF 40.00. Can I get compensation?
+  must_say:
+  - Wallisellen
+  - Otelfingen
+  - '149'
+  - '50'
+  snapshot:
+    00-core.fx: a7fb4d32accbd899b50a07d6991c2a50a61a7012c7913c23c64be0735736840f
+    10-geography.fx: c49532f4019d43934a1cf44ff93281bac4d3c90989b2ee0802a73a9e4ef85405
+    20-facilities.fx: e88517d8c51c5cbf953f2cc9e792c24211789fa24cdae0e54f70407fe00659a3
+    30-network.fx: cf4dcccfb10b0c3a09c1fd1fa49658f52f9842e7cb4999b05d5c330ebe39c559
+    40-service.fx: 528eef21531b161c2532d507f48f6549324aa8fddd52970044e6eccdf2a9293c
+    46-refunds.fx: ec49783a46af9c5e6d4cfe211ec1be64ba5da0ea759fb19c22f3158c4af7ee42
+    47-refund-policy.fx: f7bcd8c6ced6223cfdbcab553d77c972c52fbb5357bc633582d1f70f3f92c6e4
+    50-observations.fx: c9c5b958f574800778f75fb67632a1a9859a3fed6f03011c7aef809004cd9f8b
+    60-spine.fx: e4c6469096a52a9ca0acc1a7da9495fdd739424ec449e572294350a17493bed8
+    70-abfahrtsplakate0.fx: cfde16486e8b12525b509845c6669813a7f48ed66c9928a7c0485e854d7b3a2b
+    70-billetentwerter.fx: 6ccc4cbad9a212b84597506960a4f133ee3e0caa2c37060cab8df2402e77e86c
+    70-haltestelle-uhr.fx: 37efe8a32ededcbd908540ff02e31b5d18bde1b756e855a599a773e35987923d
+    70-haltestelle-visuell-taktile-sicherheitslinie.fx: c1d41011012d3341ef35c4e99ec9d2e3998cf1ab5e9f212f41b057e0cb769ecd
+    70-haltestelle-wartehallen.fx: 137ca7e22cf8a8c859c3b245da07120b3d5ec4a0411c1994e75ca3e532b47d10
+    70-ist-daten-sbb.fx: b3d5786685b6e3b61d63ce3386de5c2896f1a5988bcbc689da843c50476c4818
+    70-linie-mit-betriebspunkten.fx: d515162b0f4f2f21cf6775fe6e7a7e2914162c48953eac8ebd3a4c21a8122355
+    70-lorastation.fx: 0297cabec0475726ffd61cfdb2c5781df01c0d96175e6dc37f4155348309d8f0
+    70-passagierfrequenz.fx: b80fce34363332be08dd310681976907c5aa26dfd33e8a989d2c5915459d6829
+    70-perron.fx: aa1c9e96081819a2a271f7eaf6cdf3870e5d73228aaec1508f8ade7fb79cfecf
+    70-regionaler-linienplan.fx: 62ee751b413a10ba42f3b65e1452b6d2d859de86ba8ad104538aa0db922c3c23
+    70-sektortafel.fx: ae119e3959b58e384fa29124de98f7276cda7ffffa3613637d049474ec051f9a
+    70-wifistation.fx: dde384cdefdc03eccfddd4209dfb3728d1addcee545603c95c4161a1b5ed2455
+    manifest.json: 0ac8beb9c7197fb675de224365ad2216eb6e0e4b3d8ba36f9ab2901265dce373
+  evidence:
+    delayMinutes: 149
+    plannedArrival: 1794020220
+    actualArrival: 1794029215
+    plannedChanges: 1
+    actualChanges: 1
+    planned_events:
+    - ev_d306139e2aff66e0a4c64ddc2f583a3e
+    - ev_e7a5d9513e3bad0ce0f60004c31ab547
+    - ev_f2933a26a8e167a7d77c61592d2f384f
+    - ev_7070e96098d647ba13a73eae7cad3ce2
+    actual_events:
+    - ev_43031850470912a7c4c0a032b9513b2c
+    - ev_8803365d1297a6eca0c16d262da1c4f2
+    - ev_3d4151dc97bea514f7ca985282f84d20
+    - ev_515cac1100e688062374bf4f6b5a7b78
+    reasons: []
+    offered: true
+    source: Wallisellen
+    destination: Otelfingen
+    trip_ref: ch:1:sjyid:100001:13784-001
+    ticket_price_source: synthetic passenger statement
+    oracle: independent enumeration; not production-rule output
+    search_limits_seconds:
+      start_wait: 10800
+      change_wait: 3600
+      journey: 14400
+- id: snapshot_25_percent_chf_19_60
+  request:
+    origin: sp_8507483
+    destination: sp_8503000
+    board_event: ev_0d6ee0b2810d1e861464dc526a0054b0
+    day: '2026-11-07'
+    window_center: 1794068580
+    transfer_seconds: 300
+    price_chf: '19.60'
+  expected:
+    decision: no_refund
+    delayMinutes: 66
+    refundStatus: entitled
+    refundPercent: 25
+    refundCHF: '4.90'
+    paidOut: false
+    plannedArrival: 1794070380
+    actualArrival: 1794074347
+  tags:
+  - snapshot
+  - 25_percent_chf_19_60
+  messages:
+  - role: user
+    content: I travelled from Spiez to Zürich HB on 2026-11-07 at 17:23, train ch:1:sjyid:100001:100-002.
+      My ticket cost CHF 19.60. Can I get compensation?
+  must_say:
+  - Spiez
+  - Zürich HB
+  - '66'
+  - '25'
+  - '5'
+  snapshot:
+    00-core.fx: a7fb4d32accbd899b50a07d6991c2a50a61a7012c7913c23c64be0735736840f
+    10-geography.fx: c49532f4019d43934a1cf44ff93281bac4d3c90989b2ee0802a73a9e4ef85405
+    20-facilities.fx: e88517d8c51c5cbf953f2cc9e792c24211789fa24cdae0e54f70407fe00659a3
+    30-network.fx: cf4dcccfb10b0c3a09c1fd1fa49658f52f9842e7cb4999b05d5c330ebe39c559
+    40-service.fx: 528eef21531b161c2532d507f48f6549324aa8fddd52970044e6eccdf2a9293c
+    46-refunds.fx: ec49783a46af9c5e6d4cfe211ec1be64ba5da0ea759fb19c22f3158c4af7ee42
+    47-refund-policy.fx: f7bcd8c6ced6223cfdbcab553d77c972c52fbb5357bc633582d1f70f3f92c6e4
+    50-observations.fx: c9c5b958f574800778f75fb67632a1a9859a3fed6f03011c7aef809004cd9f8b
+    60-spine.fx: e4c6469096a52a9ca0acc1a7da9495fdd739424ec449e572294350a17493bed8
+    70-abfahrtsplakate0.fx: cfde16486e8b12525b509845c6669813a7f48ed66c9928a7c0485e854d7b3a2b
+    70-billetentwerter.fx: 6ccc4cbad9a212b84597506960a4f133ee3e0caa2c37060cab8df2402e77e86c
+    70-haltestelle-uhr.fx: 37efe8a32ededcbd908540ff02e31b5d18bde1b756e855a599a773e35987923d
+    70-haltestelle-visuell-taktile-sicherheitslinie.fx: c1d41011012d3341ef35c4e99ec9d2e3998cf1ab5e9f212f41b057e0cb769ecd
+    70-haltestelle-wartehallen.fx: 137ca7e22cf8a8c859c3b245da07120b3d5ec4a0411c1994e75ca3e532b47d10
+    70-ist-daten-sbb.fx: b3d5786685b6e3b61d63ce3386de5c2896f1a5988bcbc689da843c50476c4818
+    70-linie-mit-betriebspunkten.fx: d515162b0f4f2f21cf6775fe6e7a7e2914162c48953eac8ebd3a4c21a8122355
+    70-lorastation.fx: 0297cabec0475726ffd61cfdb2c5781df01c0d96175e6dc37f4155348309d8f0
+    70-passagierfrequenz.fx: b80fce34363332be08dd310681976907c5aa26dfd33e8a989d2c5915459d6829
+    70-perron.fx: aa1c9e96081819a2a271f7eaf6cdf3870e5d73228aaec1508f8ade7fb79cfecf
+    70-regionaler-linienplan.fx: 62ee751b413a10ba42f3b65e1452b6d2d859de86ba8ad104538aa0db922c3c23
+    70-sektortafel.fx: ae119e3959b58e384fa29124de98f7276cda7ffffa3613637d049474ec051f9a
+    70-wifistation.fx: dde384cdefdc03eccfddd4209dfb3728d1addcee545603c95c4161a1b5ed2455
+    manifest.json: 0ac8beb9c7197fb675de224365ad2216eb6e0e4b3d8ba36f9ab2901265dce373
+  evidence:
+    delayMinutes: 66
+    plannedArrival: 1794070380
+    actualArrival: 1794074347
+    plannedChanges: 0
+    actualChanges: 0
+    planned_events:
+    - ev_0d6ee0b2810d1e861464dc526a0054b0
+    - ev_190e7a3fdc0e563177c09e5f2031fda4
+    actual_events:
+    - ev_ea2772f590927b766e14456f708b59ca
+    - ev_cbbe4da7667c7428768737f42fc94bab
+    reasons: []
+    offered: true
+    source: Spiez
+    destination: Zürich HB
+    trip_ref: ch:1:sjyid:100001:100-002
+    ticket_price_source: synthetic passenger statement
+    oracle: independent enumeration; not production-rule output
+    search_limits_seconds:
+      start_wait: 10800
+      change_wait: 3600
+      journey: 14400
+- id: snapshot_25_percent_chf_20_00
+  request:
+    origin: sp_8507483
+    destination: sp_8503000
+    board_event: ev_0d6ee0b2810d1e861464dc526a0054b0
+    day: '2026-11-07'
+    window_center: 1794068580
+    transfer_seconds: 300
+    price_chf: '20.00'
+  expected:
+    decision: refund
+    delayMinutes: 66
+    refundStatus: entitled
+    refundPercent: 25
+    refundCHF: '5.00'
+    paidOut: true
+    plannedArrival: 1794070380
+    actualArrival: 1794074347
+  tags:
+  - snapshot
+  - 25_percent_chf_20_00
+  messages:
+  - role: user
+    content: I travelled from Spiez to Zürich HB on 2026-11-07 at 17:23, train ch:1:sjyid:100001:100-002.
+      My ticket cost CHF 20.00. Can I get compensation?
+  must_say:
+  - Spiez
+  - Zürich HB
+  - '66'
+  - '25'
+  snapshot:
+    00-core.fx: a7fb4d32accbd899b50a07d6991c2a50a61a7012c7913c23c64be0735736840f
+    10-geography.fx: c49532f4019d43934a1cf44ff93281bac4d3c90989b2ee0802a73a9e4ef85405
+    20-facilities.fx: e88517d8c51c5cbf953f2cc9e792c24211789fa24cdae0e54f70407fe00659a3
+    30-network.fx: cf4dcccfb10b0c3a09c1fd1fa49658f52f9842e7cb4999b05d5c330ebe39c559
+    40-service.fx: 528eef21531b161c2532d507f48f6549324aa8fddd52970044e6eccdf2a9293c
+    46-refunds.fx: ec49783a46af9c5e6d4cfe211ec1be64ba5da0ea759fb19c22f3158c4af7ee42
+    47-refund-policy.fx: f7bcd8c6ced6223cfdbcab553d77c972c52fbb5357bc633582d1f70f3f92c6e4
+    50-observations.fx: c9c5b958f574800778f75fb67632a1a9859a3fed6f03011c7aef809004cd9f8b
+    60-spine.fx: e4c6469096a52a9ca0acc1a7da9495fdd739424ec449e572294350a17493bed8
+    70-abfahrtsplakate0.fx: cfde16486e8b12525b509845c6669813a7f48ed66c9928a7c0485e854d7b3a2b
+    70-billetentwerter.fx: 6ccc4cbad9a212b84597506960a4f133ee3e0caa2c37060cab8df2402e77e86c
+    70-haltestelle-uhr.fx: 37efe8a32ededcbd908540ff02e31b5d18bde1b756e855a599a773e35987923d
+    70-haltestelle-visuell-taktile-sicherheitslinie.fx: c1d41011012d3341ef35c4e99ec9d2e3998cf1ab5e9f212f41b057e0cb769ecd
+    70-haltestelle-wartehallen.fx: 137ca7e22cf8a8c859c3b245da07120b3d5ec4a0411c1994e75ca3e532b47d10
+    70-ist-daten-sbb.fx: b3d5786685b6e3b61d63ce3386de5c2896f1a5988bcbc689da843c50476c4818
+    70-linie-mit-betriebspunkten.fx: d515162b0f4f2f21cf6775fe6e7a7e2914162c48953eac8ebd3a4c21a8122355
+    70-lorastation.fx: 0297cabec0475726ffd61cfdb2c5781df01c0d96175e6dc37f4155348309d8f0
+    70-passagierfrequenz.fx: b80fce34363332be08dd310681976907c5aa26dfd33e8a989d2c5915459d6829
+    70-perron.fx: aa1c9e96081819a2a271f7eaf6cdf3870e5d73228aaec1508f8ade7fb79cfecf
+    70-regionaler-linienplan.fx: 62ee751b413a10ba42f3b65e1452b6d2d859de86ba8ad104538aa0db922c3c23
+    70-sektortafel.fx: ae119e3959b58e384fa29124de98f7276cda7ffffa3613637d049474ec051f9a
+    70-wifistation.fx: dde384cdefdc03eccfddd4209dfb3728d1addcee545603c95c4161a1b5ed2455
+    manifest.json: 0ac8beb9c7197fb675de224365ad2216eb6e0e4b3d8ba36f9ab2901265dce373
+  evidence:
+    delayMinutes: 66
+    plannedArrival: 1794070380
+    actualArrival: 1794074347
+    plannedChanges: 0
+    actualChanges: 0
+    planned_events:
+    - ev_0d6ee0b2810d1e861464dc526a0054b0
+    - ev_190e7a3fdc0e563177c09e5f2031fda4
+    actual_events:
+    - ev_ea2772f590927b766e14456f708b59ca
+    - ev_cbbe4da7667c7428768737f42fc94bab
+    reasons: []
+    offered: true
+    source: Spiez
+    destination: Zürich HB
+    trip_ref: ch:1:sjyid:100001:100-002
+    ticket_price_source: synthetic passenger statement
+    oracle: independent enumeration; not production-rule output
+    search_limits_seconds:
+      start_wait: 10800
+      change_wait: 3600
+      journey: 14400
+- id: snapshot_25_percent_chf_20_02
+  request:
+    origin: sp_8507483
+    destination: sp_8503000
+    board_event: ev_0d6ee0b2810d1e861464dc526a0054b0
+    day: '2026-11-07'
+    window_center: 1794068580
+    transfer_seconds: 300
+    price_chf: '20.02'
+  expected:
+    decision: refund
+    delayMinutes: 66
+    refundStatus: entitled
+    refundPercent: 25
+    refundCHF: '5.01'
+    paidOut: true
+    plannedArrival: 1794070380
+    actualArrival: 1794074347
+  tags:
+  - snapshot
+  - 25_percent_chf_20_02
+  messages:
+  - role: user
+    content: I travelled from Spiez to Zürich HB on 2026-11-07 at 17:23, train ch:1:sjyid:100001:100-002.
+      My ticket cost CHF 20.02. Can I get compensation?
+  must_say:
+  - Spiez
+  - Zürich HB
+  - '66'
+  - '25'
+  snapshot:
+    00-core.fx: a7fb4d32accbd899b50a07d6991c2a50a61a7012c7913c23c64be0735736840f
+    10-geography.fx: c49532f4019d43934a1cf44ff93281bac4d3c90989b2ee0802a73a9e4ef85405
+    20-facilities.fx: e88517d8c51c5cbf953f2cc9e792c24211789fa24cdae0e54f70407fe00659a3
+    30-network.fx: cf4dcccfb10b0c3a09c1fd1fa49658f52f9842e7cb4999b05d5c330ebe39c559
+    40-service.fx: 528eef21531b161c2532d507f48f6549324aa8fddd52970044e6eccdf2a9293c
+    46-refunds.fx: ec49783a46af9c5e6d4cfe211ec1be64ba5da0ea759fb19c22f3158c4af7ee42
+    47-refund-policy.fx: f7bcd8c6ced6223cfdbcab553d77c972c52fbb5357bc633582d1f70f3f92c6e4
+    50-observations.fx: c9c5b958f574800778f75fb67632a1a9859a3fed6f03011c7aef809004cd9f8b
+    60-spine.fx: e4c6469096a52a9ca0acc1a7da9495fdd739424ec449e572294350a17493bed8
+    70-abfahrtsplakate0.fx: cfde16486e8b12525b509845c6669813a7f48ed66c9928a7c0485e854d7b3a2b
+    70-billetentwerter.fx: 6ccc4cbad9a212b84597506960a4f133ee3e0caa2c37060cab8df2402e77e86c
+    70-haltestelle-uhr.fx: 37efe8a32ededcbd908540ff02e31b5d18bde1b756e855a599a773e35987923d
+    70-haltestelle-visuell-taktile-sicherheitslinie.fx: c1d41011012d3341ef35c4e99ec9d2e3998cf1ab5e9f212f41b057e0cb769ecd
+    70-haltestelle-wartehallen.fx: 137ca7e22cf8a8c859c3b245da07120b3d5ec4a0411c1994e75ca3e532b47d10
+    70-ist-daten-sbb.fx: b3d5786685b6e3b61d63ce3386de5c2896f1a5988bcbc689da843c50476c4818
+    70-linie-mit-betriebspunkten.fx: d515162b0f4f2f21cf6775fe6e7a7e2914162c48953eac8ebd3a4c21a8122355
+    70-lorastation.fx: 0297cabec0475726ffd61cfdb2c5781df01c0d96175e6dc37f4155348309d8f0
+    70-passagierfrequenz.fx: b80fce34363332be08dd310681976907c5aa26dfd33e8a989d2c5915459d6829
+    70-perron.fx: aa1c9e96081819a2a271f7eaf6cdf3870e5d73228aaec1508f8ade7fb79cfecf
+    70-regionaler-linienplan.fx: 62ee751b413a10ba42f3b65e1452b6d2d859de86ba8ad104538aa0db922c3c23
+    70-sektortafel.fx: ae119e3959b58e384fa29124de98f7276cda7ffffa3613637d049474ec051f9a
+    70-wifistation.fx: dde384cdefdc03eccfddd4209dfb3728d1addcee545603c95c4161a1b5ed2455
+    manifest.json: 0ac8beb9c7197fb675de224365ad2216eb6e0e4b3d8ba36f9ab2901265dce373
+  evidence:
+    delayMinutes: 66
+    plannedArrival: 1794070380
+    actualArrival: 1794074347
+    plannedChanges: 0
+    actualChanges: 0
+    planned_events:
+    - ev_0d6ee0b2810d1e861464dc526a0054b0
+    - ev_190e7a3fdc0e563177c09e5f2031fda4
+    actual_events:
+    - ev_ea2772f590927b766e14456f708b59ca
+    - ev_cbbe4da7667c7428768737f42fc94bab
+    reasons: []
+    offered: true
+    source: Spiez
+    destination: Zürich HB
+    trip_ref: ch:1:sjyid:100001:100-002
+    ticket_price_source: synthetic passenger statement
+    oracle: independent enumeration; not production-rule output
+    search_limits_seconds:
+      start_wait: 10800
+      change_wait: 3600
+      journey: 14400
+- id: snapshot_25_percent_chf_24_00
+  request:
+    origin: sp_8507483
+    destination: sp_8503000
+    board_event: ev_0d6ee0b2810d1e861464dc526a0054b0
+    day: '2026-11-07'
+    window_center: 1794068580
+    transfer_seconds: 300
+    price_chf: '24.00'
+  expected:
+    decision: refund
+    delayMinutes: 66
+    refundStatus: entitled
+    refundPercent: 25
+    refundCHF: '6.00'
+    paidOut: true
+    plannedArrival: 1794070380
+    actualArrival: 1794074347
+  tags:
+  - snapshot
+  - 25_percent_chf_24_00
+  messages:
+  - role: user
+    content: I travelled from Spiez to Zürich HB on 2026-11-07 at 17:23, train ch:1:sjyid:100001:100-002.
+      My ticket cost CHF 24.00. Can I get compensation?
+  must_say:
+  - Spiez
+  - Zürich HB
+  - '66'
+  - '25'
+  snapshot:
+    00-core.fx: a7fb4d32accbd899b50a07d6991c2a50a61a7012c7913c23c64be0735736840f
+    10-geography.fx: c49532f4019d43934a1cf44ff93281bac4d3c90989b2ee0802a73a9e4ef85405
+    20-facilities.fx: e88517d8c51c5cbf953f2cc9e792c24211789fa24cdae0e54f70407fe00659a3
+    30-network.fx: cf4dcccfb10b0c3a09c1fd1fa49658f52f9842e7cb4999b05d5c330ebe39c559
+    40-service.fx: 528eef21531b161c2532d507f48f6549324aa8fddd52970044e6eccdf2a9293c
+    46-refunds.fx: ec49783a46af9c5e6d4cfe211ec1be64ba5da0ea759fb19c22f3158c4af7ee42
+    47-refund-policy.fx: f7bcd8c6ced6223cfdbcab553d77c972c52fbb5357bc633582d1f70f3f92c6e4
+    50-observations.fx: c9c5b958f574800778f75fb67632a1a9859a3fed6f03011c7aef809004cd9f8b
+    60-spine.fx: e4c6469096a52a9ca0acc1a7da9495fdd739424ec449e572294350a17493bed8
+    70-abfahrtsplakate0.fx: cfde16486e8b12525b509845c6669813a7f48ed66c9928a7c0485e854d7b3a2b
+    70-billetentwerter.fx: 6ccc4cbad9a212b84597506960a4f133ee3e0caa2c37060cab8df2402e77e86c
+    70-haltestelle-uhr.fx: 37efe8a32ededcbd908540ff02e31b5d18bde1b756e855a599a773e35987923d
+    70-haltestelle-visuell-taktile-sicherheitslinie.fx: c1d41011012d3341ef35c4e99ec9d2e3998cf1ab5e9f212f41b057e0cb769ecd
+    70-haltestelle-wartehallen.fx: 137ca7e22cf8a8c859c3b245da07120b3d5ec4a0411c1994e75ca3e532b47d10
+    70-ist-daten-sbb.fx: b3d5786685b6e3b61d63ce3386de5c2896f1a5988bcbc689da843c50476c4818
+    70-linie-mit-betriebspunkten.fx: d515162b0f4f2f21cf6775fe6e7a7e2914162c48953eac8ebd3a4c21a8122355
+    70-lorastation.fx: 0297cabec0475726ffd61cfdb2c5781df01c0d96175e6dc37f4155348309d8f0
+    70-passagierfrequenz.fx: b80fce34363332be08dd310681976907c5aa26dfd33e8a989d2c5915459d6829
+    70-perron.fx: aa1c9e96081819a2a271f7eaf6cdf3870e5d73228aaec1508f8ade7fb79cfecf
+    70-regionaler-linienplan.fx: 62ee751b413a10ba42f3b65e1452b6d2d859de86ba8ad104538aa0db922c3c23
+    70-sektortafel.fx: ae119e3959b58e384fa29124de98f7276cda7ffffa3613637d049474ec051f9a
+    70-wifistation.fx: dde384cdefdc03eccfddd4209dfb3728d1addcee545603c95c4161a1b5ed2455
+    manifest.json: 0ac8beb9c7197fb675de224365ad2216eb6e0e4b3d8ba36f9ab2901265dce373
+  evidence:
+    delayMinutes: 66
+    plannedArrival: 1794070380
+    actualArrival: 1794074347
+    plannedChanges: 0
+    actualChanges: 0
+    planned_events:
+    - ev_0d6ee0b2810d1e861464dc526a0054b0
+    - ev_190e7a3fdc0e563177c09e5f2031fda4
+    actual_events:
+    - ev_ea2772f590927b766e14456f708b59ca
+    - ev_cbbe4da7667c7428768737f42fc94bab
+    reasons: []
+    offered: true
+    source: Spiez
+    destination: Zürich HB
+    trip_ref: ch:1:sjyid:100001:100-002
+    ticket_price_source: synthetic passenger statement
+    oracle: independent enumeration; not production-rule output
+    search_limits_seconds:
+      start_wait: 10800
+      change_wait: 3600
+      journey: 14400
+- id: snapshot_50_percent_chf_9_80
+  request:
+    origin: sp_8503129
+    destination: sp_8503528
+    board_event: ev_d306139e2aff66e0a4c64ddc2f583a3e
+    day: '2026-11-07'
+    window_center: 1794017340
+    transfer_seconds: 300
+    price_chf: '9.80'
+  expected:
+    decision: no_refund
+    delayMinutes: 149
+    refundStatus: entitled
+    refundPercent: 50
+    refundCHF: '4.90'
+    paidOut: false
+    plannedArrival: 1794020220
+    actualArrival: 1794029215
+  tags:
+  - snapshot
+  - 50_percent_chf_9_80
+  messages:
+  - role: user
+    content: I travelled from Wallisellen to Otelfingen on 2026-11-07 at 03:09, train ch:1:sjyid:100001:13784-001.
+      My ticket cost CHF 9.80. Can I get compensation?
+  must_say:
+  - Wallisellen
+  - Otelfingen
+  - '149'
+  - '50'
+  - '5'
+  snapshot:
+    00-core.fx: a7fb4d32accbd899b50a07d6991c2a50a61a7012c7913c23c64be0735736840f
+    10-geography.fx: c49532f4019d43934a1cf44ff93281bac4d3c90989b2ee0802a73a9e4ef85405
+    20-facilities.fx: e88517d8c51c5cbf953f2cc9e792c24211789fa24cdae0e54f70407fe00659a3
+    30-network.fx: cf4dcccfb10b0c3a09c1fd1fa49658f52f9842e7cb4999b05d5c330ebe39c559
+    40-service.fx: 528eef21531b161c2532d507f48f6549324aa8fddd52970044e6eccdf2a9293c
+    46-refunds.fx: ec49783a46af9c5e6d4cfe211ec1be64ba5da0ea759fb19c22f3158c4af7ee42
+    47-refund-policy.fx: f7bcd8c6ced6223cfdbcab553d77c972c52fbb5357bc633582d1f70f3f92c6e4
+    50-observations.fx: c9c5b958f574800778f75fb67632a1a9859a3fed6f03011c7aef809004cd9f8b
+    60-spine.fx: e4c6469096a52a9ca0acc1a7da9495fdd739424ec449e572294350a17493bed8
+    70-abfahrtsplakate0.fx: cfde16486e8b12525b509845c6669813a7f48ed66c9928a7c0485e854d7b3a2b
+    70-billetentwerter.fx: 6ccc4cbad9a212b84597506960a4f133ee3e0caa2c37060cab8df2402e77e86c
+    70-haltestelle-uhr.fx: 37efe8a32ededcbd908540ff02e31b5d18bde1b756e855a599a773e35987923d
+    70-haltestelle-visuell-taktile-sicherheitslinie.fx: c1d41011012d3341ef35c4e99ec9d2e3998cf1ab5e9f212f41b057e0cb769ecd
+    70-haltestelle-wartehallen.fx: 137ca7e22cf8a8c859c3b245da07120b3d5ec4a0411c1994e75ca3e532b47d10
+    70-ist-daten-sbb.fx: b3d5786685b6e3b61d63ce3386de5c2896f1a5988bcbc689da843c50476c4818
+    70-linie-mit-betriebspunkten.fx: d515162b0f4f2f21cf6775fe6e7a7e2914162c48953eac8ebd3a4c21a8122355
+    70-lorastation.fx: 0297cabec0475726ffd61cfdb2c5781df01c0d96175e6dc37f4155348309d8f0
+    70-passagierfrequenz.fx: b80fce34363332be08dd310681976907c5aa26dfd33e8a989d2c5915459d6829
+    70-perron.fx: aa1c9e96081819a2a271f7eaf6cdf3870e5d73228aaec1508f8ade7fb79cfecf
+    70-regionaler-linienplan.fx: 62ee751b413a10ba42f3b65e1452b6d2d859de86ba8ad104538aa0db922c3c23
+    70-sektortafel.fx: ae119e3959b58e384fa29124de98f7276cda7ffffa3613637d049474ec051f9a
+    70-wifistation.fx: dde384cdefdc03eccfddd4209dfb3728d1addcee545603c95c4161a1b5ed2455
+    manifest.json: 0ac8beb9c7197fb675de224365ad2216eb6e0e4b3d8ba36f9ab2901265dce373
+  evidence:
+    delayMinutes: 149
+    plannedArrival: 1794020220
+    actualArrival: 1794029215
+    plannedChanges: 1
+    actualChanges: 1
+    planned_events:
+    - ev_d306139e2aff66e0a4c64ddc2f583a3e
+    - ev_e7a5d9513e3bad0ce0f60004c31ab547
+    - ev_f2933a26a8e167a7d77c61592d2f384f
+    - ev_7070e96098d647ba13a73eae7cad3ce2
+    actual_events:
+    - ev_43031850470912a7c4c0a032b9513b2c
+    - ev_8803365d1297a6eca0c16d262da1c4f2
+    - ev_3d4151dc97bea514f7ca985282f84d20
+    - ev_515cac1100e688062374bf4f6b5a7b78
+    reasons: []
+    offered: true
+    source: Wallisellen
+    destination: Otelfingen
+    trip_ref: ch:1:sjyid:100001:13784-001
+    ticket_price_source: synthetic passenger statement
+    oracle: independent enumeration; not production-rule output
+    search_limits_seconds:
+      start_wait: 10800
+      change_wait: 3600
+      journey: 14400
+- id: snapshot_50_percent_chf_10_00
+  request:
+    origin: sp_8503129
+    destination: sp_8503528
+    board_event: ev_d306139e2aff66e0a4c64ddc2f583a3e
+    day: '2026-11-07'
+    window_center: 1794017340
+    transfer_seconds: 300
+    price_chf: '10.00'
+  expected:
+    decision: refund
+    delayMinutes: 149
+    refundStatus: entitled
+    refundPercent: 50
+    refundCHF: '5.00'
+    paidOut: true
+    plannedArrival: 1794020220
+    actualArrival: 1794029215
+  tags:
+  - snapshot
+  - 50_percent_chf_10_00
+  messages:
+  - role: user
+    content: I travelled from Wallisellen to Otelfingen on 2026-11-07 at 03:09, train ch:1:sjyid:100001:13784-001.
+      My ticket cost CHF 10.00. Can I get compensation?
+  must_say:
+  - Wallisellen
+  - Otelfingen
+  - '149'
+  - '50'
+  snapshot:
+    00-core.fx: a7fb4d32accbd899b50a07d6991c2a50a61a7012c7913c23c64be0735736840f
+    10-geography.fx: c49532f4019d43934a1cf44ff93281bac4d3c90989b2ee0802a73a9e4ef85405
+    20-facilities.fx: e88517d8c51c5cbf953f2cc9e792c24211789fa24cdae0e54f70407fe00659a3
+    30-network.fx: cf4dcccfb10b0c3a09c1fd1fa49658f52f9842e7cb4999b05d5c330ebe39c559
+    40-service.fx: 528eef21531b161c2532d507f48f6549324aa8fddd52970044e6eccdf2a9293c
+    46-refunds.fx: ec49783a46af9c5e6d4cfe211ec1be64ba5da0ea759fb19c22f3158c4af7ee42
+    47-refund-policy.fx: f7bcd8c6ced6223cfdbcab553d77c972c52fbb5357bc633582d1f70f3f92c6e4
+    50-observations.fx: c9c5b958f574800778f75fb67632a1a9859a3fed6f03011c7aef809004cd9f8b
+    60-spine.fx: e4c6469096a52a9ca0acc1a7da9495fdd739424ec449e572294350a17493bed8
+    70-abfahrtsplakate0.fx: cfde16486e8b12525b509845c6669813a7f48ed66c9928a7c0485e854d7b3a2b
+    70-billetentwerter.fx: 6ccc4cbad9a212b84597506960a4f133ee3e0caa2c37060cab8df2402e77e86c
+    70-haltestelle-uhr.fx: 37efe8a32ededcbd908540ff02e31b5d18bde1b756e855a599a773e35987923d
+    70-haltestelle-visuell-taktile-sicherheitslinie.fx: c1d41011012d3341ef35c4e99ec9d2e3998cf1ab5e9f212f41b057e0cb769ecd
+    70-haltestelle-wartehallen.fx: 137ca7e22cf8a8c859c3b245da07120b3d5ec4a0411c1994e75ca3e532b47d10
+    70-ist-daten-sbb.fx: b3d5786685b6e3b61d63ce3386de5c2896f1a5988bcbc689da843c50476c4818
+    70-linie-mit-betriebspunkten.fx: d515162b0f4f2f21cf6775fe6e7a7e2914162c48953eac8ebd3a4c21a8122355
+    70-lorastation.fx: 0297cabec0475726ffd61cfdb2c5781df01c0d96175e6dc37f4155348309d8f0
+    70-passagierfrequenz.fx: b80fce34363332be08dd310681976907c5aa26dfd33e8a989d2c5915459d6829
+    70-perron.fx: aa1c9e96081819a2a271f7eaf6cdf3870e5d73228aaec1508f8ade7fb79cfecf
+    70-regionaler-linienplan.fx: 62ee751b413a10ba42f3b65e1452b6d2d859de86ba8ad104538aa0db922c3c23
+    70-sektortafel.fx: ae119e3959b58e384fa29124de98f7276cda7ffffa3613637d049474ec051f9a
+    70-wifistation.fx: dde384cdefdc03eccfddd4209dfb3728d1addcee545603c95c4161a1b5ed2455
+    manifest.json: 0ac8beb9c7197fb675de224365ad2216eb6e0e4b3d8ba36f9ab2901265dce373
+  evidence:
+    delayMinutes: 149
+    plannedArrival: 1794020220
+    actualArrival: 1794029215
+    plannedChanges: 1
+    actualChanges: 1
+    planned_events:
+    - ev_d306139e2aff66e0a4c64ddc2f583a3e
+    - ev_e7a5d9513e3bad0ce0f60004c31ab547
+    - ev_f2933a26a8e167a7d77c61592d2f384f
+    - ev_7070e96098d647ba13a73eae7cad3ce2
+    actual_events:
+    - ev_43031850470912a7c4c0a032b9513b2c
+    - ev_8803365d1297a6eca0c16d262da1c4f2
+    - ev_3d4151dc97bea514f7ca985282f84d20
+    - ev_515cac1100e688062374bf4f6b5a7b78
+    reasons: []
+    offered: true
+    source: Wallisellen
+    destination: Otelfingen
+    trip_ref: ch:1:sjyid:100001:13784-001
+    ticket_price_source: synthetic passenger statement
+    oracle: independent enumeration; not production-rule output
+    search_limits_seconds:
+      start_wait: 10800
+      change_wait: 3600
+      journey: 14400
+- id: snapshot_50_percent_chf_10_01
+  request:
+    origin: sp_8503129
+    destination: sp_8503528
+    board_event: ev_d306139e2aff66e0a4c64ddc2f583a3e
+    day: '2026-11-07'
+    window_center: 1794017340
+    transfer_seconds: 300
+    price_chf: '10.01'
+  expected:
+    decision: refund
+    delayMinutes: 149
+    refundStatus: entitled
+    refundPercent: 50
+    refundCHF: '5.01'
+    paidOut: true
+    plannedArrival: 1794020220
+    actualArrival: 1794029215
+  tags:
+  - snapshot
+  - 50_percent_chf_10_01
+  messages:
+  - role: user
+    content: I travelled from Wallisellen to Otelfingen on 2026-11-07 at 03:09, train ch:1:sjyid:100001:13784-001.
+      My ticket cost CHF 10.01. Can I get compensation?
+  must_say:
+  - Wallisellen
+  - Otelfingen
+  - '149'
+  - '50'
+  snapshot:
+    00-core.fx: a7fb4d32accbd899b50a07d6991c2a50a61a7012c7913c23c64be0735736840f
+    10-geography.fx: c49532f4019d43934a1cf44ff93281bac4d3c90989b2ee0802a73a9e4ef85405
+    20-facilities.fx: e88517d8c51c5cbf953f2cc9e792c24211789fa24cdae0e54f70407fe00659a3
+    30-network.fx: cf4dcccfb10b0c3a09c1fd1fa49658f52f9842e7cb4999b05d5c330ebe39c559
+    40-service.fx: 528eef21531b161c2532d507f48f6549324aa8fddd52970044e6eccdf2a9293c
+    46-refunds.fx: ec49783a46af9c5e6d4cfe211ec1be64ba5da0ea759fb19c22f3158c4af7ee42
+    47-refund-policy.fx: f7bcd8c6ced6223cfdbcab553d77c972c52fbb5357bc633582d1f70f3f92c6e4
+    50-observations.fx: c9c5b958f574800778f75fb67632a1a9859a3fed6f03011c7aef809004cd9f8b
+    60-spine.fx: e4c6469096a52a9ca0acc1a7da9495fdd739424ec449e572294350a17493bed8
+    70-abfahrtsplakate0.fx: cfde16486e8b12525b509845c6669813a7f48ed66c9928a7c0485e854d7b3a2b
+    70-billetentwerter.fx: 6ccc4cbad9a212b84597506960a4f133ee3e0caa2c37060cab8df2402e77e86c
+    70-haltestelle-uhr.fx: 37efe8a32ededcbd908540ff02e31b5d18bde1b756e855a599a773e35987923d
+    70-haltestelle-visuell-taktile-sicherheitslinie.fx: c1d41011012d3341ef35c4e99ec9d2e3998cf1ab5e9f212f41b057e0cb769ecd
+    70-haltestelle-wartehallen.fx: 137ca7e22cf8a8c859c3b245da07120b3d5ec4a0411c1994e75ca3e532b47d10
+    70-ist-daten-sbb.fx: b3d5786685b6e3b61d63ce3386de5c2896f1a5988bcbc689da843c50476c4818
+    70-linie-mit-betriebspunkten.fx: d515162b0f4f2f21cf6775fe6e7a7e2914162c48953eac8ebd3a4c21a8122355
+    70-lorastation.fx: 0297cabec0475726ffd61cfdb2c5781df01c0d96175e6dc37f4155348309d8f0
+    70-passagierfrequenz.fx: b80fce34363332be08dd310681976907c5aa26dfd33e8a989d2c5915459d6829
+    70-perron.fx: aa1c9e96081819a2a271f7eaf6cdf3870e5d73228aaec1508f8ade7fb79cfecf
+    70-regionaler-linienplan.fx: 62ee751b413a10ba42f3b65e1452b6d2d859de86ba8ad104538aa0db922c3c23
+    70-sektortafel.fx: ae119e3959b58e384fa29124de98f7276cda7ffffa3613637d049474ec051f9a
+    70-wifistation.fx: dde384cdefdc03eccfddd4209dfb3728d1addcee545603c95c4161a1b5ed2455
+    manifest.json: 0ac8beb9c7197fb675de224365ad2216eb6e0e4b3d8ba36f9ab2901265dce373
+  evidence:
+    delayMinutes: 149
+    plannedArrival: 1794020220
+    actualArrival: 1794029215
+    plannedChanges: 1
+    actualChanges: 1
+    planned_events:
+    - ev_d306139e2aff66e0a4c64ddc2f583a3e
+    - ev_e7a5d9513e3bad0ce0f60004c31ab547
+    - ev_f2933a26a8e167a7d77c61592d2f384f
+    - ev_7070e96098d647ba13a73eae7cad3ce2
+    actual_events:
+    - ev_43031850470912a7c4c0a032b9513b2c
+    - ev_8803365d1297a6eca0c16d262da1c4f2
+    - ev_3d4151dc97bea514f7ca985282f84d20
+    - ev_515cac1100e688062374bf4f6b5a7b78
+    reasons: []
+    offered: true
+    source: Wallisellen
+    destination: Otelfingen
+    trip_ref: ch:1:sjyid:100001:13784-001
+    ticket_price_source: synthetic passenger statement
+    oracle: independent enumeration; not production-rule output
+    search_limits_seconds:
+      start_wait: 10800
+      change_wait: 3600
+      journey: 14400
+- id: snapshot_50_percent_chf_12_00
+  request:
+    origin: sp_8503129
+    destination: sp_8503528
+    board_event: ev_d306139e2aff66e0a4c64ddc2f583a3e
+    day: '2026-11-07'
+    window_center: 1794017340
+    transfer_seconds: 300
+    price_chf: '12.00'
+  expected:
+    decision: refund
+    delayMinutes: 149
+    refundStatus: entitled
+    refundPercent: 50
+    refundCHF: '6.00'
+    paidOut: true
+    plannedArrival: 1794020220
+    actualArrival: 1794029215
+  tags:
+  - snapshot
+  - 50_percent_chf_12_00
+  messages:
+  - role: user
+    content: I travelled from Wallisellen to Otelfingen on 2026-11-07 at 03:09, train ch:1:sjyid:100001:13784-001.
+      My ticket cost CHF 12.00. Can I get compensation?
+  must_say:
+  - Wallisellen
+  - Otelfingen
+  - '149'
+  - '50'
+  snapshot:
+    00-core.fx: a7fb4d32accbd899b50a07d6991c2a50a61a7012c7913c23c64be0735736840f
+    10-geography.fx: c49532f4019d43934a1cf44ff93281bac4d3c90989b2ee0802a73a9e4ef85405
+    20-facilities.fx: e88517d8c51c5cbf953f2cc9e792c24211789fa24cdae0e54f70407fe00659a3
+    30-network.fx: cf4dcccfb10b0c3a09c1fd1fa49658f52f9842e7cb4999b05d5c330ebe39c559
+    40-service.fx: 528eef21531b161c2532d507f48f6549324aa8fddd52970044e6eccdf2a9293c
+    46-refunds.fx: ec49783a46af9c5e6d4cfe211ec1be64ba5da0ea759fb19c22f3158c4af7ee42
+    47-refund-policy.fx: f7bcd8c6ced6223cfdbcab553d77c972c52fbb5357bc633582d1f70f3f92c6e4
+    50-observations.fx: c9c5b958f574800778f75fb67632a1a9859a3fed6f03011c7aef809004cd9f8b
+    60-spine.fx: e4c6469096a52a9ca0acc1a7da9495fdd739424ec449e572294350a17493bed8
+    70-abfahrtsplakate0.fx: cfde16486e8b12525b509845c6669813a7f48ed66c9928a7c0485e854d7b3a2b
+    70-billetentwerter.fx: 6ccc4cbad9a212b84597506960a4f133ee3e0caa2c37060cab8df2402e77e86c
+    70-haltestelle-uhr.fx: 37efe8a32ededcbd908540ff02e31b5d18bde1b756e855a599a773e35987923d
+    70-haltestelle-visuell-taktile-sicherheitslinie.fx: c1d41011012d3341ef35c4e99ec9d2e3998cf1ab5e9f212f41b057e0cb769ecd
+    70-haltestelle-wartehallen.fx: 137ca7e22cf8a8c859c3b245da07120b3d5ec4a0411c1994e75ca3e532b47d10
+    70-ist-daten-sbb.fx: b3d5786685b6e3b61d63ce3386de5c2896f1a5988bcbc689da843c50476c4818
+    70-linie-mit-betriebspunkten.fx: d515162b0f4f2f21cf6775fe6e7a7e2914162c48953eac8ebd3a4c21a8122355
+    70-lorastation.fx: 0297cabec0475726ffd61cfdb2c5781df01c0d96175e6dc37f4155348309d8f0
+    70-passagierfrequenz.fx: b80fce34363332be08dd310681976907c5aa26dfd33e8a989d2c5915459d6829
+    70-perron.fx: aa1c9e96081819a2a271f7eaf6cdf3870e5d73228aaec1508f8ade7fb79cfecf
+    70-regionaler-linienplan.fx: 62ee751b413a10ba42f3b65e1452b6d2d859de86ba8ad104538aa0db922c3c23
+    70-sektortafel.fx: ae119e3959b58e384fa29124de98f7276cda7ffffa3613637d049474ec051f9a
+    70-wifistation.fx: dde384cdefdc03eccfddd4209dfb3728d1addcee545603c95c4161a1b5ed2455
+    manifest.json: 0ac8beb9c7197fb675de224365ad2216eb6e0e4b3d8ba36f9ab2901265dce373
+  evidence:
+    delayMinutes: 149
+    plannedArrival: 1794020220
+    actualArrival: 1794029215
+    plannedChanges: 1
+    actualChanges: 1
+    planned_events:
+    - ev_d306139e2aff66e0a4c64ddc2f583a3e
+    - ev_e7a5d9513e3bad0ce0f60004c31ab547
+    - ev_f2933a26a8e167a7d77c61592d2f384f
+    - ev_7070e96098d647ba13a73eae7cad3ce2
+    actual_events:
+    - ev_43031850470912a7c4c0a032b9513b2c
+    - ev_8803365d1297a6eca0c16d262da1c4f2
+    - ev_3d4151dc97bea514f7ca985282f84d20
+    - ev_515cac1100e688062374bf4f6b5a7b78
+    reasons: []
+    offered: true
+    source: Wallisellen
+    destination: Otelfingen
+    trip_ref: ch:1:sjyid:100001:13784-001
+    ticket_price_source: synthetic passenger statement
+    oracle: independent enumeration; not production-rule output
+    search_limits_seconds:
+      start_wait: 10800
+      change_wait: 3600
+      journey: 14400
+- id: snapshot_missing_price
+  request:
+    origin: sp_8507483
+    destination: sp_8503000
+    board_event: ev_0d6ee0b2810d1e861464dc526a0054b0
+    day: '2026-11-07'
+    window_center: 1794068580
+    transfer_seconds: 300
+    price_chf: null
+  expected:
+    decision: refund
+    delayMinutes: 66
+    refundStatus: entitled
+    refundPercent: 25
+    refundCHF: null
+    paidOut: null
+    plannedArrival: 1794070380
+    actualArrival: 1794074347
+  tags:
+  - snapshot
+  - missing_price
+  messages:
+  - role: user
+    content: I travelled from Spiez to Zürich HB on 2026-11-07 at 17:23, train ch:1:sjyid:100001:100-002.
+      Can I get compensation?
+  must_say:
+  - Spiez
+  - Zürich HB
+  - '66'
+  - '25'
+  - '5'
+  - price
+  snapshot:
+    00-core.fx: a7fb4d32accbd899b50a07d6991c2a50a61a7012c7913c23c64be0735736840f
+    10-geography.fx: c49532f4019d43934a1cf44ff93281bac4d3c90989b2ee0802a73a9e4ef85405
+    20-facilities.fx: e88517d8c51c5cbf953f2cc9e792c24211789fa24cdae0e54f70407fe00659a3
+    30-network.fx: cf4dcccfb10b0c3a09c1fd1fa49658f52f9842e7cb4999b05d5c330ebe39c559
+    40-service.fx: 528eef21531b161c2532d507f48f6549324aa8fddd52970044e6eccdf2a9293c
+    46-refunds.fx: ec49783a46af9c5e6d4cfe211ec1be64ba5da0ea759fb19c22f3158c4af7ee42
+    47-refund-policy.fx: f7bcd8c6ced6223cfdbcab553d77c972c52fbb5357bc633582d1f70f3f92c6e4
+    50-observations.fx: c9c5b958f574800778f75fb67632a1a9859a3fed6f03011c7aef809004cd9f8b
+    60-spine.fx: e4c6469096a52a9ca0acc1a7da9495fdd739424ec449e572294350a17493bed8
+    70-abfahrtsplakate0.fx: cfde16486e8b12525b509845c6669813a7f48ed66c9928a7c0485e854d7b3a2b
+    70-billetentwerter.fx: 6ccc4cbad9a212b84597506960a4f133ee3e0caa2c37060cab8df2402e77e86c
+    70-haltestelle-uhr.fx: 37efe8a32ededcbd908540ff02e31b5d18bde1b756e855a599a773e35987923d
+    70-haltestelle-visuell-taktile-sicherheitslinie.fx: c1d41011012d3341ef35c4e99ec9d2e3998cf1ab5e9f212f41b057e0cb769ecd
+    70-haltestelle-wartehallen.fx: 137ca7e22cf8a8c859c3b245da07120b3d5ec4a0411c1994e75ca3e532b47d10
+    70-ist-daten-sbb.fx: b3d5786685b6e3b61d63ce3386de5c2896f1a5988bcbc689da843c50476c4818
+    70-linie-mit-betriebspunkten.fx: d515162b0f4f2f21cf6775fe6e7a7e2914162c48953eac8ebd3a4c21a8122355
+    70-lorastation.fx: 0297cabec0475726ffd61cfdb2c5781df01c0d96175e6dc37f4155348309d8f0
+    70-passagierfrequenz.fx: b80fce34363332be08dd310681976907c5aa26dfd33e8a989d2c5915459d6829
+    70-perron.fx: aa1c9e96081819a2a271f7eaf6cdf3870e5d73228aaec1508f8ade7fb79cfecf
+    70-regionaler-linienplan.fx: 62ee751b413a10ba42f3b65e1452b6d2d859de86ba8ad104538aa0db922c3c23
+    70-sektortafel.fx: ae119e3959b58e384fa29124de98f7276cda7ffffa3613637d049474ec051f9a
+    70-wifistation.fx: dde384cdefdc03eccfddd4209dfb3728d1addcee545603c95c4161a1b5ed2455
+    manifest.json: 0ac8beb9c7197fb675de224365ad2216eb6e0e4b3d8ba36f9ab2901265dce373
+  evidence:
+    delayMinutes: 66
+    plannedArrival: 1794070380
+    actualArrival: 1794074347
+    plannedChanges: 0
+    actualChanges: 0
+    planned_events:
+    - ev_0d6ee0b2810d1e861464dc526a0054b0
+    - ev_190e7a3fdc0e563177c09e5f2031fda4
+    actual_events:
+    - ev_ea2772f590927b766e14456f708b59ca
+    - ev_cbbe4da7667c7428768737f42fc94bab
+    reasons: []
+    offered: true
+    source: Spiez
+    destination: Zürich HB
+    trip_ref: ch:1:sjyid:100001:100-002
+    ticket_price_source: synthetic passenger statement
+    oracle: independent enumeration; not production-rule output
+    search_limits_seconds:
+      start_wait: 10800
+      change_wait: 3600
+      journey: 14400
+- id: snapshot_unsupported_day
+  request:
+    origin: sp_8507483
+    destination: sp_8503000
+    board_event: ev_0d6ee0b2810d1e861464dc526a0054b0
+    day: '2026-11-08'
+    window_center: 1794068580
+    transfer_seconds: 300
+    price_chf: '40.00'
+  expected:
+    decision: handoff
+    refundStatus: null
+    refundPercent: null
+    refundCHF: null
+    paidOut: null
+    delayMinutes: null
+  tags:
+  - snapshot
+  - unsupported_day
+  messages:
+  - role: user
+    content: I travelled from Spiez to Zürich HB on 2026-11-08 at 17:23, train ch:1:sjyid:100001:100-002.
+      My ticket cost CHF 40.00. Can I get compensation?
+  must_say:
+  - customer service
+  snapshot:
+    00-core.fx: a7fb4d32accbd899b50a07d6991c2a50a61a7012c7913c23c64be0735736840f
+    10-geography.fx: c49532f4019d43934a1cf44ff93281bac4d3c90989b2ee0802a73a9e4ef85405
+    20-facilities.fx: e88517d8c51c5cbf953f2cc9e792c24211789fa24cdae0e54f70407fe00659a3
+    30-network.fx: cf4dcccfb10b0c3a09c1fd1fa49658f52f9842e7cb4999b05d5c330ebe39c559
+    40-service.fx: 528eef21531b161c2532d507f48f6549324aa8fddd52970044e6eccdf2a9293c
+    46-refunds.fx: ec49783a46af9c5e6d4cfe211ec1be64ba5da0ea759fb19c22f3158c4af7ee42
+    47-refund-policy.fx: f7bcd8c6ced6223cfdbcab553d77c972c52fbb5357bc633582d1f70f3f92c6e4
+    50-observations.fx: c9c5b958f574800778f75fb67632a1a9859a3fed6f03011c7aef809004cd9f8b
+    60-spine.fx: e4c6469096a52a9ca0acc1a7da9495fdd739424ec449e572294350a17493bed8
+    70-abfahrtsplakate0.fx: cfde16486e8b12525b509845c6669813a7f48ed66c9928a7c0485e854d7b3a2b
+    70-billetentwerter.fx: 6ccc4cbad9a212b84597506960a4f133ee3e0caa2c37060cab8df2402e77e86c
+    70-haltestelle-uhr.fx: 37efe8a32ededcbd908540ff02e31b5d18bde1b756e855a599a773e35987923d
+    70-haltestelle-visuell-taktile-sicherheitslinie.fx: c1d41011012d3341ef35c4e99ec9d2e3998cf1ab5e9f212f41b057e0cb769ecd
+    70-haltestelle-wartehallen.fx: 137ca7e22cf8a8c859c3b245da07120b3d5ec4a0411c1994e75ca3e532b47d10
+    70-ist-daten-sbb.fx: b3d5786685b6e3b61d63ce3386de5c2896f1a5988bcbc689da843c50476c4818
+    70-linie-mit-betriebspunkten.fx: d515162b0f4f2f21cf6775fe6e7a7e2914162c48953eac8ebd3a4c21a8122355
+    70-lorastation.fx: 0297cabec0475726ffd61cfdb2c5781df01c0d96175e6dc37f4155348309d8f0
+    70-passagierfrequenz.fx: b80fce34363332be08dd310681976907c5aa26dfd33e8a989d2c5915459d6829
+    70-perron.fx: aa1c9e96081819a2a271f7eaf6cdf3870e5d73228aaec1508f8ade7fb79cfecf
+    70-regionaler-linienplan.fx: 62ee751b413a10ba42f3b65e1452b6d2d859de86ba8ad104538aa0db922c3c23
+    70-sektortafel.fx: ae119e3959b58e384fa29124de98f7276cda7ffffa3613637d049474ec051f9a
+    70-wifistation.fx: dde384cdefdc03eccfddd4209dfb3728d1addcee545603c95c4161a1b5ed2455
+    manifest.json: 0ac8beb9c7197fb675de224365ad2216eb6e0e4b3d8ba36f9ab2901265dce373
+  evidence:
+    delayMinutes: null
+    reasons:
+    - journeys on this day are not in the SBB data
+    offered: false
+    source: Spiez
+    destination: Zürich HB
+    trip_ref: ch:1:sjyid:100001:100-002
+    ticket_price_source: synthetic passenger statement
+    oracle: independent enumeration; not production-rule output
+    search_limits_seconds:
+      start_wait: 10800
+      change_wait: 3600
+      journey: 14400

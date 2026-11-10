@@ -43,6 +43,7 @@ def run_cases(system: SystemPort, cases: list[Case], *, repeats: int = 1,
                 except Exception as exc:  # noqa: BLE001 -- each attempted case remains in the report
                     result = Observation("error", error=type(exc).__name__)
                 elapsed = (time.perf_counter() - start) * 1000
+                performance_eligible = result.metadata.get("performance_eligible", True)
                 replay = system.scope == "replay"
                 latency = result.stage_ms.get("end_to_end") if replay else elapsed
                 effective_scope = result.metadata.get("scope", "conversation") if replay else system.scope
@@ -60,7 +61,7 @@ def run_cases(system: SystemPort, cases: list[Case], *, repeats: int = 1,
                              "case": case.to_dict(), "expected": case.expected, "observation": asdict(result),
                              "scope": effective_scope,
                              "phase": "first_request" if not rows else "warm_request",
-                             "replayed": replay, "latency_ms": latency,
+                             "replayed": replay, "performance_eligible": performance_eligible, "latency_ms": latency,
                              "judge_ms": judge_ms, "scores": scores, "quality": quality})
                 if progress:
                     progress(f"{case.id}: correct={scores['correct']}, elapsed_ms={latency}")
@@ -96,8 +97,9 @@ def summarize(rows: list[dict]) -> dict:
         metrics[key] = {"count": len(values), "mean": statistics.mean(values) if values else None}
     stages: dict[str, list[float]] = {}
     for row in rows:
-        for name, value in row["observation"]["stage_ms"].items():
-            stages.setdefault(name, []).append(value)
+        if row.get("performance_eligible", True):
+            for name, value in row["observation"]["stage_ms"].items():
+                stages.setdefault(name, []).append(value)
     quality_dimensions: dict[str, list[int]] = {}
     for row in rows:
         if row["quality"].get("status") == "scored":
@@ -108,9 +110,9 @@ def summarize(rows: list[dict]) -> dict:
             "technical_errors": sum(r["observation"]["decision"] == "error" for r in rows),
             "audit_complete": sum(r["scores"]["audit_complete"] for r in rows),
             "invariant_counts": invariant_counts(rows),
-            "latency": durations([r["latency_ms"] for r in rows if r["latency_ms"] is not None]),
-            "first_request": durations([r["latency_ms"] for r in rows if r["phase"] == "first_request" and r["latency_ms"] is not None]),
-            "warm_request": durations([r["latency_ms"] for r in rows if r["phase"] == "warm_request" and r["latency_ms"] is not None]),
+            "latency": durations([r["latency_ms"] for r in rows if r["latency_ms"] is not None and r.get("performance_eligible", True)]),
+            "first_request": durations([r["latency_ms"] for r in rows if r["phase"] == "first_request" and r["latency_ms"] is not None and r.get("performance_eligible", True)]),
+            "warm_request": durations([r["latency_ms"] for r in rows if r["phase"] == "warm_request" and r["latency_ms"] is not None and r.get("performance_eligible", True)]),
             "judge_latency": durations([r["judge_ms"] for r in rows if r["judge_ms"] is not None]),
             "stages": {name: durations(values) for name, values in stages.items()},
             "repeated_cases": len(consistency),

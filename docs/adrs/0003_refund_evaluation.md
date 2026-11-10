@@ -31,8 +31,8 @@ FrameX cross-checks rather than generates the expected answers. Keep synthetic
 threshold and fault cases when real data cannot cover a boundary.
 
 Use the approved exact-amount payout test and half-up cent display rounding in
-the oracle. Production floors fractional Rappen; preserve and report that
-discrepancy rather than silently copying it into expectations.
+the oracle. Production now uses the same display rounding and compares the exact share
+against the payout minimum. Earlier floor-rounding results remain archived.
 
 Deterministic correctness and trace checks remain separate from the OpenAI
 quality judge. Missing instrumentation is unverified. Judge failures are
@@ -42,10 +42,10 @@ Performance is measured and reported without invented acceptance thresholds.
 ## Alternatives
 
 Generating expected answers with production rules would conceal shared errors.
-Coupling to the unfinished chat would block evaluation work. Human scoring is
+Direct coupling to chat internals would weaken the independent evaluation boundary. Human scoring is
 outside the agreed scope. A model judge alone cannot establish refund correctness.
 
-The incoming pipeline's no-payout response is `no_refund`; entitlement remains
+The production pipeline's no-payout response is `no_refund`; entitlement remains
 a separate field. Extraction and phrasing have separate one-repair budgets.
 
 ## Consequences

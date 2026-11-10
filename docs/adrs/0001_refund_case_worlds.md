@@ -14,6 +14,9 @@ The refund chat must answer while the passenger waits. The rules in `46-refunds.
 
 Each decision loads a fresh engine holding the unchanged rule files of `fx/` (those before `60-`), FrameX's `competence.fx`, our gate, and only the trips those rules can use: trips at the origin in the case window, and trips at the destination that a change from one of them could reach within the rules' own bounds. See [knowledge.py](../../src/pipeline/knowledge.py), the only code that writes FrameX source for a case, always from checked identifiers.
 
+Direct and one-change plans compete even when the selected train continues to
+the destination; the earliest arrival determines the plan.
+
 Planned connections must arrive after they depart (`46-refunds.fx`). Two services reported under one trip reference otherwise form a phantom train that hides every real departure.
 
 ## Alternatives considered

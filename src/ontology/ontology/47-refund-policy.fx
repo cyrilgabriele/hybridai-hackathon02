@@ -46,12 +46,15 @@ closed slot dayOnRecord.
 // --------------------------------------------------------------------
 // Amount and payout, only when the passenger named the price
 // --------------------------------------------------------------------
+// Display rounds half-up; payout compares the exact unrounded share.
 ?Y[refundRappen -> ?R] <- ?Y[refundPercent -> ?P; ticketPriceRappen -> ?C] AND ?P > 0
-    AND ?X := ?C * ?P AND ?Q := ?X / 100 AND ?R := floor(?Q).
-?Y[paidOut -> true] <- ?Y[refundRappen -> ?R]
-    AND refundPolicy[minimumPayoutRappen -> ?Min] AND ?R >= ?Min.
-?Y[paidOut -> false] <- ?Y[refundRappen -> ?R]
-    AND refundPolicy[minimumPayoutRappen -> ?Min] AND ?R < ?Min.
+    AND ?X := ?C * ?P AND ?Q := ?X / 100 AND ?Rounded := ?Q + 0.5 AND ?R := floor(?Rounded).
+?Y[paidOut -> true] <- ?Y[refundPercent -> ?P; ticketPriceRappen -> ?C] AND ?P > 0
+    AND ?X := ?C * ?P AND refundPolicy[minimumPayoutRappen -> ?Min]
+    AND ?Limit := ?Min * 100 AND ?X >= ?Limit.
+?Y[paidOut -> false] <- ?Y[refundPercent -> ?P; ticketPriceRappen -> ?C] AND ?P > 0
+    AND ?X := ?C * ?P AND refundPolicy[minimumPayoutRappen -> ?Min]
+    AND ?Limit := ?Min * 100 AND ?X < ?Limit.
 
 // --------------------------------------------------------------------
 // No verdict: customer service takes over, with the reason

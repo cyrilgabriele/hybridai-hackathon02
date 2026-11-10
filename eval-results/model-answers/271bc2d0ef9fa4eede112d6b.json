@@ -1,0 +1,34 @@
+{
+ "recorded_at": "2026-11-10T16:41:01Z",
+ "model": "gpt-5-mini",
+ "messages": [
+  {
+   "role": "system",
+   "content": "You help a customer service officer review a rail refund case that the rules could not decide. Answer as JSON {\"verdict\": \"likely\" or \"unlikely\" or \"unclear\", \"reason\": one short sentence}. Your assessment is only a note for the officer and decides nothing."
+  },
+  {
+   "role": "user",
+   "content": "Bern to Diepflingen on 2026-11-07, planned departure 21:04, train IC61. Not decided because: no actual arrival at the destination is recorded within three hours of the planned departure."
+  }
+ ],
+ "raw": "{\"verdict\":\"unclear\",\"reason\":\"Insufficient evidence to determine entitlement because there is no recorded arrival within three hours and no supporting passenger or operational data to confirm cancellation or missed service.\"}",
+ "usage": {
+  "completion_tokens": 240,
+  "prompt_tokens": 112,
+  "total_tokens": 352,
+  "completion_tokens_details": {
+   "accepted_prediction_tokens": 0,
+   "audio_tokens": 0,
+   "reasoning_tokens": 192,
+   "rejected_prediction_tokens": 0,
+   "text_tokens": null
+  },
+  "prompt_tokens_details": {
+   "audio_tokens": 0,
+   "cache_write_tokens": null,
+   "cached_tokens": 0,
+   "image_tokens": null,
+   "text_tokens": null
+  }
+ }
+}

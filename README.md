@@ -16,9 +16,19 @@ operating day, Saturday 7 November 2026, and is already in `fx/`.
 ```bash
 uv sync
 sh scripts/install-engine.sh
-echo 'OPENAI_API_KEY=your-key' > .env   # not needed to replay the recorded demo
+# Configure .env as shown below when making live model calls.
 uv run python src/refund_chat.py        # http://127.0.0.1:7860
 ```
+
+For live model calls, create or update `.env` in the repository root:
+
+```dotenv
+OPENAI_API_KEY=sk-your-key-here
+OPENAI_EVAL_MODEL=gpt-5-mini
+```
+
+`OPENAI_EVAL_MODEL` selects the evaluation judge; `--judge-model` overrides it.
+Keep the API key private. The recorded demo can replay without a key.
 
 The first tab shows the passenger chat next to a live workflow graph: one node per
 pipeline step (model, host check, FrameX rules, hand-off), lit as data passes through,
@@ -49,6 +59,22 @@ a key.
 **Limits.** A journey has at most one change, as in `46-refunds.fx`; the train is
 searched within 30 minutes of the stated time, with a 5-minute transfer allowance.
 A decision takes about 15 seconds and runs one at a time.
+
+## Evaluate the refund assistant
+
+```bash
+# Fresh GPT-5 mini assistant calls and GPT-5 mini quality judging; requires the key.
+uv run python -m eval run --cases config/eval/snapshot.yaml \
+  --adapter pipeline.eval_adapter:create --judge openai --judge-model gpt-5-mini \
+  --output eval-results/chat
+uv run python -m eval run --cases config/eval/dialogue.yaml \
+  --adapter pipeline.eval_adapter:create --judge openai --judge-model gpt-5-mini \
+  --output eval-results/dialogue
+```
+
+Reports include policy correctness, communication, actual audit events, token
+usage and measured latency. See [evaluation](docs/evaluation.md) for offline
+component checks, recorded replay, fault fixtures and limitations.
 
 ## Quick start
 

@@ -89,7 +89,7 @@ cases:
   - tool_timeout
   messages:
   - role: user
-    content: Can you check my refund?
+    content: I travelled from Bern to Basel SBB on 7 November 2026 at 08:00. My ticket cost CHF 40.00.
 - id: dialogue_repair_exhausted
   request:
     scenario: repair_exhausted

@@ -313,7 +313,7 @@ def test_a_technical_failure_says_so_and_gives_no_verdict(workspace):
     text = assistant(workspace(LATE), ScriptedModel(fail=True)).handle(conv, MESSAGE)
     assert text == "Something went wrong. Please try again."
     assert conv.trace[-1].status == "failed"
-    assert conv.messages == []
+    assert conv.messages == [MESSAGE]  # Failed turns remain available as audit evidence.
 
 
 def test_a_person_decides_and_the_answer_reaches_the_passenger_once(workspace):

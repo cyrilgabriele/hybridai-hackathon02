@@ -1,0 +1,868 @@
+{
+  "version": 1,
+  "timestamp": "2026-11-10T16:51:40.107615+00:00",
+  "rubric_version": "refund-quality-v1",
+  "percentile_method": "nearest-rank",
+  "system": "RefundSystemAdapter",
+  "scope": "conversation",
+  "system_configuration": {
+    "client_version": "0.5.0",
+    "client_commit": "977bb14db288caeb6bf1b253fdb8e25f83ada711",
+    "engine_receipt_matches_client": true,
+    "model": "gpt-5-mini",
+    "mode": "live",
+    "workspace": "/Users/cyrilgabriele/Documents/School/00_Courses/02_HNS_AI/hybridai-hackathon02/fx",
+    "system_version": "c87372928a0c669b89de845c7b7ba53ed9e138f134e87d8de569519f33fcbea5",
+    "snapshot": {
+      "00-core.fx": "a7fb4d32accbd899b50a07d6991c2a50a61a7012c7913c23c64be0735736840f",
+      "10-geography.fx": "c49532f4019d43934a1cf44ff93281bac4d3c90989b2ee0802a73a9e4ef85405",
+      "20-facilities.fx": "e88517d8c51c5cbf953f2cc9e792c24211789fa24cdae0e54f70407fe00659a3",
+      "30-network.fx": "cf4dcccfb10b0c3a09c1fd1fa49658f52f9842e7cb4999b05d5c330ebe39c559",
+      "40-service.fx": "528eef21531b161c2532d507f48f6549324aa8fddd52970044e6eccdf2a9293c",
+      "46-refunds.fx": "ec49783a46af9c5e6d4cfe211ec1be64ba5da0ea759fb19c22f3158c4af7ee42",
+      "47-refund-policy.fx": "f7bcd8c6ced6223cfdbcab553d77c972c52fbb5357bc633582d1f70f3f92c6e4",
+      "50-observations.fx": "c9c5b958f574800778f75fb67632a1a9859a3fed6f03011c7aef809004cd9f8b",
+      "60-spine.fx": "e4c6469096a52a9ca0acc1a7da9495fdd739424ec449e572294350a17493bed8",
+      "70-abfahrtsplakate0.fx": "cfde16486e8b12525b509845c6669813a7f48ed66c9928a7c0485e854d7b3a2b",
+      "70-billetentwerter.fx": "6ccc4cbad9a212b84597506960a4f133ee3e0caa2c37060cab8df2402e77e86c",
+      "70-haltestelle-uhr.fx": "37efe8a32ededcbd908540ff02e31b5d18bde1b756e855a599a773e35987923d",
+      "70-haltestelle-visuell-taktile-sicherheitslinie.fx": "c1d41011012d3341ef35c4e99ec9d2e3998cf1ab5e9f212f41b057e0cb769ecd",
+      "70-haltestelle-wartehallen.fx": "137ca7e22cf8a8c859c3b245da07120b3d5ec4a0411c1994e75ca3e532b47d10",
+      "70-ist-daten-sbb.fx": "b3d5786685b6e3b61d63ce3386de5c2896f1a5988bcbc689da843c50476c4818",
+      "70-linie-mit-betriebspunkten.fx": "d515162b0f4f2f21cf6775fe6e7a7e2914162c48953eac8ebd3a4c21a8122355",
+      "70-lorastation.fx": "0297cabec0475726ffd61cfdb2c5781df01c0d96175e6dc37f4155348309d8f0",
+      "70-passagierfrequenz.fx": "b80fce34363332be08dd310681976907c5aa26dfd33e8a989d2c5915459d6829",
+      "70-perron.fx": "aa1c9e96081819a2a271f7eaf6cdf3870e5d73228aaec1508f8ade7fb79cfecf",
+      "70-regionaler-linienplan.fx": "62ee751b413a10ba42f3b65e1452b6d2d859de86ba8ad104538aa0db922c3c23",
+      "70-sektortafel.fx": "ae119e3959b58e384fa29124de98f7276cda7ffffa3613637d049474ec051f9a",
+      "70-wifistation.fx": "dde384cdefdc03eccfddd4209dfb3728d1addcee545603c95c4161a1b5ed2455",
+      "manifest.json": "0ac8beb9c7197fb675de224365ad2216eb6e0e4b3d8ba36f9ab2901265dce373"
+    }
+  },
+  "initialization_ms": 48.08954196050763,
+  "cleanup_error": null,
+  "rows": [
+    {
+      "case_id": "dialogue_corrected_destination",
+      "repetition": 0,
+      "tags": [
+        "scripted_dialogue",
+        "correction"
+      ],
+      "case": {
+        "id": "dialogue_corrected_destination",
+        "request": {
+          "scenario": "corrected_destination",
+          "fault": "several_departures_after_correction"
+        },
+        "expected": {
+          "decision": "question",
+          "destination": "sp_8503000",
+          "critiqueReason": "several_departures"
+        },
+        "tags": [
+          "scripted_dialogue",
+          "correction"
+        ],
+        "messages": [
+          {
+            "role": "user",
+            "content": "I travelled from Bern to Basel SBB on 7 November 2026 at 08:00."
+          },
+          {
+            "role": "assistant",
+            "content": "You said Basel SBB; is that correct?"
+          },
+          {
+            "role": "user",
+            "content": "Sorry, I meant Zürich HB instead of Basel SBB."
+          }
+        ],
+        "must_say": [
+          "Zürich HB"
+        ],
+        "expected_tools": null,
+        "snapshot": {},
+        "evidence": {}
+      },
+      "expected": {
+        "decision": "question",
+        "destination": "sp_8503000",
+        "critiqueReason": "several_departures"
+      },
+      "observation": {
+        "decision": "question",
+        "reply": "I read your journey as Bern → Zürich HB, 07.11.2026, ~08:00. Several trains fit. Which one did you take? \n\n1. 08:00 IC A, arrives 09:00\n2. 08:05 IC B, arrives 09:05",
+        "facts": {
+          "refundStatus": null,
+          "refundPercent": null,
+          "refundCHF": null,
+          "paidOut": null,
+          "critiqueReason": "several_departures",
+          "origin": "sp_8507000",
+          "destination": "sp_8503000"
+        },
+        "events": [
+          {
+            "kind": "slot",
+            "slot": "origin",
+            "accepted": true,
+            "quote": "Bern",
+            "message_index": 0
+          },
+          {
+            "kind": "accept",
+            "name": "origin",
+            "evidence": [
+              "e0"
+            ]
+          },
+          {
+            "kind": "slot",
+            "slot": "destination",
+            "accepted": true,
+            "quote": "Basel SBB",
+            "message_index": 0
+          },
+          {
+            "kind": "accept",
+            "name": "destination",
+            "evidence": [
+              "e1"
+            ]
+          },
+          {
+            "kind": "slot",
+            "slot": "date",
+            "accepted": true,
+            "quote": "7 November 2026",
+            "message_index": 0
+          },
+          {
+            "kind": "accept",
+            "name": "date",
+            "evidence": [
+              "e2"
+            ]
+          },
+          {
+            "kind": "slot",
+            "slot": "time",
+            "accepted": true,
+            "quote": "08:00",
+            "message_index": 0
+          },
+          {
+            "kind": "accept",
+            "name": "time",
+            "evidence": [
+              "e3"
+            ]
+          },
+          {
+            "kind": "validate",
+            "call_id": "call8",
+            "name": "offers",
+            "arguments": {
+              "origin_id": "sp_8507000",
+              "origin_name": "Bern",
+              "destination_id": "sp_8500010",
+              "destination_name": "Basel SBB",
+              "day": "2026-11-07",
+              "time": "08:00"
+            },
+            "approved": true
+          },
+          {
+            "kind": "execute",
+            "call_id": "call8",
+            "name": "offers",
+            "arguments": {
+              "origin_id": "sp_8507000",
+              "origin_name": "Bern",
+              "destination_id": "sp_8500010",
+              "destination_name": "Basel SBB",
+              "day": "2026-11-07",
+              "time": "08:00"
+            }
+          },
+          {
+            "kind": "accept",
+            "name": "offers",
+            "evidence": [
+              "e4"
+            ]
+          },
+          {
+            "kind": "ask",
+            "slot": "train"
+          },
+          {
+            "kind": "slot",
+            "slot": "origin",
+            "accepted": true,
+            "quote": "Bern",
+            "message_index": 0
+          },
+          {
+            "kind": "accept",
+            "name": "origin",
+            "evidence": [
+              "e5"
+            ]
+          },
+          {
+            "kind": "slot",
+            "slot": "destination",
+            "accepted": true,
+            "quote": "Zürich HB",
+            "message_index": 2
+          },
+          {
+            "kind": "accept",
+            "name": "destination",
+            "evidence": [
+              "e6"
+            ]
+          },
+          {
+            "kind": "slot",
+            "slot": "date",
+            "accepted": true,
+            "quote": "7 November 2026",
+            "message_index": 0
+          },
+          {
+            "kind": "accept",
+            "name": "date",
+            "evidence": [
+              "e7"
+            ]
+          },
+          {
+            "kind": "slot",
+            "slot": "time",
+            "accepted": true,
+            "quote": "08:00",
+            "message_index": 0
+          },
+          {
+            "kind": "accept",
+            "name": "time",
+            "evidence": [
+              "e8"
+            ]
+          },
+          {
+            "kind": "validate",
+            "call_id": "call20",
+            "name": "offers",
+            "arguments": {
+              "origin_id": "sp_8507000",
+              "origin_name": "Bern",
+              "destination_id": "sp_8503000",
+              "destination_name": "Zürich HB",
+              "day": "2026-11-07",
+              "time": "08:00"
+            },
+            "approved": true
+          },
+          {
+            "kind": "execute",
+            "call_id": "call20",
+            "name": "offers",
+            "arguments": {
+              "origin_id": "sp_8507000",
+              "origin_name": "Bern",
+              "destination_id": "sp_8503000",
+              "destination_name": "Zürich HB",
+              "day": "2026-11-07",
+              "time": "08:00"
+            }
+          },
+          {
+            "kind": "accept",
+            "name": "offers",
+            "evidence": [
+              "e9"
+            ]
+          },
+          {
+            "kind": "ask",
+            "slot": "train"
+          }
+        ],
+        "coverage": [
+          "checked_execution",
+          "evidence_acceptance",
+          "repair_budget",
+          "price_asked_once"
+        ],
+        "stage_ms": {
+          "end_to_end": 25698.288665967993,
+          "model_extraction": 22883.724500075914,
+          "model_generation": 2811.7174999788404,
+          "engine": 0.0
+        },
+        "usage": {
+          "completion_tokens": 1056,
+          "prompt_tokens": 1450,
+          "total_tokens": 2506
+        },
+        "metadata": {
+          "timestamp": "2026-11-10T16:51:25.140714+00:00",
+          "system_version": "c87372928a0c669b89de845c7b7ba53ed9e138f134e87d8de569519f33fcbea5",
+          "model": "gpt-5-mini",
+          "receipt_id": "ca7a2e3dc9134ab3af35a547317b86e0",
+          "evidence": {
+            "e0": {
+              "quote": "Bern",
+              "message_index": 0,
+              "value": "Bern"
+            },
+            "e1": {
+              "quote": "Basel SBB",
+              "message_index": 0,
+              "value": "Basel SBB"
+            },
+            "e2": {
+              "quote": "7 November 2026",
+              "message_index": 0,
+              "value": "2026-11-07"
+            },
+            "e3": {
+              "quote": "08:00",
+              "message_index": 0,
+              "value": "08:00"
+            },
+            "e4": {
+              "asserted": "test fixture: two departures",
+              "offers": [
+                {
+                  "id": "fixture1",
+                  "label": "IC A",
+                  "departure": "08:00",
+                  "arrival": "09:00",
+                  "changes": 0,
+                  "boards": [],
+                  "references": []
+                },
+                {
+                  "id": "fixture2",
+                  "label": "IC B",
+                  "departure": "08:05",
+                  "arrival": "09:05",
+                  "changes": 0,
+                  "boards": [],
+                  "references": []
+                }
+              ],
+              "not_checkable": null
+            },
+            "e5": {
+              "quote": "Bern",
+              "message_index": 0,
+              "value": "Bern"
+            },
+            "e6": {
+              "quote": "Zürich HB",
+              "message_index": 2,
+              "value": "Zürich HB"
+            },
+            "e7": {
+              "quote": "7 November 2026",
+              "message_index": 0,
+              "value": "2026-11-07"
+            },
+            "e8": {
+              "quote": "08:00",
+              "message_index": 0,
+              "value": "08:00"
+            },
+            "e9": {
+              "asserted": "test fixture: two departures",
+              "offers": [
+                {
+                  "id": "fixture1",
+                  "label": "IC A",
+                  "departure": "08:00",
+                  "arrival": "09:00",
+                  "changes": 0,
+                  "boards": [],
+                  "references": []
+                },
+                {
+                  "id": "fixture2",
+                  "label": "IC B",
+                  "departure": "08:05",
+                  "arrival": "09:05",
+                  "changes": 0,
+                  "boards": [],
+                  "references": []
+                }
+              ],
+              "not_checkable": null
+            }
+          },
+          "transcript": [
+            {
+              "role": "user",
+              "content": "I travelled from Bern to Basel SBB on 7 November 2026 at 08:00."
+            },
+            {
+              "role": "assistant",
+              "content": "I read your journey as Bern → Basel SBB, 07.11.2026, ~08:00. Several trains fit. Which one did you take? \n\n1. 08:00 IC A, arrives 09:00\n2. 08:05 IC B, arrives 09:05",
+              "generated": true
+            },
+            {
+              "role": "assistant",
+              "content": "You said Basel SBB; is that correct?",
+              "generated": false
+            },
+            {
+              "role": "user",
+              "content": "Sorry, I meant Zürich HB instead of Basel SBB."
+            },
+            {
+              "role": "assistant",
+              "content": "I read your journey as Bern → Zürich HB, 07.11.2026, ~08:00. Several trains fit. Which one did you take? \n\n1. 08:00 IC A, arrives 09:00\n2. 08:05 IC B, arrives 09:05",
+              "generated": true
+            }
+          ],
+          "workflow": [
+            {
+              "pattern": "",
+              "actor": "Passenger",
+              "title": "Passenger wrote",
+              "detail": "I travelled from Bern to Basel SBB on 7 November 2026 at 08:00.",
+              "status": "ok",
+              "seconds": 0.0
+            },
+            {
+              "pattern": "P3",
+              "actor": "GPT-5 mini",
+              "title": "Translate the passenger's words into slots",
+              "detail": "[live] {\"origin\": {\"station\": \"Bern\", \"quote\": \"Bern\"}, \"destination\": {\"station\": \"Basel SBB\", \"quote\": \"Basel SBB\"}, \"date\": {\"value\": \"2026-11-07\", \"quote\": \"7 November 2026\"}, \"time\": {\"value\": \"08:00\", \"quote\": \"08:00\"}, \"price\": null, \"train\": null, \"language\": \"en\"}",
+              "status": "ok",
+              "seconds": 7.513433124986477
+            },
+            {
+              "pattern": "P1, P6",
+              "actor": "Host",
+              "title": "Check quotes and values against the knowledge base",
+              "detail": "every quote found, every value valid",
+              "status": "ok",
+              "seconds": 0.0
+            },
+            {
+              "pattern": "P3",
+              "actor": "Host",
+              "title": "Assert RefundCase from checked identifiers",
+              "detail": "test fixture: two departures",
+              "status": "ok",
+              "seconds": 0.0
+            },
+            {
+              "pattern": "P3",
+              "actor": "Rules",
+              "title": "Planned connections: 2 offered",
+              "detail": "08:00 IC A, arrives 09:00\n08:05 IC B, arrives 09:05",
+              "status": "ok",
+              "seconds": 0.0
+            },
+            {
+              "pattern": "P12",
+              "actor": "GPT-5 mini",
+              "title": "Phrase the outcome: choose_train",
+              "detail": "[live] {\"decision\":\"question\",\"reply\":\"I read your journey as {journey}. Several trains fit. Which one did you take? {train_list}\"}",
+              "status": "ok",
+              "seconds": 1.6520607090787962
+            },
+            {
+              "pattern": "P12, P6",
+              "actor": "Host",
+              "title": "Check words, then insert values from the knowledge base",
+              "detail": "no digit, station or wrong decision in the model's words",
+              "status": "ok",
+              "seconds": 0.0
+            },
+            {
+              "pattern": "",
+              "actor": "Passenger",
+              "title": "Passenger wrote",
+              "detail": "Sorry, I meant Zürich HB instead of Basel SBB.",
+              "status": "ok",
+              "seconds": 0.0
+            },
+            {
+              "pattern": "P3",
+              "actor": "GPT-5 mini",
+              "title": "Translate the passenger's words into slots",
+              "detail": "[live] {\"origin\": {\"station\": \"Bern\", \"quote\": \"Bern\"}, \"destination\": {\"station\": \"Zürich HB\", \"quote\": \"Zürich HB\"}, \"date\": {\"value\": \"2026-11-07\", \"quote\": \"7 November 2026\"}, \"time\": {\"value\": \"08:00\", \"quote\": \"08:00\"}, \"price\": null, \"train\": null, \"language\": \"en\"}",
+              "status": "ok",
+              "seconds": 15.369985667057335
+            },
+            {
+              "pattern": "P1, P6",
+              "actor": "Host",
+              "title": "Check quotes and values against the knowledge base",
+              "detail": "every quote found, every value valid",
+              "status": "ok",
+              "seconds": 0.0
+            },
+            {
+              "pattern": "P3",
+              "actor": "Host",
+              "title": "Assert RefundCase from checked identifiers",
+              "detail": "test fixture: two departures",
+              "status": "ok",
+              "seconds": 0.0
+            },
+            {
+              "pattern": "P3",
+              "actor": "Rules",
+              "title": "Planned connections: 2 offered",
+              "detail": "08:00 IC A, arrives 09:00\n08:05 IC B, arrives 09:05",
+              "status": "ok",
+              "seconds": 0.0
+            },
+            {
+              "pattern": "P12",
+              "actor": "GPT-5 mini",
+              "title": "Phrase the outcome: choose_train",
+              "detail": "[live] {\"decision\":\"question\",\"reply\":\"I read your journey as {journey}. Several trains fit. Which one did you take? {train_list}\"}",
+              "status": "ok",
+              "seconds": 1.1594399999594316
+            },
+            {
+              "pattern": "P12, P6",
+              "actor": "Host",
+              "title": "Check words, then insert values from the knowledge base",
+              "detail": "no digit, station or wrong decision in the model's words",
+              "status": "ok",
+              "seconds": 0.0
+            }
+          ],
+          "model_calls": [
+            {
+              "mode": "live",
+              "stage": "extraction",
+              "elapsed_ms": 7513.566000037827,
+              "usage": {
+                "completion_tokens": 424,
+                "prompt_tokens": 456,
+                "total_tokens": 880,
+                "completion_tokens_details": {
+                  "accepted_prediction_tokens": 0,
+                  "audio_tokens": 0,
+                  "reasoning_tokens": 320,
+                  "rejected_prediction_tokens": 0,
+                  "text_tokens": null
+                },
+                "prompt_tokens_details": {
+                  "audio_tokens": 0,
+                  "cache_write_tokens": null,
+                  "cached_tokens": 0,
+                  "image_tokens": null,
+                  "text_tokens": null
+                }
+              }
+            },
+            {
+              "mode": "live",
+              "stage": "generation",
+              "elapsed_ms": 1652.2084579337388,
+              "usage": {
+                "completion_tokens": 40,
+                "prompt_tokens": 234,
+                "total_tokens": 274,
+                "completion_tokens_details": {
+                  "accepted_prediction_tokens": 0,
+                  "audio_tokens": 0,
+                  "reasoning_tokens": 0,
+                  "rejected_prediction_tokens": 0,
+                  "text_tokens": null
+                },
+                "prompt_tokens_details": {
+                  "audio_tokens": 0,
+                  "cache_write_tokens": null,
+                  "cached_tokens": 0,
+                  "image_tokens": null,
+                  "text_tokens": null
+                }
+              }
+            },
+            {
+              "mode": "live",
+              "stage": "extraction",
+              "elapsed_ms": 15370.158500038087,
+              "usage": {
+                "completion_tokens": 552,
+                "prompt_tokens": 526,
+                "total_tokens": 1078,
+                "completion_tokens_details": {
+                  "accepted_prediction_tokens": 0,
+                  "audio_tokens": 0,
+                  "reasoning_tokens": 448,
+                  "rejected_prediction_tokens": 0,
+                  "text_tokens": null
+                },
+                "prompt_tokens_details": {
+                  "audio_tokens": 0,
+                  "cache_write_tokens": null,
+                  "cached_tokens": 0,
+                  "image_tokens": null,
+                  "text_tokens": null
+                }
+              }
+            },
+            {
+              "mode": "live",
+              "stage": "generation",
+              "elapsed_ms": 1159.5090420451015,
+              "usage": {
+                "completion_tokens": 40,
+                "prompt_tokens": 234,
+                "total_tokens": 274,
+                "completion_tokens_details": {
+                  "accepted_prediction_tokens": 0,
+                  "audio_tokens": 0,
+                  "reasoning_tokens": 0,
+                  "rejected_prediction_tokens": 0,
+                  "text_tokens": null
+                },
+                "prompt_tokens_details": {
+                  "audio_tokens": 0,
+                  "cache_write_tokens": null,
+                  "cached_tokens": 0,
+                  "image_tokens": null,
+                  "text_tokens": null
+                }
+              }
+            }
+          ],
+          "model_modes": [
+            "live"
+          ],
+          "performance_eligible": false,
+          "fault": "several_departures_after_correction",
+          "fixture_controlled": true,
+          "snapshot": {
+            "00-core.fx": "a7fb4d32accbd899b50a07d6991c2a50a61a7012c7913c23c64be0735736840f",
+            "10-geography.fx": "c49532f4019d43934a1cf44ff93281bac4d3c90989b2ee0802a73a9e4ef85405",
+            "20-facilities.fx": "e88517d8c51c5cbf953f2cc9e792c24211789fa24cdae0e54f70407fe00659a3",
+            "30-network.fx": "cf4dcccfb10b0c3a09c1fd1fa49658f52f9842e7cb4999b05d5c330ebe39c559",
+            "40-service.fx": "528eef21531b161c2532d507f48f6549324aa8fddd52970044e6eccdf2a9293c",
+            "46-refunds.fx": "ec49783a46af9c5e6d4cfe211ec1be64ba5da0ea759fb19c22f3158c4af7ee42",
+            "47-refund-policy.fx": "f7bcd8c6ced6223cfdbcab553d77c972c52fbb5357bc633582d1f70f3f92c6e4",
+            "50-observations.fx": "c9c5b958f574800778f75fb67632a1a9859a3fed6f03011c7aef809004cd9f8b",
+            "60-spine.fx": "e4c6469096a52a9ca0acc1a7da9495fdd739424ec449e572294350a17493bed8",
+            "70-abfahrtsplakate0.fx": "cfde16486e8b12525b509845c6669813a7f48ed66c9928a7c0485e854d7b3a2b",
+            "70-billetentwerter.fx": "6ccc4cbad9a212b84597506960a4f133ee3e0caa2c37060cab8df2402e77e86c",
+            "70-haltestelle-uhr.fx": "37efe8a32ededcbd908540ff02e31b5d18bde1b756e855a599a773e35987923d",
+            "70-haltestelle-visuell-taktile-sicherheitslinie.fx": "c1d41011012d3341ef35c4e99ec9d2e3998cf1ab5e9f212f41b057e0cb769ecd",
+            "70-haltestelle-wartehallen.fx": "137ca7e22cf8a8c859c3b245da07120b3d5ec4a0411c1994e75ca3e532b47d10",
+            "70-ist-daten-sbb.fx": "b3d5786685b6e3b61d63ce3386de5c2896f1a5988bcbc689da843c50476c4818",
+            "70-linie-mit-betriebspunkten.fx": "d515162b0f4f2f21cf6775fe6e7a7e2914162c48953eac8ebd3a4c21a8122355",
+            "70-lorastation.fx": "0297cabec0475726ffd61cfdb2c5781df01c0d96175e6dc37f4155348309d8f0",
+            "70-passagierfrequenz.fx": "b80fce34363332be08dd310681976907c5aa26dfd33e8a989d2c5915459d6829",
+            "70-perron.fx": "aa1c9e96081819a2a271f7eaf6cdf3870e5d73228aaec1508f8ade7fb79cfecf",
+            "70-regionaler-linienplan.fx": "62ee751b413a10ba42f3b65e1452b6d2d859de86ba8ad104538aa0db922c3c23",
+            "70-sektortafel.fx": "ae119e3959b58e384fa29124de98f7276cda7ffffa3613637d049474ec051f9a",
+            "70-wifistation.fx": "dde384cdefdc03eccfddd4209dfb3728d1addcee545603c95c4161a1b5ed2455",
+            "manifest.json": "0ac8beb9c7197fb675de224365ad2216eb6e0e4b3d8ba36f9ab2901265dce373"
+          },
+          "configuration": {
+            "client_version": "0.5.0",
+            "client_commit": "977bb14db288caeb6bf1b253fdb8e25f83ada711",
+            "engine_receipt_matches_client": true,
+            "model": "gpt-5-mini",
+            "mode": "live",
+            "workspace": "/Users/cyrilgabriele/Documents/School/00_Courses/02_HNS_AI/hybridai-hackathon02/fx",
+            "system_version": "c87372928a0c669b89de845c7b7ba53ed9e138f134e87d8de569519f33fcbea5",
+            "snapshot": {
+              "00-core.fx": "a7fb4d32accbd899b50a07d6991c2a50a61a7012c7913c23c64be0735736840f",
+              "10-geography.fx": "c49532f4019d43934a1cf44ff93281bac4d3c90989b2ee0802a73a9e4ef85405",
+              "20-facilities.fx": "e88517d8c51c5cbf953f2cc9e792c24211789fa24cdae0e54f70407fe00659a3",
+              "30-network.fx": "cf4dcccfb10b0c3a09c1fd1fa49658f52f9842e7cb4999b05d5c330ebe39c559",
+              "40-service.fx": "528eef21531b161c2532d507f48f6549324aa8fddd52970044e6eccdf2a9293c",
+              "46-refunds.fx": "ec49783a46af9c5e6d4cfe211ec1be64ba5da0ea759fb19c22f3158c4af7ee42",
+              "47-refund-policy.fx": "f7bcd8c6ced6223cfdbcab553d77c972c52fbb5357bc633582d1f70f3f92c6e4",
+              "50-observations.fx": "c9c5b958f574800778f75fb67632a1a9859a3fed6f03011c7aef809004cd9f8b",
+              "60-spine.fx": "e4c6469096a52a9ca0acc1a7da9495fdd739424ec449e572294350a17493bed8",
+              "70-abfahrtsplakate0.fx": "cfde16486e8b12525b509845c6669813a7f48ed66c9928a7c0485e854d7b3a2b",
+              "70-billetentwerter.fx": "6ccc4cbad9a212b84597506960a4f133ee3e0caa2c37060cab8df2402e77e86c",
+              "70-haltestelle-uhr.fx": "37efe8a32ededcbd908540ff02e31b5d18bde1b756e855a599a773e35987923d",
+              "70-haltestelle-visuell-taktile-sicherheitslinie.fx": "c1d41011012d3341ef35c4e99ec9d2e3998cf1ab5e9f212f41b057e0cb769ecd",
+              "70-haltestelle-wartehallen.fx": "137ca7e22cf8a8c859c3b245da07120b3d5ec4a0411c1994e75ca3e532b47d10",
+              "70-ist-daten-sbb.fx": "b3d5786685b6e3b61d63ce3386de5c2896f1a5988bcbc689da843c50476c4818",
+              "70-linie-mit-betriebspunkten.fx": "d515162b0f4f2f21cf6775fe6e7a7e2914162c48953eac8ebd3a4c21a8122355",
+              "70-lorastation.fx": "0297cabec0475726ffd61cfdb2c5781df01c0d96175e6dc37f4155348309d8f0",
+              "70-passagierfrequenz.fx": "b80fce34363332be08dd310681976907c5aa26dfd33e8a989d2c5915459d6829",
+              "70-perron.fx": "aa1c9e96081819a2a271f7eaf6cdf3870e5d73228aaec1508f8ade7fb79cfecf",
+              "70-regionaler-linienplan.fx": "62ee751b413a10ba42f3b65e1452b6d2d859de86ba8ad104538aa0db922c3c23",
+              "70-sektortafel.fx": "ae119e3959b58e384fa29124de98f7276cda7ffffa3613637d049474ec051f9a",
+              "70-wifistation.fx": "dde384cdefdc03eccfddd4209dfb3728d1addcee545603c95c4161a1b5ed2455",
+              "manifest.json": "0ac8beb9c7197fb675de224365ad2216eb6e0e4b3d8ba36f9ab2901265dce373"
+            }
+          }
+        },
+        "error": null
+      },
+      "scope": "conversation",
+      "phase": "first_request",
+      "replayed": false,
+      "performance_eligible": false,
+      "latency_ms": 25711.183874984272,
+      "judge_ms": 14966.248415992595,
+      "scores": {
+        "correct": true,
+        "checks": {
+          "decision": true,
+          "destination": true,
+          "critiqueReason": true,
+          "no_unsupported_verdict": true,
+          "accepted_quotes_grounded": true
+        },
+        "required_content_coverage": 1.0,
+        "tool_precision": null,
+        "tool_recall": null,
+        "parameter_accuracy": null,
+        "quote_fidelity": 1.0,
+        "invariants": {
+          "checked_execution": "passed",
+          "evidence_acceptance": "passed",
+          "repair_budget": "passed",
+          "price_asked_once": "passed",
+          "replayable": "passed"
+        },
+        "task_success": true,
+        "audit_complete": true
+      },
+      "quality": {
+        "status": "scored",
+        "ratings": {
+          "relevance": {
+            "score": 5,
+            "reason": "The reply directly addresses the corrected destination and asks the necessary follow-up to resolve which specific departure applies.",
+            "excerpt": "I read your journey as Bern → Zürich HB, 07.11.2026, ~08:00. Several trains fit. Which one did you take?"
+          },
+          "clarity": {
+            "score": 5,
+            "reason": "The message clearly restates the interpreted journey and lists the two candidate trains with times and arrivals.",
+            "excerpt": "1. 08:00 IC A, arrives 09:00\n2. 08:05 IC B, arrives 09:05"
+          },
+          "coherence": {
+            "score": 5,
+            "reason": "The assistant correctly incorporated the user's correction (Zürich HB) and retained origin, date and time context from the conversation.",
+            "excerpt": "I read your journey as Bern → Zürich HB, 07.11.2026, ~08:00."
+          },
+          "evidence_fidelity": {
+            "score": 5,
+            "reason": "The offered departures match the system's two-offer fixture (08:00 IC A and 08:05 IC B), so the reply faithfully reflects available evidence.",
+            "excerpt": "1. 08:00 IC A, arrives 09:00\n2. 08:05 IC B, arrives 09:05"
+          },
+          "actionability": {
+            "score": 5,
+            "reason": "The assistant gives a clear, answerable next step (choose which train) and provides numbered options the user can pick from.",
+            "excerpt": "Several trains fit. Which one did you take?"
+          }
+        },
+        "model": "gpt-5-mini",
+        "response_id": "resp_03ee06109adc82cb016af34b8d6eb087d28d072690f06e7fff",
+        "usage": {
+          "input_tokens": 6359,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "cache_write_tokens_details": null
+          },
+          "output_tokens": 1067,
+          "output_tokens_details": {
+            "reasoning_tokens": 640
+          },
+          "total_tokens": 7426
+        },
+        "rubric_version": "refund-quality-v1"
+      }
+    }
+  ],
+  "summary": {
+    "attempted": 1,
+    "correct": 1,
+    "task_successes": 1,
+    "technical_errors": 0,
+    "audit_complete": 1,
+    "invariant_counts": {
+      "checked_execution.passed": 1,
+      "evidence_acceptance.passed": 1,
+      "repair_budget.passed": 1,
+      "price_asked_once.passed": 1,
+      "replayable.passed": 1
+    },
+    "latency": {
+      "count": 0,
+      "median_ms": null,
+      "p95_ms": null
+    },
+    "first_request": {
+      "count": 0,
+      "median_ms": null,
+      "p95_ms": null
+    },
+    "warm_request": {
+      "count": 0,
+      "median_ms": null,
+      "p95_ms": null
+    },
+    "judge_latency": {
+      "count": 1,
+      "median_ms": 14966.248415992595,
+      "p95_ms": 14966.248415992595
+    },
+    "stages": {},
+    "repeated_cases": 0,
+    "decision_consistency": null,
+    "quality_scored": 1,
+    "quality_errors": 0,
+    "quality_proxy": {
+      "relevance": {
+        "count": 1,
+        "mean": 5
+      },
+      "clarity": {
+        "count": 1,
+        "mean": 5
+      },
+      "coherence": {
+        "count": 1,
+        "mean": 5
+      },
+      "evidence_fidelity": {
+        "count": 1,
+        "mean": 5
+      },
+      "actionability": {
+        "count": 1,
+        "mean": 5
+      }
+    },
+    "tool_precision": {
+      "count": 0,
+      "mean": null
+    },
+    "tool_recall": {
+      "count": 0,
+      "mean": null
+    },
+    "parameter_accuracy": {
+      "count": 0,
+      "mean": null
+    },
+    "required_content_coverage": {
+      "count": 1,
+      "mean": 1.0
+    }
+  },
+  "case_document": "config/eval/dialogue.yaml"
+}

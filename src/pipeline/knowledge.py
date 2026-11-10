@@ -114,6 +114,7 @@ class Offer:
     arrival: str
     changes: int
     boards: tuple[str, ...]
+    references: tuple[str, ...] = ()
 
     def line(self, language: str = "en") -> str:
         arrives, change = {"de": ("Ankunft", "Umstieg"), "fr": ("arrivée", "correspondance"),
@@ -139,6 +140,7 @@ class Verdict:
     delay_minutes: int | None = None
     percent: int | None = None
     refund_rappen: int | None = None
+    facts: dict = field(default_factory=dict)
     planned_arrival: str = ""
     actual_arrival: str = ""
     cancelled: bool = False
@@ -205,6 +207,8 @@ class Knowledge:
         self.ids_by_name: dict[str, list[str]] = {}
         self._index_stations()
         self._index_service()
+        self.days = sorted({json.loads(line.split(" -> ", 1)[1][:-2])
+                            for lines in self.blocks.values() for line in lines if "[observedOn -> " in line})
         self.rules = self._rules()
         self._by_fold: dict[str, list[str]] = {}
         for name in self.ids_by_name:
@@ -352,8 +356,17 @@ class Knowledge:
             raise ValueError(f"not a valid local time: {case.day} {case.time}")
         return stated - WINDOW_SECONDS, stated + WINDOW_SECONDS
 
+    def validate_case(self, case: Case) -> None:
+        if (self.station_id(case.origin_name) != case.origin_id
+                or self.station_id(case.destination_name) != case.destination_id
+                or not re.fullmatch(r"sp_\d+", case.origin_id)
+                or not re.fullmatch(r"sp_\d+", case.destination_id)):
+            raise ValueError("journey requires checked station identifiers")
+        self._window(case)
+
     def offers(self, case: Case) -> OfferResult:
         """The departures the rules offer, or why this day cannot be checked."""
+        self.validate_case(case)
         started = time.monotonic()
         low, high = self._window(case)
         trips = self.select_trips(case.origin_id, case.destination_id, low, high)
@@ -361,23 +374,29 @@ class Knowledge:
         with World(self.rules, [*self._facts(trips), fact]) as world:
             why_not = world.value("x", "notCheckable")
             groups: dict[tuple, list[str]] = {}
+            references: dict[str, str] = {}
             for row in world.rows("?- x[offered(?E) -> ?A] AND ?E[scheduledDepartureEpoch -> ?D].") if not why_not else []:
                 board = row["E"]
                 trip = world.value(board, "ofTrip")
+                references[board] = world.value(trip, "tripRef") or ""
                 label = world.value(trip, "lineText") or world.value(trip, "serviceCategory") or "train"
                 changes = world.value("x", f"plannedChanges({board})") or 0
                 groups.setdefault((int(row["D"]), int(row["A"]), label, changes), []).append(board)
         offers = [
-            Offer(f"t{index}", label, clock(departure), clock(arrival), changes, tuple(sorted(boards)))
+            Offer(f"t{index}", label, clock(departure), clock(arrival), changes, tuple(sorted(boards)), tuple(sorted({references[b] for b in boards})))
             for index, ((departure, arrival, label, changes), boards) in enumerate(sorted(groups.items()), 1)
         ]
         return OfferResult(offers, why_not, fact, len(trips), time.monotonic() - started)
 
     def verdict(self, case: Case, offer: Offer, price_rappen: int | None) -> Verdict:
         """Run `DelayCheck` and the policy for the chosen departure."""
+        self.validate_case(case)
         started = time.monotonic()
         low, high = self._window(case)
         trips = self.select_trips(case.origin_id, case.destination_id, low, high)
+        if (not offer.boards or any(not re.fullmatch(r"ev_[0-9a-f]+", board) for board in offer.boards)
+                or (price_rappen is not None and (type(price_rappen) is not int or price_rappen <= 0))):
+            raise ValueError("invalid checked train or ticket price")
         price = f"; ticketPriceRappen -> {price_rappen}" if price_rappen is not None else ""
         journey = (f"{case.origin_name} to {case.destination_name} on {case.day}, "
                    f"planned departure {offer.departure}, train {offer.label}.")
@@ -392,7 +411,7 @@ class Knowledge:
         chosen.asserted = "\n".join(facts)
         chosen.trips = len(trips)
         chosen.seconds = time.monotonic() - started
-        if any((v.decision, v.percent) != (chosen.decision, chosen.percent) for v in verdicts):
+        if any((v.decision, v.facts) != (chosen.decision, chosen.facts) for v in verdicts):
             chosen.decision, chosen.outcome = "handoff", "handoff"
             chosen.reason = "this departure appears twice in the data with different results"
         return chosen
@@ -408,7 +427,9 @@ class Knowledge:
             threshold_minutes=rules["thresholdMinutes"],
             minimum_rappen=rules["minimumPayoutRappen"],
         )
-        status = world.value(check, "refundStatus")
+        result.facts = {slot: world.value(check, slot) for slot in (
+            "refundStatus", "refundPercent", "refundRappen", "paidOut", "plannedArrival", "actualArrival", "delayMinutes")}
+        status = result.facts["refundStatus"]
         result.percent = world.value(check, "refundPercent")
         result.refund_rappen = world.value(check, "refundRappen")
         paid_out = world.value(check, "paidOut")

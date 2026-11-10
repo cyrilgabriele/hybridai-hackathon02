@@ -100,8 +100,8 @@ OUTCOMES = {
     ),
     "on_time": Outcome(
         "no_refund",
-        "According to the recorded data, your train from {origin} arrived at {destination} without delay. Refunds start at {threshold_minutes} minutes of delay.",
-        "Gemäss den aufgezeichneten Daten ist Ihr Zug von {origin} ohne Verspätung in {destination} angekommen. Rückerstattungen gibt es ab {threshold_minutes} Minuten Verspätung.",
+        f"{_DELAY_EN} Refunds start at {{threshold_minutes}} minutes of delay.",
+        f"{_DELAY_DE} Rückerstattungen gibt es ab {{threshold_minutes}} Minuten Verspätung.",
     ),
     "handoff": Outcome(
         "handoff",
@@ -167,7 +167,8 @@ def fill(text: str, values: dict[str, str]) -> str:
 
 
 def say(model: LanguageModel, key: str, values: dict[str, str], language: str, trace: list[Step],
-        stations: re.Pattern | None = None) -> str:
+        stations: re.Pattern | None = None, *, events: list[dict] | None = None,
+        scope_id: str = "phrasing") -> str:
     """Phrase an outcome in the passenger's language; never let a fact through."""
     outcome = OUTCOMES[key]
     request: dict = {
@@ -177,6 +178,8 @@ def say(model: LanguageModel, key: str, values: dict[str, str], language: str, t
     }
     previous: list[str] = []
     for attempt in range(MAX_REPAIRS + 1):
+        if attempt and events is not None:
+            events.append({"kind": "repair", "scope_id": scope_id})
         sent = json.dumps(request, ensure_ascii=False, sort_keys=True)
         try:
             answer = model.ask_json(PHRASE_PROMPT, sent, effort="minimal")
@@ -202,7 +205,8 @@ def say(model: LanguageModel, key: str, values: dict[str, str], language: str, t
 
 
 def ask(model: LanguageModel, missing: list[str], messages: list[str], values: dict[str, str], language: str,
-        trace: list[Step], stations: re.Pattern | None = None, *, situation: str = "", fallback: str = "") -> str:
+        trace: list[Step], stations: re.Pattern | None = None, *, situation: str = "", fallback: str = "",
+        events: list[dict] | None = None, scope_id: str = "phrasing") -> str:
     """Ask for what is missing in the words of the conversation, never stating a fact.
 
     The model sees the passenger's own words and the names of what is known. The
@@ -216,6 +220,8 @@ def ask(model: LanguageModel, missing: list[str], messages: list[str], values: d
         request["situation"] = situation
     previous: list[str] = []
     for attempt in range(MAX_REPAIRS + 1):
+        if attempt and events is not None:
+            events.append({"kind": "repair", "scope_id": scope_id})
         sent = json.dumps(request, ensure_ascii=False, sort_keys=True)
         try:
             answer = model.ask_json(ASK_PROMPT, sent)

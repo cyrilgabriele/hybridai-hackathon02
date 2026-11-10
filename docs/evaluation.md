@@ -2,7 +2,8 @@
 
 The auditor's evaluator is independent of the refund implementation. It uses
 the supplied Sheet 2 policy, the [chat contract](refund-chat.md), and the
-[auditor mandate](cyril/mandate.md). No refund chat is implemented by this package.
+[auditor mandate](cyril/mandate.md). It invokes the production refund chat through a conversation adapter; the evaluator
+core remains independent of its decisions.
 
 ## Run
 
@@ -10,8 +11,7 @@ the supplied Sheet 2 policy, the [chat contract](refund-chat.md), and the
 uv sync
 sh scripts/install-engine.sh
 
-# Fast policy-only component evaluation. Fractional-cent cases expose the
-# production rounding discrepancy below, so a nonzero result is expected.
+# Fast policy-only component evaluation, including fractional-cent boundaries.
 uv run python -m eval run --cases config/eval/policy.yaml --framex \
   --output eval-results/policy
 
@@ -23,20 +23,42 @@ uv run python -m eval discover --workspace fx --limit 250 \
 uv run python -m eval run --cases config/eval/snapshot.yaml --framex \
   --workspace fx --output eval-results/snapshot
 
-# Conversation evaluation: supply an adapter for the implemented pipeline.
+# Full conversation evaluation: fresh GPT-5 mini calls and GPT-5 mini judging.
 uv run python -m eval run --cases config/eval/snapshot.yaml \
-  --adapter pipeline.eval_adapter:create --repeats 3 --output eval-results/chat
+  --adapter pipeline.eval_adapter:create --judge openai --judge-model gpt-5-mini \
+  --output eval-results/chat
 
 # Evaluate recorded attempts without timing JSON replay as system performance.
 uv run python -m eval run --cases config/eval/snapshot.yaml \
   --saved eval-results/chat/results.json --output eval-results/replay
 ```
 
-The incoming `src/pipeline/assistant.py` implements the chat with
-`Assistant.handle(Conversation, text)`. `pipeline.eval_adapter:create` remains an
-interface example, not an existing module: its adapter must translate that
-conversation state and actual traces into the contract below. Component runs
-do not certify the pipeline's filtered-world selection or user-facing behavior.
+`pipeline.eval_adapter:create` invokes production `Assistant.handle(Conversation,
+text)` with isolated conversation and customer-service state for each attempt.
+It uses the same extraction, quote checks, filtered FrameX worlds, policy and
+phrasing as the UI. Structured events are emitted at the production boundaries,
+not reconstructed from workflow titles. Raw rule bindings retain arrival epochs,
+entitlement, payout and monetary results. Scripted assistant messages remain
+labeled fixture context; generated replies and their real state transitions are
+retained separately in the transcript.
+
+Conversation evaluation defaults to **fresh live calls**, using `OPENAI_API_KEY`
+from the environment or root `.env`. Model answers are stored separately under
+`eval-results/model-answers`, preserving demo recordings. Configure the workspace
+with `REFUND_EVAL_WORKSPACE` and recording store with `REFUND_EVAL_STORE`.
+`REFUND_EVAL_MODE=replay` uses recordings only; a missing extraction recording is
+a technical error and a missing phrasing recording uses production's fixed-wording
+fallback. It never falls through to a paid call. Recorded and injected responses
+are excluded from live-performance aggregates, while their measured row durations
+remain available. Use `--repeats 3` for fresh repeated-run consistency measurements.
+
+Dialogue scenarios use explicit dependency fault fixtures for fabricated quotes,
+exhausted repair, model/tool timeouts and multiple departures after a correction.
+Fixture-controlled results are labeled and excluded from live-performance
+aggregates. In the tool-timeout case a complete passenger journey reaches the
+knowledge operation before it fails. Synthetic policy cases remain component-only.
+Do not supply their hidden event IDs as conversation state.
+
 Use repeatable `--case CASE_ID` arguments to select representative cases. The
 FrameX adapter accepts `--timeout` and `--load-timeout` in seconds; these bound
 execution and do not define performance acceptance thresholds. Progress is
@@ -61,7 +83,8 @@ can still be expensive. No production timeout is converted to unknown or denial.
 Core modules own cases, the policy oracle, snapshot enumeration, metrics and
 reports. `adapters/` owns FrameX, saved runs and the direct OpenAI judge.
 
-Implement the `SystemPort` in `eval.contracts`:
+The production adapter implements `SystemPort` in `eval.contracts`. Additional
+systems can implement the same interface:
 
 ```python
 from eval.contracts import Observation, SystemInput
@@ -168,15 +191,14 @@ three-hour initial boarding waits and a seven-hour total search horizon are
 explicit. These are the current bounded search contract, not a guarantee about
 all possible railway journeys. Midnight timestamps retain their date.
 
-Both the independent oracle and the incoming rules reject planned connections
+Both the independent oracle and production rules reject planned connections
 that arrive before (or at) departure; the oracle also rejects individual
 backwards-time legs. This prevents a shared trip reference from creating a
 phantom connection.
 
-The independent oracle permits a one-change route even if the selected train
-also reaches the destination directly. The production rules currently suppress
-that planned search when a direct journey exists. Disagreement must be audited,
-not resolved by changing the expected answer to match production.
+Both the independent oracle and production rules consider a one-change route
+even when the selected train also reaches the destination directly. The fastest
+plan wins. A real-engine regression covers this case.
 
 Candidates must also survive the ±30-minute departure window and dominance
 check. Each category is frozen only when found; missing coverage is recorded in
@@ -184,15 +206,14 @@ the discovery document. Running FrameX cross-checks the expectations; it does
 not retroactively make every case correct. No reduced fixture is assumed
 equivalent to the full dataset.
 
-The committed `verification.yaml` records the five representative cases actually
+The committed `verification.yaml` records representative cases actually
 cross-checked against the full snapshot, the case-document hash and unexecuted
-variants. See the [initial audit baseline](cyril/evaluation-baseline.md). It does
-not claim that every frozen case or the conversation system was tested. The
+variants. See the [initial audit baseline](cyril/evaluation-baseline.md). That file records component cross-checks; conversation runs have separate JSON/Markdown reports. The
 pre-interface snapshot and verification are archived under `docs/cyril/baselines/`.
 
-### Decision labels, money assumption and known discrepancy
+### Decision labels and money assumption
 
-The incoming pipeline uses `decision: no_refund` for no payout, including a
+The production pipeline uses `decision: no_refund` for no payout, including a
 compensation amount below CHF 5. The evaluator follows this response label
 while independently checking that `refundStatus` is still `entitled`, the
 percentage is unchanged, and `paidOut` is false. No payout is not denial of
@@ -200,11 +221,12 @@ entitlement.
 
 The supplied sheet does not specify fractional-cent rounding. The approved
 oracle uses Decimal, compares the **unrounded** compensation with CHF 5, and
-then rounds the displayed amount half-up to cents. Production
-`47-refund-policy.fx` floors fractional Rappen. For example, at 25%, CHF 20.02
-produces displayed CHF 5.01 in the oracle and CHF 5.00 in production. CHF 19.99
-displays CHF 5.00 but remains below the exact payout minimum. The evaluator
-deliberately exposes this discrepancy; production rules are not modified.
+then rounds the displayed amount half-up to cents. Production `47-refund-policy.fx` now applies the same rule:
+CHF 20.02 at 25% displays CHF 5.01; CHF 19.99 displays CHF 5.00 but is
+not paid because the exact share remains below CHF 5. Entitlement stays true.
+The former floor-rounding discrepancy is preserved in historical audit records.
+The source and committed workspace rules must stay synchronized; rebuilding the
+snapshot requires independently regenerating its case hashes and witnesses.
 
 ## Automatic quality judge
 
@@ -262,6 +284,9 @@ uv run ty check
 uv run pytest -q
 ```
 
-Normal tests use tiny fixtures and mocked judge responses, not paid API calls or
-the full snapshot. Real-system tests require a system adapter; the component
-adapter cannot assess passenger-facing communication or the agent's guardrails.
+Normal tests use tiny fixtures, the real FrameX engine and controlled model/judge
+responses, without paid API calls or the full snapshot. The conversation adapter
+assesses passenger-facing communication and actual guardrail events; the component
+adapter covers rule behavior only. Missing execution or acceptance events remain
+unverified for early clarification and injected-failure cases. See
+[the end-to-end verification record](cyril/evaluation-e2e.md) for executed runs.

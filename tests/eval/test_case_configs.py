@@ -89,7 +89,9 @@ def test_verification_hash_follows_yaml_and_preserves_original_provenance():
     assert record.case_document_sha256 == hashlib.sha256((CONFIG / "snapshot.yaml").read_bytes()).hexdigest()
     assert record.original_case_document_sha256 != record.case_document_sha256
     cases = {case.id: case for case in snapshot.load(CONFIG / "snapshot.yaml").cases}
-    assert len(record.checked) == 5
+    assert {"snapshot_no_refund", "snapshot_25_percent", "snapshot_50_percent", "snapshot_handoff",
+            "snapshot_missed_connection", "snapshot_cancellation", "snapshot_changed_one_transfer_route"}.issubset(
+                {result.case_id for result in record.checked})
     for result in record.checked:
         assert result.correct
         assert result.case_id in cases

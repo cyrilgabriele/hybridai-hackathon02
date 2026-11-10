@@ -10,6 +10,8 @@ import hashlib
 import json
 import logging
 import re
+from dataclasses import asdict
+from datetime import date
 
 from .handoff import Desk, HandOff, now
 from .knowledge import Case, Knowledge, Offer, Verdict, fold
@@ -66,6 +68,9 @@ def _minutes(count: int, language: str) -> str:
 def match_offer(text: str, offers: list[Offer]) -> Offer | None:
     """A number, a departure time or a line name that fits exactly one train."""
     stated = text.strip().rstrip(".")
+    by_reference = [offer for offer in offers if stated.casefold() in {offer.label.casefold(), *(r.casefold() for r in offer.references)}]
+    if len(by_reference) == 1:
+        return by_reference[0]
     if stated.isdigit() and 1 <= int(stated) <= len(offers):
         return offers[int(stated) - 1]
     times = {f"{int(h):02d}:{m}" for h, m in re.findall(r"\b(\d{1,2})[:.](\d{2})\b", text)}
@@ -90,16 +95,24 @@ class Assistant:
 
     def handle(self, conv: Conversation, text: str) -> str:
         """Answer one passenger message. A technical failure is said as one."""
+        conv.turn += 1
+        conv.error = None
+        conv.decision = "question"
+        conv.critique_reason = None
+        conv.message_indices.append(conv.input_message_count)
+        conv.input_message_count += 1
         conv.messages.append(text)
         conv.trace.append(Step("", "Passenger", "Passenger wrote", text))
         try:
             return self._route(conv, text)
         except ModelCallFailed as exc:
-            conv.trace.append(Step("", "GPT-5 mini", "Model call failed", str(exc), "failed"))
-        except Exception as exc:  # the chat must say so and keep running
-            log.exception("refund turn failed")
+            conv.error = type(exc).__name__
+            conv.trace.append(Step("", "GPT-5 mini", "Model call failed", type(exc).__name__, "failed"))
+        except Exception as exc:  # noqa: BLE001 -- report sanitized technical failures to the passenger
+            conv.error = type(exc).__name__
+            log.error("refund turn failed (%s)", type(exc).__name__)
             conv.trace.append(Step("", "Host", "Technical error", type(exc).__name__, "failed"))
-        conv.messages.pop()
+        conv.decision = "error"
         return _text(TECHNICAL, conv.language)
 
     def deliver(self, conv: Conversation) -> str | None:
@@ -119,17 +132,35 @@ class Assistant:
         if conv.stage == "handed_over":
             return self._say(conv, "already_handed", {"case_id": conv.handoff_id or ""})
         if conv.stage == "choose_train":
+            if re.search(r"\b(instead|meant|correction|actually)\b", text, re.IGNORECASE):
+                conv.stage = "collect"
+                conv.offers = []
+                conv.chosen = None
+                conv.verdict = None
+                return self._collect(conv, text)
             return self._choose_train(conv, text)
         if conv.stage == "price":
             return self._take_price(conv)
         if conv.stage == "done":
             messages = conv.messages[-1:]
+            indices = conv.message_indices[-1:]
             conv.start_new_case()
             conv.messages = messages
+            conv.message_indices = indices
         return self._collect(conv, text)
 
     def _say(self, conv: Conversation, key: str, values: dict[str, str]) -> str:
-        reply = say(self.model, key, values, conv.language, conv.trace, self.stations)
+        conv.decision = OUTCOMES[key].decision
+        reasons = {"ask_station_choice": "ambiguous_station", "choose_train": "several_departures",
+                   "choose_train_again": "several_departures"}
+        if key in reasons:
+            conv.critique_reason = reasons[key]
+        elif key.startswith("ask_") and conv.critique_reason is None:
+            conv.critique_reason = "missing_slot"
+        if key.startswith(("ask_", "choose_train")) or key == "refund_percent":
+            conv.record("ask", slot="price" if key == "refund_percent" else conv.asked_for or "train")
+        reply = say(self.model, key, values, conv.language, conv.trace, self.stations,
+                    events=conv.events, scope_id=f"turn{conv.turn}:phrasing:{len(conv.events)}")
         return "\n\n".join([*self._interpretations(conv), reply])
 
     def _interpretations(self, conv: Conversation) -> list[str]:
@@ -155,7 +186,9 @@ class Assistant:
             matches = [c for c in candidates if fold(c) in said or said in fold(c).split()]
         if len(matches) != 1:
             return False
-        conv.slots[slot] = Slot(matches[0], matches[0], self.knowledge.station_id(matches[0]))
+        conv.slots[slot] = Slot(matches[0], text, self.knowledge.station_id(matches[0]))
+        conv.record("slot", slot=slot, accepted=True, quote=text, message_index=conv.message_indices[-1])
+        conv.accept(slot, {"quote": text, "value": matches[0], "candidates": candidates})
         conv.pending_station = None
         conv.trace.append(Step("P3", "Passenger", "Chose a station from the rule-listed candidates", matches[0]))
         return True
@@ -196,12 +229,18 @@ class Assistant:
     def _ask(self, conv: Conversation, missing: list[str], *, situation: str = "",
              extra: dict[str, str] | None = None, fallback: str = "") -> str:
         """Ask for what is missing with the whole conversation as context."""
+        conv.decision = "question"
+        if conv.critique_reason is None:
+            conv.critique_reason = "missing_slot"
+        for slot in missing:
+            conv.record("ask", slot=slot)
         slots = conv.slots
         known = {name: slots[name].value for name in ("origin", "destination", "time") if name in slots}
         if "date" in slots:
             known["date"] = _swiss_date(slots["date"].value)
         question = ask(self.model, missing, conv.messages, {**known, **(extra or {})}, conv.language, conv.trace,
-                       self.stations, situation=situation, fallback=fallback)
+                       self.stations, situation=situation, fallback=fallback,
+                       events=conv.events, scope_id=f"turn{conv.turn}:phrasing:{len(conv.events)}")
         return "\n\n".join([*self._interpretations(conv), question])
 
     def _case(self, conv: Conversation) -> Case:
@@ -214,14 +253,19 @@ class Assistant:
 
     def _offer(self, conv: Conversation) -> str:
         case = self._case(conv)
+        self.knowledge.validate_case(case)
+        self._execution(conv, "offers", asdict(case))
         result = self.knowledge.offers(case)
+        conv.accept("offers", {"asserted": result.asserted, "offers": [asdict(o) for o in result.offers],
+                               "not_checkable": result.not_checkable})
         conv.trace.append(Step("P3", "Host", "Assert RefundCase from checked identifiers", result.asserted))
         listing = "\n".join(offer.line() for offer in result.offers)
         conv.trace.append(Step("P3", "Rules", f"Planned connections: {len(result.offers)} offered",
                                result.not_checkable or listing or "none", "unknown" if result.not_checkable else "ok",
                                result.seconds))
         if result.not_checkable:
-            return self._hand_off(conv, result.not_checkable)
+            conv.critique_reason = "date_not_checkable"
+            return self._hand_off(conv, result.not_checkable + "; available operating days: " + ", ".join(date.fromisoformat(day).strftime("%-d %B %Y") for day in self.knowledge.days))
         if not result.offers:
             if conv.time_asked_again:
                 return self._hand_off(conv, "no train departs close to the stated time")
@@ -229,6 +273,7 @@ class Assistant:
             conv.slots.pop("time")
             conv.asked_for = "time"
             return self._ask(conv, ["time"], situation="no train departs close to the time the passenger gave", fallback="ask_time_again")
+        conv.offers = result.offers
         named = conv.slots.get("train")
         matched = match_offer(named.value, result.offers) if named else None
         if matched is not None:
@@ -267,17 +312,35 @@ class Assistant:
             sent,
         )
         picked = (answer.data or {}).get("train")
-        accepted = picked in trains
+        accepted = isinstance(picked, str) and picked in trains
+        conv.record("validate", call_id=f"select{len(conv.events)}", name="select_train",
+                    arguments={"proposed": picked}, approved=accepted)
+        if accepted:
+            conv.accept("selected_train", {"selected": picked, "offered": trains})
         conv.trace.append(Step("P12", "GPT-5 mini", "Select an identifier from the list", f"[{answer.mode}] {answer.raw}",
                                "ok" if accepted or picked is None else "refused", answer.seconds, sent))
-        return next((offer for offer in conv.offers if offer.id == picked), None)
+        return next((offer for offer in conv.offers if accepted and offer.id == picked), None)
 
     # --- the decision -----------------------------------------------------
 
+    @staticmethod
+    def _execution(conv: Conversation, name: str, arguments: dict) -> None:
+        call_id = f"call{len(conv.events)}"
+        conv.record("validate", call_id=call_id, name=name, arguments=arguments, approved=True)
+        conv.record("execute", call_id=call_id, name=name, arguments=arguments)
+
     def _decide(self, conv: Conversation, offer: Offer) -> str:
+        self.knowledge.validate_case(self._case(conv))
+        if offer not in conv.offers:
+            raise ValueError("train was not offered by the rules")
         conv.chosen = offer
         price = conv.slots.get("price")
-        verdict = self.knowledge.verdict(self._case(conv), offer, int(price.value) if price else None)
+        amount = int(price.value) if price else None
+        if amount is not None and amount <= 0:
+            raise ValueError("ticket price must be positive")
+        self._execution(conv, "verdict", {"case": asdict(self._case(conv)), "offer": asdict(offer), "price_rappen": amount})
+        verdict = self.knowledge.verdict(self._case(conv), offer, amount)
+        conv.accept("verdict", {"bindings": verdict.facts, "boards": list(offer.boards), "asserted": verdict.asserted})
         conv.verdict = verdict
         conv.trace.append(Step("P3", "Host", "Assert DelayCheck for the passenger's train", verdict.asserted))
         conv.trace.append(Step("P7", "Rules", f"Delay and policy: {verdict.decision}", self._summary(verdict),

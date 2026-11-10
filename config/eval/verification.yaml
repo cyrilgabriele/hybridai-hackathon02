@@ -1,12 +1,13 @@
 kind: verification
 version: 1
-timestamp: '2026-11-10T16:23:23.028160+00:00'
-scope: full snapshot component cross-check after developer interface cbe5d3b; not a chat evaluation
-case_document_sha256: 3d80e562e5feaea9591bf89da33a13e17a9c02849d61f7700fe3a319d9b2f1b4
+timestamp: '2026-11-10T16:54:06.457966+00:00'
+scope: full snapshot component cross-check after end-to-end integration; conversation
+  runs reported separately
+case_document_sha256: 1f86918ba46df973fd7ad8130d7ab52dba02f3c591626ee9d993744840be0e08
 case_document_path: config/eval/snapshot.yaml
 original_case_document_sha256: 6ad6e3e0cc62268bdbcad3050dac91717b63fba9b947fa0e60cd7efb36dbe320
 system_commit: 977bb14db288caeb6bf1b253fdb8e25f83ada711
-initialization_ms: 8008.011334110051
+initialization_ms: 8589.469375088811
 checked:
 - case_id: snapshot_no_refund
   correct: true
@@ -19,7 +20,19 @@ checked:
     actualArrival: 1794068568
     handOff: []
     refundCHF: null
-  latency_ms: 7482.493708957918
+  latency_ms: 8643.882332951762
+- case_id: snapshot_cancellation
+  correct: true
+  facts:
+    refundStatus: notEntitled
+    refundPercent: 0
+    paidOut: null
+    delayMinutes: 0
+    plannedArrival: 1794068580
+    actualArrival: 1794068568
+    handOff: []
+    refundCHF: null
+  latency_ms: 10760.255625005811
 - case_id: snapshot_25_percent
   correct: true
   facts:
@@ -31,7 +44,19 @@ checked:
     actualArrival: 1794074347
     handOff: []
     refundCHF: '10.00'
-  latency_ms: 16968.00762496423
+  latency_ms: 19441.27779197879
+- case_id: snapshot_changed_one_transfer_route
+  correct: true
+  facts:
+    refundStatus: notEntitled
+    refundPercent: 0
+    paidOut: null
+    delayMinutes: 29
+    plannedArrival: 1794038640
+    actualArrival: 1794040436
+    handOff: []
+    refundCHF: null
+  latency_ms: 25762.45849998668
 - case_id: snapshot_missed_connection
   correct: true
   facts:
@@ -43,7 +68,7 @@ checked:
     actualArrival: 1794040436
     handOff: []
     refundCHF: null
-  latency_ms: 22365.072958986275
+  latency_ms: 31704.50875000097
 - case_id: snapshot_handoff
   correct: true
   facts:
@@ -54,10 +79,11 @@ checked:
     plannedArrival: 1794084780
     actualArrival: null
     handOff:
-    - no actual arrival at the destination is recorded within three hours of the planned departure
+    - no actual arrival at the destination is recorded within three hours of the planned
+      departure
     - the planned train's arrival at the destination has no recorded actual time
     refundCHF: null
-  latency_ms: 23798.697707941756
+  latency_ms: 33906.971125048585
 - case_id: snapshot_50_percent
   correct: true
   facts:
@@ -69,10 +95,8 @@ checked:
     actualArrival: 1794029215
     handOff: []
     refundCHF: '20.00'
-  latency_ms: 25701.123625040054
+  latency_ms: 35925.03887496423
 not_checked:
-- snapshot_cancellation
-- snapshot_changed_one_transfer_route
 - snapshot_25_percent_chf_19_60
 - snapshot_25_percent_chf_20_00
 - snapshot_25_percent_chf_20_02
@@ -83,5 +107,5 @@ not_checked:
 - snapshot_50_percent_chf_12_00
 - snapshot_missing_price
 - snapshot_unsupported_day
-performance_note: One sequential session; growing request state can increase later per-case costs. This
-  is component latency, not passenger response time.
+performance_note: Seven representative full-workspace component cases in one sequential
+  session. Conversation and quality-judge latency are separate; see docs/cyril/evaluation-e2e.md.

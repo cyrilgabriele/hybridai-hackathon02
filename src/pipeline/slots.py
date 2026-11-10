@@ -164,10 +164,15 @@ def read_slots(model: LanguageModel, knowledge: Knowledge, conv: Conversation) -
     message = "\n".join(conv.messages)
     known = {name: slot.value for name, slot in sorted(conv.slots.items())}
     request = {"message": message, "asked_for": conv.asked_for, "already_known": known}
+    if conv.context:
+        request["context"] = conv.context
     result = Reading()
     previous: list[Problem] = []
     problems: list[Problem] = []
+    scope = f"turn{conv.turn}:slots"
     for attempt in range(MAX_REPAIRS + 1):
+        if attempt:
+            conv.record("repair", scope_id=scope)
         sent = json.dumps(request, ensure_ascii=False, sort_keys=True)
         answer = model.ask_json(EXTRACT_PROMPT, sent)
         conv.trace.append(Step("P3", "GPT-5 mini", "Translate the passenger's words into slots",
@@ -176,6 +181,20 @@ def read_slots(model: LanguageModel, knowledge: Knowledge, conv: Conversation) -
             reading, problems = Reading(), [Problem("reply", "wrong_format")]
         else:
             reading, problems = critique(answer.data, message, knowledge)
+        for name, slot in reading.accepted.items():
+            index = next((i for i in range(len(conv.messages) - 1, -1, -1)
+                          if slot.quote.casefold() in conv.messages[i].casefold()), None)
+            # A quote spanning separate messages is not passenger evidence.
+            if index is None:
+                problems.append(Problem(name, "quote_not_found"))
+                continue
+            message_index = conv.message_indices[index] if conv.message_indices else index
+            conv.record("slot", slot=name, accepted=True, quote=slot.quote, message_index=message_index)
+            conv.accept(name, {"quote": slot.quote, "message_index": message_index, "value": slot.value})
+        reading.accepted = {name: slot for name, slot in reading.accepted.items()
+                            if any(slot.quote.casefold() in text.casefold() for text in conv.messages)}
+        for problem in problems:
+            conv.record("slot", slot=problem.slot, accepted=False, reason=problem.reason)
         result.accepted.update(reading.accepted)
         result.ambiguous.update(reading.ambiguous)
         result.unknown.update(reading.unknown)
@@ -189,5 +208,6 @@ def read_slots(model: LanguageModel, knowledge: Knowledge, conv: Conversation) -
         previous = repairable
         request = {**request, "previous_reply": answer.raw,
                    "problems": [{"slot": p.slot, "reason": p.reason} for p in repairable]}
+    conv.critique_reason = problems[0].reason if problems else None
     result.dropped = {p.slot: p.reason for p in problems if p.slot not in result.accepted}
     return result

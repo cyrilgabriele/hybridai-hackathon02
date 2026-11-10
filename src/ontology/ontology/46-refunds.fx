@@ -12,8 +12,8 @@
 //                train. The rules derive what really happened from it.
 //
 //   PlannedConnection  scheduled times; cancelled trains count, they were
-//                      planned. Direct, or with one change when the
-//                      boarded train does not reach the destination.
+//                      planned. Direct and one-change routes compete;
+//                      the earliest arrival determines the plan.
 //   ActualLeg          REAL times only, as in 40-service.fx: the ways the
 //                      passenger could really have travelled, boarding at
 //                      the origin no earlier than the planned departure.
@@ -89,7 +89,7 @@ pc1(?X, ?E, ?G, ?H, ?F):PlannedConnection[connOf -> ?X; connBoard -> ?E; connAli
     AND ?E[atStopPoint -> ?O] AND ?E[passThrough -> false]
     AND ?E[scheduledDepartureEpoch -> ?D] AND ?D >= ?Lo AND ?D <= ?Hi
     AND ?E[ofTrip -> ?T1] AND ?T1[observedOn -> ?Day]
-    AND NOT ?X[directFrom(?E) -> true] AND ?E[stopSequence -> ?I]
+    AND ?E[stopSequence -> ?I]
     AND ?G[ofTrip -> ?T1] AND ?G[passThrough -> false] AND ?G[stopSequence -> ?I2] AND ?I < ?I2
     AND ?G[atStopPoint -> ?V] AND ?V != ?S AND ?V != ?O AND ?G[scheduledArrivalEpoch -> ?GA]
     AND ?Ready := ?GA + ?TS AND refundSearch[maxChangeWait -> ?W] AND ?Latest := ?GA + ?W

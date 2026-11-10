@@ -1,0 +1,1938 @@
+{
+  "version": 1,
+  "timestamp": "2026-11-10T16:25:55.055101+00:00",
+  "rubric_version": "refund-quality-v1",
+  "percentile_method": "nearest-rank",
+  "system": "FrameXSystem",
+  "scope": "component",
+  "system_configuration": {
+    "client_version": "0.5.0",
+    "client_commit": "977bb14db288caeb6bf1b253fdb8e25f83ada711",
+    "engine_receipt_matches_client": true,
+    "timeout_seconds": 900,
+    "load_timeout_seconds": 1800,
+    "workspace": null
+  },
+  "initialization_ms": 27.2502499865368,
+  "cleanup_error": null,
+  "rows": [
+    {
+      "case_id": "policy_0_chf_40.00",
+      "repetition": 0,
+      "tags": [
+        "synthetic",
+        "policy_boundary"
+      ],
+      "case": {
+        "id": "policy_0_chf_40.00",
+        "request": {
+          "synthetic_delay": 0,
+          "price_chf": "40.00"
+        },
+        "expected": {
+          "decision": "no_refund",
+          "delayMinutes": 0,
+          "refundStatus": "notEntitled",
+          "refundPercent": 0,
+          "refundCHF": null,
+          "paidOut": null
+        },
+        "tags": [
+          "synthetic",
+          "policy_boundary"
+        ],
+        "messages": [],
+        "must_say": [],
+        "expected_tools": null,
+        "snapshot": {},
+        "evidence": {}
+      },
+      "expected": {
+        "decision": "no_refund",
+        "delayMinutes": 0,
+        "refundStatus": "notEntitled",
+        "refundPercent": 0,
+        "refundCHF": null,
+        "paidOut": null
+      },
+      "observation": {
+        "decision": "no_refund",
+        "reply": "",
+        "facts": {
+          "refundStatus": "notEntitled",
+          "refundPercent": 0,
+          "paidOut": null,
+          "delayMinutes": 0,
+          "plannedArrival": null,
+          "actualArrival": null,
+          "handOff": [],
+          "refundCHF": null
+        },
+        "events": [],
+        "coverage": [],
+        "stage_ms": {
+          "component": 16.03487494867295
+        },
+        "usage": {},
+        "metadata": {
+          "scope": "component",
+          "snapshot": {},
+          "system_version": "framex-policy",
+          "request_id": "audit_1",
+          "configuration": {
+            "client_version": "0.5.0",
+            "client_commit": "977bb14db288caeb6bf1b253fdb8e25f83ada711",
+            "engine_receipt_matches_client": true,
+            "timeout_seconds": 900,
+            "load_timeout_seconds": 1800,
+            "workspace": null
+          }
+        },
+        "error": null
+      },
+      "scope": "component",
+      "phase": "first_request",
+      "replayed": false,
+      "latency_ms": 16.163457999937236,
+      "judge_ms": null,
+      "scores": {
+        "correct": true,
+        "checks": {
+          "decision": true,
+          "delayMinutes": true,
+          "refundStatus": true,
+          "refundPercent": true,
+          "refundCHF": true,
+          "paidOut": true
+        },
+        "required_content_coverage": null,
+        "tool_precision": null,
+        "tool_recall": null,
+        "parameter_accuracy": null,
+        "quote_fidelity": null,
+        "invariants": {
+          "checked_execution": "unverified",
+          "evidence_acceptance": "unverified",
+          "repair_budget": "unverified",
+          "price_asked_once": "unverified",
+          "replayable": "unverified"
+        },
+        "task_success": true,
+        "audit_complete": false
+      },
+      "quality": {
+        "status": "unscored",
+        "reason": "judge disabled"
+      }
+    },
+    {
+      "case_id": "policy_59_chf_40.00",
+      "repetition": 0,
+      "tags": [
+        "synthetic",
+        "policy_boundary"
+      ],
+      "case": {
+        "id": "policy_59_chf_40.00",
+        "request": {
+          "synthetic_delay": 59,
+          "price_chf": "40.00"
+        },
+        "expected": {
+          "decision": "no_refund",
+          "delayMinutes": 59,
+          "refundStatus": "notEntitled",
+          "refundPercent": 0,
+          "refundCHF": null,
+          "paidOut": null
+        },
+        "tags": [
+          "synthetic",
+          "policy_boundary"
+        ],
+        "messages": [],
+        "must_say": [],
+        "expected_tools": null,
+        "snapshot": {},
+        "evidence": {}
+      },
+      "expected": {
+        "decision": "no_refund",
+        "delayMinutes": 59,
+        "refundStatus": "notEntitled",
+        "refundPercent": 0,
+        "refundCHF": null,
+        "paidOut": null
+      },
+      "observation": {
+        "decision": "no_refund",
+        "reply": "",
+        "facts": {
+          "refundStatus": "notEntitled",
+          "refundPercent": 0,
+          "paidOut": null,
+          "delayMinutes": 59,
+          "plannedArrival": null,
+          "actualArrival": null,
+          "handOff": [],
+          "refundCHF": null
+        },
+        "events": [],
+        "coverage": [],
+        "stage_ms": {
+          "component": 15.99716697819531
+        },
+        "usage": {},
+        "metadata": {
+          "scope": "component",
+          "snapshot": {},
+          "system_version": "framex-policy",
+          "request_id": "audit_2",
+          "configuration": {
+            "client_version": "0.5.0",
+            "client_commit": "977bb14db288caeb6bf1b253fdb8e25f83ada711",
+            "engine_receipt_matches_client": true,
+            "timeout_seconds": 900,
+            "load_timeout_seconds": 1800,
+            "workspace": null
+          }
+        },
+        "error": null
+      },
+      "scope": "component",
+      "phase": "warm_request",
+      "replayed": false,
+      "latency_ms": 16.053750063292682,
+      "judge_ms": null,
+      "scores": {
+        "correct": true,
+        "checks": {
+          "decision": true,
+          "delayMinutes": true,
+          "refundStatus": true,
+          "refundPercent": true,
+          "refundCHF": true,
+          "paidOut": true
+        },
+        "required_content_coverage": null,
+        "tool_precision": null,
+        "tool_recall": null,
+        "parameter_accuracy": null,
+        "quote_fidelity": null,
+        "invariants": {
+          "checked_execution": "unverified",
+          "evidence_acceptance": "unverified",
+          "repair_budget": "unverified",
+          "price_asked_once": "unverified",
+          "replayable": "unverified"
+        },
+        "task_success": true,
+        "audit_complete": false
+      },
+      "quality": {
+        "status": "unscored",
+        "reason": "judge disabled"
+      }
+    },
+    {
+      "case_id": "policy_60_chf_19.60",
+      "repetition": 0,
+      "tags": [
+        "synthetic",
+        "policy_boundary"
+      ],
+      "case": {
+        "id": "policy_60_chf_19.60",
+        "request": {
+          "synthetic_delay": 60,
+          "price_chf": "19.60"
+        },
+        "expected": {
+          "decision": "no_refund",
+          "delayMinutes": 60,
+          "refundStatus": "entitled",
+          "refundPercent": 25,
+          "refundCHF": "4.90",
+          "paidOut": false
+        },
+        "tags": [
+          "synthetic",
+          "policy_boundary"
+        ],
+        "messages": [],
+        "must_say": [],
+        "expected_tools": null,
+        "snapshot": {},
+        "evidence": {}
+      },
+      "expected": {
+        "decision": "no_refund",
+        "delayMinutes": 60,
+        "refundStatus": "entitled",
+        "refundPercent": 25,
+        "refundCHF": "4.90",
+        "paidOut": false
+      },
+      "observation": {
+        "decision": "no_refund",
+        "reply": "",
+        "facts": {
+          "refundStatus": "entitled",
+          "refundPercent": 25,
+          "paidOut": false,
+          "delayMinutes": 60,
+          "plannedArrival": null,
+          "actualArrival": null,
+          "handOff": [],
+          "refundCHF": "4.90"
+        },
+        "events": [],
+        "coverage": [],
+        "stage_ms": {
+          "component": 15.914708958007395
+        },
+        "usage": {},
+        "metadata": {
+          "scope": "component",
+          "snapshot": {},
+          "system_version": "framex-policy",
+          "request_id": "audit_3",
+          "configuration": {
+            "client_version": "0.5.0",
+            "client_commit": "977bb14db288caeb6bf1b253fdb8e25f83ada711",
+            "engine_receipt_matches_client": true,
+            "timeout_seconds": 900,
+            "load_timeout_seconds": 1800,
+            "workspace": null
+          }
+        },
+        "error": null
+      },
+      "scope": "component",
+      "phase": "warm_request",
+      "replayed": false,
+      "latency_ms": 15.957958996295929,
+      "judge_ms": null,
+      "scores": {
+        "correct": true,
+        "checks": {
+          "decision": true,
+          "delayMinutes": true,
+          "refundStatus": true,
+          "refundPercent": true,
+          "refundCHF": true,
+          "paidOut": true
+        },
+        "required_content_coverage": null,
+        "tool_precision": null,
+        "tool_recall": null,
+        "parameter_accuracy": null,
+        "quote_fidelity": null,
+        "invariants": {
+          "checked_execution": "unverified",
+          "evidence_acceptance": "unverified",
+          "repair_budget": "unverified",
+          "price_asked_once": "unverified",
+          "replayable": "unverified"
+        },
+        "task_success": true,
+        "audit_complete": false
+      },
+      "quality": {
+        "status": "unscored",
+        "reason": "judge disabled"
+      }
+    },
+    {
+      "case_id": "policy_60_chf_19.99",
+      "repetition": 0,
+      "tags": [
+        "synthetic",
+        "policy_boundary"
+      ],
+      "case": {
+        "id": "policy_60_chf_19.99",
+        "request": {
+          "synthetic_delay": 60,
+          "price_chf": "19.99"
+        },
+        "expected": {
+          "decision": "no_refund",
+          "delayMinutes": 60,
+          "refundStatus": "entitled",
+          "refundPercent": 25,
+          "refundCHF": "5.00",
+          "paidOut": false
+        },
+        "tags": [
+          "synthetic",
+          "policy_boundary"
+        ],
+        "messages": [],
+        "must_say": [],
+        "expected_tools": null,
+        "snapshot": {},
+        "evidence": {}
+      },
+      "expected": {
+        "decision": "no_refund",
+        "delayMinutes": 60,
+        "refundStatus": "entitled",
+        "refundPercent": 25,
+        "refundCHF": "5.00",
+        "paidOut": false
+      },
+      "observation": {
+        "decision": "no_refund",
+        "reply": "",
+        "facts": {
+          "refundStatus": "entitled",
+          "refundPercent": 25,
+          "paidOut": false,
+          "delayMinutes": 60,
+          "plannedArrival": null,
+          "actualArrival": null,
+          "handOff": [],
+          "refundCHF": "4.99"
+        },
+        "events": [],
+        "coverage": [],
+        "stage_ms": {
+          "component": 15.975375077687204
+        },
+        "usage": {},
+        "metadata": {
+          "scope": "component",
+          "snapshot": {},
+          "system_version": "framex-policy",
+          "request_id": "audit_4",
+          "configuration": {
+            "client_version": "0.5.0",
+            "client_commit": "977bb14db288caeb6bf1b253fdb8e25f83ada711",
+            "engine_receipt_matches_client": true,
+            "timeout_seconds": 900,
+            "load_timeout_seconds": 1800,
+            "workspace": null
+          }
+        },
+        "error": null
+      },
+      "scope": "component",
+      "phase": "warm_request",
+      "replayed": false,
+      "latency_ms": 16.012333100661635,
+      "judge_ms": null,
+      "scores": {
+        "correct": false,
+        "checks": {
+          "decision": true,
+          "delayMinutes": true,
+          "refundStatus": true,
+          "refundPercent": true,
+          "refundCHF": false,
+          "paidOut": true
+        },
+        "required_content_coverage": null,
+        "tool_precision": null,
+        "tool_recall": null,
+        "parameter_accuracy": null,
+        "quote_fidelity": null,
+        "invariants": {
+          "checked_execution": "unverified",
+          "evidence_acceptance": "unverified",
+          "repair_budget": "unverified",
+          "price_asked_once": "unverified",
+          "replayable": "unverified"
+        },
+        "task_success": false,
+        "audit_complete": false
+      },
+      "quality": {
+        "status": "unscored",
+        "reason": "judge disabled"
+      }
+    },
+    {
+      "case_id": "policy_60_chf_20.00",
+      "repetition": 0,
+      "tags": [
+        "synthetic",
+        "policy_boundary"
+      ],
+      "case": {
+        "id": "policy_60_chf_20.00",
+        "request": {
+          "synthetic_delay": 60,
+          "price_chf": "20.00"
+        },
+        "expected": {
+          "decision": "refund",
+          "delayMinutes": 60,
+          "refundStatus": "entitled",
+          "refundPercent": 25,
+          "refundCHF": "5.00",
+          "paidOut": true
+        },
+        "tags": [
+          "synthetic",
+          "policy_boundary"
+        ],
+        "messages": [],
+        "must_say": [],
+        "expected_tools": null,
+        "snapshot": {},
+        "evidence": {}
+      },
+      "expected": {
+        "decision": "refund",
+        "delayMinutes": 60,
+        "refundStatus": "entitled",
+        "refundPercent": 25,
+        "refundCHF": "5.00",
+        "paidOut": true
+      },
+      "observation": {
+        "decision": "refund",
+        "reply": "",
+        "facts": {
+          "refundStatus": "entitled",
+          "refundPercent": 25,
+          "paidOut": true,
+          "delayMinutes": 60,
+          "plannedArrival": null,
+          "actualArrival": null,
+          "handOff": [],
+          "refundCHF": "5.00"
+        },
+        "events": [],
+        "coverage": [],
+        "stage_ms": {
+          "component": 15.816375031135976
+        },
+        "usage": {},
+        "metadata": {
+          "scope": "component",
+          "snapshot": {},
+          "system_version": "framex-policy",
+          "request_id": "audit_5",
+          "configuration": {
+            "client_version": "0.5.0",
+            "client_commit": "977bb14db288caeb6bf1b253fdb8e25f83ada711",
+            "engine_receipt_matches_client": true,
+            "timeout_seconds": 900,
+            "load_timeout_seconds": 1800,
+            "workspace": null
+          }
+        },
+        "error": null
+      },
+      "scope": "component",
+      "phase": "warm_request",
+      "replayed": false,
+      "latency_ms": 15.851917094551027,
+      "judge_ms": null,
+      "scores": {
+        "correct": true,
+        "checks": {
+          "decision": true,
+          "delayMinutes": true,
+          "refundStatus": true,
+          "refundPercent": true,
+          "refundCHF": true,
+          "paidOut": true
+        },
+        "required_content_coverage": null,
+        "tool_precision": null,
+        "tool_recall": null,
+        "parameter_accuracy": null,
+        "quote_fidelity": null,
+        "invariants": {
+          "checked_execution": "unverified",
+          "evidence_acceptance": "unverified",
+          "repair_budget": "unverified",
+          "price_asked_once": "unverified",
+          "replayable": "unverified"
+        },
+        "task_success": true,
+        "audit_complete": false
+      },
+      "quality": {
+        "status": "unscored",
+        "reason": "judge disabled"
+      }
+    },
+    {
+      "case_id": "policy_60_chf_20.02",
+      "repetition": 0,
+      "tags": [
+        "synthetic",
+        "policy_boundary"
+      ],
+      "case": {
+        "id": "policy_60_chf_20.02",
+        "request": {
+          "synthetic_delay": 60,
+          "price_chf": "20.02"
+        },
+        "expected": {
+          "decision": "refund",
+          "delayMinutes": 60,
+          "refundStatus": "entitled",
+          "refundPercent": 25,
+          "refundCHF": "5.01",
+          "paidOut": true
+        },
+        "tags": [
+          "synthetic",
+          "policy_boundary"
+        ],
+        "messages": [],
+        "must_say": [],
+        "expected_tools": null,
+        "snapshot": {},
+        "evidence": {}
+      },
+      "expected": {
+        "decision": "refund",
+        "delayMinutes": 60,
+        "refundStatus": "entitled",
+        "refundPercent": 25,
+        "refundCHF": "5.01",
+        "paidOut": true
+      },
+      "observation": {
+        "decision": "refund",
+        "reply": "",
+        "facts": {
+          "refundStatus": "entitled",
+          "refundPercent": 25,
+          "paidOut": true,
+          "delayMinutes": 60,
+          "plannedArrival": null,
+          "actualArrival": null,
+          "handOff": [],
+          "refundCHF": "5.00"
+        },
+        "events": [],
+        "coverage": [],
+        "stage_ms": {
+          "component": 15.912375063635409
+        },
+        "usage": {},
+        "metadata": {
+          "scope": "component",
+          "snapshot": {},
+          "system_version": "framex-policy",
+          "request_id": "audit_6",
+          "configuration": {
+            "client_version": "0.5.0",
+            "client_commit": "977bb14db288caeb6bf1b253fdb8e25f83ada711",
+            "engine_receipt_matches_client": true,
+            "timeout_seconds": 900,
+            "load_timeout_seconds": 1800,
+            "workspace": null
+          }
+        },
+        "error": null
+      },
+      "scope": "component",
+      "phase": "warm_request",
+      "replayed": false,
+      "latency_ms": 15.946915955282748,
+      "judge_ms": null,
+      "scores": {
+        "correct": false,
+        "checks": {
+          "decision": true,
+          "delayMinutes": true,
+          "refundStatus": true,
+          "refundPercent": true,
+          "refundCHF": false,
+          "paidOut": true
+        },
+        "required_content_coverage": null,
+        "tool_precision": null,
+        "tool_recall": null,
+        "parameter_accuracy": null,
+        "quote_fidelity": null,
+        "invariants": {
+          "checked_execution": "unverified",
+          "evidence_acceptance": "unverified",
+          "repair_budget": "unverified",
+          "price_asked_once": "unverified",
+          "replayable": "unverified"
+        },
+        "task_success": false,
+        "audit_complete": false
+      },
+      "quality": {
+        "status": "unscored",
+        "reason": "judge disabled"
+      }
+    },
+    {
+      "case_id": "policy_60_chf_24.00",
+      "repetition": 0,
+      "tags": [
+        "synthetic",
+        "policy_boundary"
+      ],
+      "case": {
+        "id": "policy_60_chf_24.00",
+        "request": {
+          "synthetic_delay": 60,
+          "price_chf": "24.00"
+        },
+        "expected": {
+          "decision": "refund",
+          "delayMinutes": 60,
+          "refundStatus": "entitled",
+          "refundPercent": 25,
+          "refundCHF": "6.00",
+          "paidOut": true
+        },
+        "tags": [
+          "synthetic",
+          "policy_boundary"
+        ],
+        "messages": [],
+        "must_say": [],
+        "expected_tools": null,
+        "snapshot": {},
+        "evidence": {}
+      },
+      "expected": {
+        "decision": "refund",
+        "delayMinutes": 60,
+        "refundStatus": "entitled",
+        "refundPercent": 25,
+        "refundCHF": "6.00",
+        "paidOut": true
+      },
+      "observation": {
+        "decision": "refund",
+        "reply": "",
+        "facts": {
+          "refundStatus": "entitled",
+          "refundPercent": 25,
+          "paidOut": true,
+          "delayMinutes": 60,
+          "plannedArrival": null,
+          "actualArrival": null,
+          "handOff": [],
+          "refundCHF": "6.00"
+        },
+        "events": [],
+        "coverage": [],
+        "stage_ms": {
+          "component": 15.001459047198296
+        },
+        "usage": {},
+        "metadata": {
+          "scope": "component",
+          "snapshot": {},
+          "system_version": "framex-policy",
+          "request_id": "audit_7",
+          "configuration": {
+            "client_version": "0.5.0",
+            "client_commit": "977bb14db288caeb6bf1b253fdb8e25f83ada711",
+            "engine_receipt_matches_client": true,
+            "timeout_seconds": 900,
+            "load_timeout_seconds": 1800,
+            "workspace": null
+          }
+        },
+        "error": null
+      },
+      "scope": "component",
+      "phase": "warm_request",
+      "replayed": false,
+      "latency_ms": 15.037958044558764,
+      "judge_ms": null,
+      "scores": {
+        "correct": true,
+        "checks": {
+          "decision": true,
+          "delayMinutes": true,
+          "refundStatus": true,
+          "refundPercent": true,
+          "refundCHF": true,
+          "paidOut": true
+        },
+        "required_content_coverage": null,
+        "tool_precision": null,
+        "tool_recall": null,
+        "parameter_accuracy": null,
+        "quote_fidelity": null,
+        "invariants": {
+          "checked_execution": "unverified",
+          "evidence_acceptance": "unverified",
+          "repair_budget": "unverified",
+          "price_asked_once": "unverified",
+          "replayable": "unverified"
+        },
+        "task_success": true,
+        "audit_complete": false
+      },
+      "quality": {
+        "status": "unscored",
+        "reason": "judge disabled"
+      }
+    },
+    {
+      "case_id": "policy_60_chf_None",
+      "repetition": 0,
+      "tags": [
+        "synthetic",
+        "policy_boundary"
+      ],
+      "case": {
+        "id": "policy_60_chf_None",
+        "request": {
+          "synthetic_delay": 60,
+          "price_chf": null
+        },
+        "expected": {
+          "decision": "refund",
+          "delayMinutes": 60,
+          "refundStatus": "entitled",
+          "refundPercent": 25,
+          "refundCHF": null,
+          "paidOut": null
+        },
+        "tags": [
+          "synthetic",
+          "policy_boundary"
+        ],
+        "messages": [],
+        "must_say": [],
+        "expected_tools": null,
+        "snapshot": {},
+        "evidence": {}
+      },
+      "expected": {
+        "decision": "refund",
+        "delayMinutes": 60,
+        "refundStatus": "entitled",
+        "refundPercent": 25,
+        "refundCHF": null,
+        "paidOut": null
+      },
+      "observation": {
+        "decision": "refund",
+        "reply": "",
+        "facts": {
+          "refundStatus": "entitled",
+          "refundPercent": 25,
+          "paidOut": null,
+          "delayMinutes": 60,
+          "plannedArrival": null,
+          "actualArrival": null,
+          "handOff": [],
+          "refundCHF": null
+        },
+        "events": [],
+        "coverage": [],
+        "stage_ms": {
+          "component": 15.224000089801848
+        },
+        "usage": {},
+        "metadata": {
+          "scope": "component",
+          "snapshot": {},
+          "system_version": "framex-policy",
+          "request_id": "audit_8",
+          "configuration": {
+            "client_version": "0.5.0",
+            "client_commit": "977bb14db288caeb6bf1b253fdb8e25f83ada711",
+            "engine_receipt_matches_client": true,
+            "timeout_seconds": 900,
+            "load_timeout_seconds": 1800,
+            "workspace": null
+          }
+        },
+        "error": null
+      },
+      "scope": "component",
+      "phase": "warm_request",
+      "replayed": false,
+      "latency_ms": 15.254291007295251,
+      "judge_ms": null,
+      "scores": {
+        "correct": true,
+        "checks": {
+          "decision": true,
+          "delayMinutes": true,
+          "refundStatus": true,
+          "refundPercent": true,
+          "refundCHF": true,
+          "paidOut": true
+        },
+        "required_content_coverage": null,
+        "tool_precision": null,
+        "tool_recall": null,
+        "parameter_accuracy": null,
+        "quote_fidelity": null,
+        "invariants": {
+          "checked_execution": "unverified",
+          "evidence_acceptance": "unverified",
+          "repair_budget": "unverified",
+          "price_asked_once": "unverified",
+          "replayable": "unverified"
+        },
+        "task_success": true,
+        "audit_complete": false
+      },
+      "quality": {
+        "status": "unscored",
+        "reason": "judge disabled"
+      }
+    },
+    {
+      "case_id": "policy_119_chf_40.00",
+      "repetition": 0,
+      "tags": [
+        "synthetic",
+        "policy_boundary"
+      ],
+      "case": {
+        "id": "policy_119_chf_40.00",
+        "request": {
+          "synthetic_delay": 119,
+          "price_chf": "40.00"
+        },
+        "expected": {
+          "decision": "refund",
+          "delayMinutes": 119,
+          "refundStatus": "entitled",
+          "refundPercent": 25,
+          "refundCHF": "10.00",
+          "paidOut": true
+        },
+        "tags": [
+          "synthetic",
+          "policy_boundary"
+        ],
+        "messages": [],
+        "must_say": [],
+        "expected_tools": null,
+        "snapshot": {},
+        "evidence": {}
+      },
+      "expected": {
+        "decision": "refund",
+        "delayMinutes": 119,
+        "refundStatus": "entitled",
+        "refundPercent": 25,
+        "refundCHF": "10.00",
+        "paidOut": true
+      },
+      "observation": {
+        "decision": "refund",
+        "reply": "",
+        "facts": {
+          "refundStatus": "entitled",
+          "refundPercent": 25,
+          "paidOut": true,
+          "delayMinutes": 119,
+          "plannedArrival": null,
+          "actualArrival": null,
+          "handOff": [],
+          "refundCHF": "10.00"
+        },
+        "events": [],
+        "coverage": [],
+        "stage_ms": {
+          "component": 15.26570797432214
+        },
+        "usage": {},
+        "metadata": {
+          "scope": "component",
+          "snapshot": {},
+          "system_version": "framex-policy",
+          "request_id": "audit_9",
+          "configuration": {
+            "client_version": "0.5.0",
+            "client_commit": "977bb14db288caeb6bf1b253fdb8e25f83ada711",
+            "engine_receipt_matches_client": true,
+            "timeout_seconds": 900,
+            "load_timeout_seconds": 1800,
+            "workspace": null
+          }
+        },
+        "error": null
+      },
+      "scope": "component",
+      "phase": "warm_request",
+      "replayed": false,
+      "latency_ms": 15.301709063351154,
+      "judge_ms": null,
+      "scores": {
+        "correct": true,
+        "checks": {
+          "decision": true,
+          "delayMinutes": true,
+          "refundStatus": true,
+          "refundPercent": true,
+          "refundCHF": true,
+          "paidOut": true
+        },
+        "required_content_coverage": null,
+        "tool_precision": null,
+        "tool_recall": null,
+        "parameter_accuracy": null,
+        "quote_fidelity": null,
+        "invariants": {
+          "checked_execution": "unverified",
+          "evidence_acceptance": "unverified",
+          "repair_budget": "unverified",
+          "price_asked_once": "unverified",
+          "replayable": "unverified"
+        },
+        "task_success": true,
+        "audit_complete": false
+      },
+      "quality": {
+        "status": "unscored",
+        "reason": "judge disabled"
+      }
+    },
+    {
+      "case_id": "policy_120_chf_9.80",
+      "repetition": 0,
+      "tags": [
+        "synthetic",
+        "policy_boundary"
+      ],
+      "case": {
+        "id": "policy_120_chf_9.80",
+        "request": {
+          "synthetic_delay": 120,
+          "price_chf": "9.80"
+        },
+        "expected": {
+          "decision": "no_refund",
+          "delayMinutes": 120,
+          "refundStatus": "entitled",
+          "refundPercent": 50,
+          "refundCHF": "4.90",
+          "paidOut": false
+        },
+        "tags": [
+          "synthetic",
+          "policy_boundary"
+        ],
+        "messages": [],
+        "must_say": [],
+        "expected_tools": null,
+        "snapshot": {},
+        "evidence": {}
+      },
+      "expected": {
+        "decision": "no_refund",
+        "delayMinutes": 120,
+        "refundStatus": "entitled",
+        "refundPercent": 50,
+        "refundCHF": "4.90",
+        "paidOut": false
+      },
+      "observation": {
+        "decision": "no_refund",
+        "reply": "",
+        "facts": {
+          "refundStatus": "entitled",
+          "refundPercent": 50,
+          "paidOut": false,
+          "delayMinutes": 120,
+          "plannedArrival": null,
+          "actualArrival": null,
+          "handOff": [],
+          "refundCHF": "4.90"
+        },
+        "events": [],
+        "coverage": [],
+        "stage_ms": {
+          "component": 15.292000025510788
+        },
+        "usage": {},
+        "metadata": {
+          "scope": "component",
+          "snapshot": {},
+          "system_version": "framex-policy",
+          "request_id": "audit_10",
+          "configuration": {
+            "client_version": "0.5.0",
+            "client_commit": "977bb14db288caeb6bf1b253fdb8e25f83ada711",
+            "engine_receipt_matches_client": true,
+            "timeout_seconds": 900,
+            "load_timeout_seconds": 1800,
+            "workspace": null
+          }
+        },
+        "error": null
+      },
+      "scope": "component",
+      "phase": "warm_request",
+      "replayed": false,
+      "latency_ms": 15.323834028095007,
+      "judge_ms": null,
+      "scores": {
+        "correct": true,
+        "checks": {
+          "decision": true,
+          "delayMinutes": true,
+          "refundStatus": true,
+          "refundPercent": true,
+          "refundCHF": true,
+          "paidOut": true
+        },
+        "required_content_coverage": null,
+        "tool_precision": null,
+        "tool_recall": null,
+        "parameter_accuracy": null,
+        "quote_fidelity": null,
+        "invariants": {
+          "checked_execution": "unverified",
+          "evidence_acceptance": "unverified",
+          "repair_budget": "unverified",
+          "price_asked_once": "unverified",
+          "replayable": "unverified"
+        },
+        "task_success": true,
+        "audit_complete": false
+      },
+      "quality": {
+        "status": "unscored",
+        "reason": "judge disabled"
+      }
+    },
+    {
+      "case_id": "policy_120_chf_9.99",
+      "repetition": 0,
+      "tags": [
+        "synthetic",
+        "policy_boundary"
+      ],
+      "case": {
+        "id": "policy_120_chf_9.99",
+        "request": {
+          "synthetic_delay": 120,
+          "price_chf": "9.99"
+        },
+        "expected": {
+          "decision": "no_refund",
+          "delayMinutes": 120,
+          "refundStatus": "entitled",
+          "refundPercent": 50,
+          "refundCHF": "5.00",
+          "paidOut": false
+        },
+        "tags": [
+          "synthetic",
+          "policy_boundary"
+        ],
+        "messages": [],
+        "must_say": [],
+        "expected_tools": null,
+        "snapshot": {},
+        "evidence": {}
+      },
+      "expected": {
+        "decision": "no_refund",
+        "delayMinutes": 120,
+        "refundStatus": "entitled",
+        "refundPercent": 50,
+        "refundCHF": "5.00",
+        "paidOut": false
+      },
+      "observation": {
+        "decision": "no_refund",
+        "reply": "",
+        "facts": {
+          "refundStatus": "entitled",
+          "refundPercent": 50,
+          "paidOut": false,
+          "delayMinutes": 120,
+          "plannedArrival": null,
+          "actualArrival": null,
+          "handOff": [],
+          "refundCHF": "4.99"
+        },
+        "events": [],
+        "coverage": [],
+        "stage_ms": {
+          "component": 15.501165995374322
+        },
+        "usage": {},
+        "metadata": {
+          "scope": "component",
+          "snapshot": {},
+          "system_version": "framex-policy",
+          "request_id": "audit_11",
+          "configuration": {
+            "client_version": "0.5.0",
+            "client_commit": "977bb14db288caeb6bf1b253fdb8e25f83ada711",
+            "engine_receipt_matches_client": true,
+            "timeout_seconds": 900,
+            "load_timeout_seconds": 1800,
+            "workspace": null
+          }
+        },
+        "error": null
+      },
+      "scope": "component",
+      "phase": "warm_request",
+      "replayed": false,
+      "latency_ms": 15.539875021204352,
+      "judge_ms": null,
+      "scores": {
+        "correct": false,
+        "checks": {
+          "decision": true,
+          "delayMinutes": true,
+          "refundStatus": true,
+          "refundPercent": true,
+          "refundCHF": false,
+          "paidOut": true
+        },
+        "required_content_coverage": null,
+        "tool_precision": null,
+        "tool_recall": null,
+        "parameter_accuracy": null,
+        "quote_fidelity": null,
+        "invariants": {
+          "checked_execution": "unverified",
+          "evidence_acceptance": "unverified",
+          "repair_budget": "unverified",
+          "price_asked_once": "unverified",
+          "replayable": "unverified"
+        },
+        "task_success": false,
+        "audit_complete": false
+      },
+      "quality": {
+        "status": "unscored",
+        "reason": "judge disabled"
+      }
+    },
+    {
+      "case_id": "policy_120_chf_10.00",
+      "repetition": 0,
+      "tags": [
+        "synthetic",
+        "policy_boundary"
+      ],
+      "case": {
+        "id": "policy_120_chf_10.00",
+        "request": {
+          "synthetic_delay": 120,
+          "price_chf": "10.00"
+        },
+        "expected": {
+          "decision": "refund",
+          "delayMinutes": 120,
+          "refundStatus": "entitled",
+          "refundPercent": 50,
+          "refundCHF": "5.00",
+          "paidOut": true
+        },
+        "tags": [
+          "synthetic",
+          "policy_boundary"
+        ],
+        "messages": [],
+        "must_say": [],
+        "expected_tools": null,
+        "snapshot": {},
+        "evidence": {}
+      },
+      "expected": {
+        "decision": "refund",
+        "delayMinutes": 120,
+        "refundStatus": "entitled",
+        "refundPercent": 50,
+        "refundCHF": "5.00",
+        "paidOut": true
+      },
+      "observation": {
+        "decision": "refund",
+        "reply": "",
+        "facts": {
+          "refundStatus": "entitled",
+          "refundPercent": 50,
+          "paidOut": true,
+          "delayMinutes": 120,
+          "plannedArrival": null,
+          "actualArrival": null,
+          "handOff": [],
+          "refundCHF": "5.00"
+        },
+        "events": [],
+        "coverage": [],
+        "stage_ms": {
+          "component": 15.441208961419761
+        },
+        "usage": {},
+        "metadata": {
+          "scope": "component",
+          "snapshot": {},
+          "system_version": "framex-policy",
+          "request_id": "audit_12",
+          "configuration": {
+            "client_version": "0.5.0",
+            "client_commit": "977bb14db288caeb6bf1b253fdb8e25f83ada711",
+            "engine_receipt_matches_client": true,
+            "timeout_seconds": 900,
+            "load_timeout_seconds": 1800,
+            "workspace": null
+          }
+        },
+        "error": null
+      },
+      "scope": "component",
+      "phase": "warm_request",
+      "replayed": false,
+      "latency_ms": 15.473666950128973,
+      "judge_ms": null,
+      "scores": {
+        "correct": true,
+        "checks": {
+          "decision": true,
+          "delayMinutes": true,
+          "refundStatus": true,
+          "refundPercent": true,
+          "refundCHF": true,
+          "paidOut": true
+        },
+        "required_content_coverage": null,
+        "tool_precision": null,
+        "tool_recall": null,
+        "parameter_accuracy": null,
+        "quote_fidelity": null,
+        "invariants": {
+          "checked_execution": "unverified",
+          "evidence_acceptance": "unverified",
+          "repair_budget": "unverified",
+          "price_asked_once": "unverified",
+          "replayable": "unverified"
+        },
+        "task_success": true,
+        "audit_complete": false
+      },
+      "quality": {
+        "status": "unscored",
+        "reason": "judge disabled"
+      }
+    },
+    {
+      "case_id": "policy_120_chf_10.01",
+      "repetition": 0,
+      "tags": [
+        "synthetic",
+        "policy_boundary"
+      ],
+      "case": {
+        "id": "policy_120_chf_10.01",
+        "request": {
+          "synthetic_delay": 120,
+          "price_chf": "10.01"
+        },
+        "expected": {
+          "decision": "refund",
+          "delayMinutes": 120,
+          "refundStatus": "entitled",
+          "refundPercent": 50,
+          "refundCHF": "5.01",
+          "paidOut": true
+        },
+        "tags": [
+          "synthetic",
+          "policy_boundary"
+        ],
+        "messages": [],
+        "must_say": [],
+        "expected_tools": null,
+        "snapshot": {},
+        "evidence": {}
+      },
+      "expected": {
+        "decision": "refund",
+        "delayMinutes": 120,
+        "refundStatus": "entitled",
+        "refundPercent": 50,
+        "refundCHF": "5.01",
+        "paidOut": true
+      },
+      "observation": {
+        "decision": "refund",
+        "reply": "",
+        "facts": {
+          "refundStatus": "entitled",
+          "refundPercent": 50,
+          "paidOut": true,
+          "delayMinutes": 120,
+          "plannedArrival": null,
+          "actualArrival": null,
+          "handOff": [],
+          "refundCHF": "5.00"
+        },
+        "events": [],
+        "coverage": [],
+        "stage_ms": {
+          "component": 31.21820802334696
+        },
+        "usage": {},
+        "metadata": {
+          "scope": "component",
+          "snapshot": {},
+          "system_version": "framex-policy",
+          "request_id": "audit_13",
+          "configuration": {
+            "client_version": "0.5.0",
+            "client_commit": "977bb14db288caeb6bf1b253fdb8e25f83ada711",
+            "engine_receipt_matches_client": true,
+            "timeout_seconds": 900,
+            "load_timeout_seconds": 1800,
+            "workspace": null
+          }
+        },
+        "error": null
+      },
+      "scope": "component",
+      "phase": "warm_request",
+      "replayed": false,
+      "latency_ms": 31.27937496174127,
+      "judge_ms": null,
+      "scores": {
+        "correct": false,
+        "checks": {
+          "decision": true,
+          "delayMinutes": true,
+          "refundStatus": true,
+          "refundPercent": true,
+          "refundCHF": false,
+          "paidOut": true
+        },
+        "required_content_coverage": null,
+        "tool_precision": null,
+        "tool_recall": null,
+        "parameter_accuracy": null,
+        "quote_fidelity": null,
+        "invariants": {
+          "checked_execution": "unverified",
+          "evidence_acceptance": "unverified",
+          "repair_budget": "unverified",
+          "price_asked_once": "unverified",
+          "replayable": "unverified"
+        },
+        "task_success": false,
+        "audit_complete": false
+      },
+      "quality": {
+        "status": "unscored",
+        "reason": "judge disabled"
+      }
+    },
+    {
+      "case_id": "policy_120_chf_12.00",
+      "repetition": 0,
+      "tags": [
+        "synthetic",
+        "policy_boundary"
+      ],
+      "case": {
+        "id": "policy_120_chf_12.00",
+        "request": {
+          "synthetic_delay": 120,
+          "price_chf": "12.00"
+        },
+        "expected": {
+          "decision": "refund",
+          "delayMinutes": 120,
+          "refundStatus": "entitled",
+          "refundPercent": 50,
+          "refundCHF": "6.00",
+          "paidOut": true
+        },
+        "tags": [
+          "synthetic",
+          "policy_boundary"
+        ],
+        "messages": [],
+        "must_say": [],
+        "expected_tools": null,
+        "snapshot": {},
+        "evidence": {}
+      },
+      "expected": {
+        "decision": "refund",
+        "delayMinutes": 120,
+        "refundStatus": "entitled",
+        "refundPercent": 50,
+        "refundCHF": "6.00",
+        "paidOut": true
+      },
+      "observation": {
+        "decision": "refund",
+        "reply": "",
+        "facts": {
+          "refundStatus": "entitled",
+          "refundPercent": 50,
+          "paidOut": true,
+          "delayMinutes": 120,
+          "plannedArrival": null,
+          "actualArrival": null,
+          "handOff": [],
+          "refundCHF": "6.00"
+        },
+        "events": [],
+        "coverage": [],
+        "stage_ms": {
+          "component": 18.983708112500608
+        },
+        "usage": {},
+        "metadata": {
+          "scope": "component",
+          "snapshot": {},
+          "system_version": "framex-policy",
+          "request_id": "audit_14",
+          "configuration": {
+            "client_version": "0.5.0",
+            "client_commit": "977bb14db288caeb6bf1b253fdb8e25f83ada711",
+            "engine_receipt_matches_client": true,
+            "timeout_seconds": 900,
+            "load_timeout_seconds": 1800,
+            "workspace": null
+          }
+        },
+        "error": null
+      },
+      "scope": "component",
+      "phase": "warm_request",
+      "replayed": false,
+      "latency_ms": 19.054583040997386,
+      "judge_ms": null,
+      "scores": {
+        "correct": true,
+        "checks": {
+          "decision": true,
+          "delayMinutes": true,
+          "refundStatus": true,
+          "refundPercent": true,
+          "refundCHF": true,
+          "paidOut": true
+        },
+        "required_content_coverage": null,
+        "tool_precision": null,
+        "tool_recall": null,
+        "parameter_accuracy": null,
+        "quote_fidelity": null,
+        "invariants": {
+          "checked_execution": "unverified",
+          "evidence_acceptance": "unverified",
+          "repair_budget": "unverified",
+          "price_asked_once": "unverified",
+          "replayable": "unverified"
+        },
+        "task_success": true,
+        "audit_complete": false
+      },
+      "quality": {
+        "status": "unscored",
+        "reason": "judge disabled"
+      }
+    },
+    {
+      "case_id": "policy_120_chf_None",
+      "repetition": 0,
+      "tags": [
+        "synthetic",
+        "policy_boundary"
+      ],
+      "case": {
+        "id": "policy_120_chf_None",
+        "request": {
+          "synthetic_delay": 120,
+          "price_chf": null
+        },
+        "expected": {
+          "decision": "refund",
+          "delayMinutes": 120,
+          "refundStatus": "entitled",
+          "refundPercent": 50,
+          "refundCHF": null,
+          "paidOut": null
+        },
+        "tags": [
+          "synthetic",
+          "policy_boundary"
+        ],
+        "messages": [],
+        "must_say": [],
+        "expected_tools": null,
+        "snapshot": {},
+        "evidence": {}
+      },
+      "expected": {
+        "decision": "refund",
+        "delayMinutes": 120,
+        "refundStatus": "entitled",
+        "refundPercent": 50,
+        "refundCHF": null,
+        "paidOut": null
+      },
+      "observation": {
+        "decision": "refund",
+        "reply": "",
+        "facts": {
+          "refundStatus": "entitled",
+          "refundPercent": 50,
+          "paidOut": null,
+          "delayMinutes": 120,
+          "plannedArrival": null,
+          "actualArrival": null,
+          "handOff": [],
+          "refundCHF": null
+        },
+        "events": [],
+        "coverage": [],
+        "stage_ms": {
+          "component": 15.698457951657474
+        },
+        "usage": {},
+        "metadata": {
+          "scope": "component",
+          "snapshot": {},
+          "system_version": "framex-policy",
+          "request_id": "audit_15",
+          "configuration": {
+            "client_version": "0.5.0",
+            "client_commit": "977bb14db288caeb6bf1b253fdb8e25f83ada711",
+            "engine_receipt_matches_client": true,
+            "timeout_seconds": 900,
+            "load_timeout_seconds": 1800,
+            "workspace": null
+          }
+        },
+        "error": null
+      },
+      "scope": "component",
+      "phase": "warm_request",
+      "replayed": false,
+      "latency_ms": 15.731458086520433,
+      "judge_ms": null,
+      "scores": {
+        "correct": true,
+        "checks": {
+          "decision": true,
+          "delayMinutes": true,
+          "refundStatus": true,
+          "refundPercent": true,
+          "refundCHF": true,
+          "paidOut": true
+        },
+        "required_content_coverage": null,
+        "tool_precision": null,
+        "tool_recall": null,
+        "parameter_accuracy": null,
+        "quote_fidelity": null,
+        "invariants": {
+          "checked_execution": "unverified",
+          "evidence_acceptance": "unverified",
+          "repair_budget": "unverified",
+          "price_asked_once": "unverified",
+          "replayable": "unverified"
+        },
+        "task_success": true,
+        "audit_complete": false
+      },
+      "quality": {
+        "status": "unscored",
+        "reason": "judge disabled"
+      }
+    },
+    {
+      "case_id": "policy_130_chf_40.00",
+      "repetition": 0,
+      "tags": [
+        "synthetic",
+        "policy_boundary"
+      ],
+      "case": {
+        "id": "policy_130_chf_40.00",
+        "request": {
+          "synthetic_delay": 130,
+          "price_chf": "40.00"
+        },
+        "expected": {
+          "decision": "refund",
+          "delayMinutes": 130,
+          "refundStatus": "entitled",
+          "refundPercent": 50,
+          "refundCHF": "20.00",
+          "paidOut": true
+        },
+        "tags": [
+          "synthetic",
+          "policy_boundary"
+        ],
+        "messages": [],
+        "must_say": [],
+        "expected_tools": null,
+        "snapshot": {},
+        "evidence": {}
+      },
+      "expected": {
+        "decision": "refund",
+        "delayMinutes": 130,
+        "refundStatus": "entitled",
+        "refundPercent": 50,
+        "refundCHF": "20.00",
+        "paidOut": true
+      },
+      "observation": {
+        "decision": "refund",
+        "reply": "",
+        "facts": {
+          "refundStatus": "entitled",
+          "refundPercent": 50,
+          "paidOut": true,
+          "delayMinutes": 130,
+          "plannedArrival": null,
+          "actualArrival": null,
+          "handOff": [],
+          "refundCHF": "20.00"
+        },
+        "events": [],
+        "coverage": [],
+        "stage_ms": {
+          "component": 16.14058401901275
+        },
+        "usage": {},
+        "metadata": {
+          "scope": "component",
+          "snapshot": {},
+          "system_version": "framex-policy",
+          "request_id": "audit_16",
+          "configuration": {
+            "client_version": "0.5.0",
+            "client_commit": "977bb14db288caeb6bf1b253fdb8e25f83ada711",
+            "engine_receipt_matches_client": true,
+            "timeout_seconds": 900,
+            "load_timeout_seconds": 1800,
+            "workspace": null
+          }
+        },
+        "error": null
+      },
+      "scope": "component",
+      "phase": "warm_request",
+      "replayed": false,
+      "latency_ms": 16.18179096840322,
+      "judge_ms": null,
+      "scores": {
+        "correct": true,
+        "checks": {
+          "decision": true,
+          "delayMinutes": true,
+          "refundStatus": true,
+          "refundPercent": true,
+          "refundCHF": true,
+          "paidOut": true
+        },
+        "required_content_coverage": null,
+        "tool_precision": null,
+        "tool_recall": null,
+        "parameter_accuracy": null,
+        "quote_fidelity": null,
+        "invariants": {
+          "checked_execution": "unverified",
+          "evidence_acceptance": "unverified",
+          "repair_budget": "unverified",
+          "price_asked_once": "unverified",
+          "replayable": "unverified"
+        },
+        "task_success": true,
+        "audit_complete": false
+      },
+      "quality": {
+        "status": "unscored",
+        "reason": "judge disabled"
+      }
+    },
+    {
+      "case_id": "policy_None_chf_40.00",
+      "repetition": 0,
+      "tags": [
+        "synthetic",
+        "policy_boundary"
+      ],
+      "case": {
+        "id": "policy_None_chf_40.00",
+        "request": {
+          "synthetic_delay": null,
+          "price_chf": "40.00"
+        },
+        "expected": {
+          "decision": "handoff",
+          "refundStatus": null,
+          "refundPercent": null,
+          "refundCHF": null,
+          "paidOut": null
+        },
+        "tags": [
+          "synthetic",
+          "policy_boundary"
+        ],
+        "messages": [],
+        "must_say": [],
+        "expected_tools": null,
+        "snapshot": {},
+        "evidence": {}
+      },
+      "expected": {
+        "decision": "handoff",
+        "refundStatus": null,
+        "refundPercent": null,
+        "refundCHF": null,
+        "paidOut": null
+      },
+      "observation": {
+        "decision": "handoff",
+        "reply": "",
+        "facts": {
+          "refundStatus": null,
+          "refundPercent": null,
+          "paidOut": null,
+          "delayMinutes": null,
+          "plannedArrival": null,
+          "actualArrival": null,
+          "handOff": [
+            "no actual arrival at the destination is recorded within three hours of the planned departure",
+            "synthetic missing evidence",
+            "the planned train's arrival at the destination has no recorded actual time"
+          ],
+          "refundCHF": null
+        },
+        "events": [],
+        "coverage": [],
+        "stage_ms": {
+          "component": 16.05062501039356
+        },
+        "usage": {},
+        "metadata": {
+          "scope": "component",
+          "snapshot": {},
+          "system_version": "framex-policy",
+          "request_id": "audit_17",
+          "configuration": {
+            "client_version": "0.5.0",
+            "client_commit": "977bb14db288caeb6bf1b253fdb8e25f83ada711",
+            "engine_receipt_matches_client": true,
+            "timeout_seconds": 900,
+            "load_timeout_seconds": 1800,
+            "workspace": null
+          }
+        },
+        "error": null
+      },
+      "scope": "component",
+      "phase": "warm_request",
+      "replayed": false,
+      "latency_ms": 16.087291995063424,
+      "judge_ms": null,
+      "scores": {
+        "correct": true,
+        "checks": {
+          "decision": true,
+          "refundStatus": true,
+          "refundPercent": true,
+          "refundCHF": true,
+          "paidOut": true,
+          "no_unsupported_verdict": true
+        },
+        "required_content_coverage": null,
+        "tool_precision": null,
+        "tool_recall": null,
+        "parameter_accuracy": null,
+        "quote_fidelity": null,
+        "invariants": {
+          "checked_execution": "unverified",
+          "evidence_acceptance": "unverified",
+          "repair_budget": "unverified",
+          "price_asked_once": "unverified",
+          "replayable": "unverified"
+        },
+        "task_success": true,
+        "audit_complete": false
+      },
+      "quality": {
+        "status": "unscored",
+        "reason": "judge disabled"
+      }
+    }
+  ],
+  "summary": {
+    "attempted": 17,
+    "correct": 13,
+    "task_successes": 13,
+    "technical_errors": 0,
+    "audit_complete": 0,
+    "invariant_counts": {
+      "checked_execution.unverified": 17,
+      "evidence_acceptance.unverified": 17,
+      "repair_budget.unverified": 17,
+      "price_asked_once.unverified": 17,
+      "replayable.unverified": 17
+    },
+    "latency": {
+      "count": 17,
+      "median_ms": 15.946915955282748,
+      "p95_ms": 31.27937496174127
+    },
+    "first_request": {
+      "count": 1,
+      "median_ms": 16.163457999937236,
+      "p95_ms": 16.163457999937236
+    },
+    "warm_request": {
+      "count": 16,
+      "median_ms": 15.899416524916887,
+      "p95_ms": 31.27937496174127
+    },
+    "judge_latency": {
+      "count": 0,
+      "median_ms": null,
+      "p95_ms": null
+    },
+    "stages": {
+      "component": {
+        "count": 17,
+        "median_ms": 15.912375063635409,
+        "p95_ms": 31.21820802334696
+      }
+    },
+    "repeated_cases": 0,
+    "decision_consistency": null,
+    "quality_scored": 0,
+    "quality_errors": 0,
+    "quality_proxy": {},
+    "tool_precision": {
+      "count": 0,
+      "mean": null
+    },
+    "tool_recall": {
+      "count": 0,
+      "mean": null
+    },
+    "parameter_accuracy": {
+      "count": 0,
+      "mean": null
+    },
+    "required_content_coverage": {
+      "count": 0,
+      "mean": null
+    }
+  },
+  "case_document": "config/eval/policy.yaml"
+}

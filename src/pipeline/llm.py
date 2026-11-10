@@ -17,7 +17,7 @@ import hashlib
 import json
 import os
 import time
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -44,6 +44,7 @@ class ModelAnswer:
     mode: str  # "live" or "replay"
     recorded_at: str
     seconds: float
+    usage: dict = field(default_factory=dict)
 
 
 def _parse(raw: str) -> dict | None:
@@ -57,8 +58,9 @@ def _parse(raw: str) -> dict | None:
 class LanguageModel:
     """One JSON-returning chat call, with record and replay."""
 
-    def __init__(self, store: Path = ANSWERS, client: OpenAI | None = None):
+    def __init__(self, store: Path = ANSWERS, client: OpenAI | None = None, *, refresh: bool = False):
         load_dotenv(ROOT / ".env", override=False)
+        self.refresh = refresh
         self.store = store
         self._client = client
 
@@ -77,9 +79,9 @@ class LanguageModel:
         ]
         identity = json.dumps([MODEL, messages], ensure_ascii=False, sort_keys=True)
         path = self.store / f"{hashlib.sha256(identity.encode()).hexdigest()[:24]}.json"
-        if path.exists() and os.environ.get("REFUND_MODEL_REFRESH") != "1":
+        if not self.refresh and path.exists() and os.environ.get("REFUND_MODEL_REFRESH") != "1":
             stored = json.loads(path.read_text(encoding="utf-8"))
-            return ModelAnswer(_parse(stored["raw"]), stored["raw"], "replay", stored["recorded_at"], 0.0)
+            return ModelAnswer(_parse(stored["raw"]), stored["raw"], "replay", stored["recorded_at"], 0.0, stored.get("usage", {}))
         started = time.monotonic()
         try:
             response = self._openai().chat.completions.create(
@@ -94,11 +96,13 @@ class LanguageModel:
         recorded_at = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
         self.store.mkdir(parents=True, exist_ok=True)
         path.write_text(
-            json.dumps({"recorded_at": recorded_at, "model": MODEL, "messages": messages, "raw": raw},
+            json.dumps({"recorded_at": recorded_at, "model": MODEL, "messages": messages, "raw": raw,
+                        "usage": response.usage.model_dump() if response.usage else {}},
                        ensure_ascii=False, indent=1),
             encoding="utf-8",
         )
-        return ModelAnswer(_parse(raw), raw, "live", recorded_at, time.monotonic() - started)
+        return ModelAnswer(_parse(raw), raw, "live", recorded_at, time.monotonic() - started,
+                           response.usage.model_dump() if response.usage else {})
 
 
 if __name__ == "__main__":
