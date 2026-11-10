@@ -55,6 +55,8 @@ NODE_OF = (
     ("Assess the open case", "handoff"), ("Handed on", "handoff"), ("Officer decided", "handoff"),
     ("Phrase the outcome", "reply"), ("Phrasing call failed", "reply"), ("Check words", "reply"),
     ("Reply refused", "reply"), ("Fixed wording used", "reply"),
+    ("Ask in context", "reply"), ("Question call failed", "reply"), ("Check the question", "reply"),
+    ("Question refused", "reply"), ("Fixed question used", "reply"),
 )
 NODE_W, NODE_H, COL, ROW, PAD = 214, 136, 252, 226, 22
 WIDTH, HEIGHT = PAD * 2 + COL * 3 + NODE_W, PAD + 26 + ROW * 2 + NODE_H + 20

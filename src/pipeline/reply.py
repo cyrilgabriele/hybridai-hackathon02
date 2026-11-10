@@ -216,16 +216,17 @@ def ask(model: LanguageModel, missing: list[str], messages: list[str], values: d
         request["situation"] = situation
     previous: list[str] = []
     for attempt in range(MAX_REPAIRS + 1):
+        sent = json.dumps(request, ensure_ascii=False, sort_keys=True)
         try:
-            answer = model.ask_json(ASK_PROMPT, json.dumps(request, ensure_ascii=False, sort_keys=True))
+            answer = model.ask_json(ASK_PROMPT, sent)
         except ModelCallFailed as exc:
-            trace.append(Step("P3", "GPT-5 mini", "Question call failed; fixed wording used", str(exc), "failed"))
+            trace.append(Step("P3", "GPT-5 mini", "Question call failed; fixed wording used", str(exc), "failed", sent=sent))
             break
         problems = critique(answer.data, outcome, values, stations, QUESTION_SENTENCES)
         if answer.data is not None and "?" not in str(answer.data.get("reply", "")):
             problems.append("not_a_question: ask for what is missing")
         trace.append(Step("P3", "GPT-5 mini", f"Ask in context for: {', '.join(missing)}",
-                          f"[{answer.mode}] {answer.raw}", "ok" if attempt == 0 else "repair", answer.seconds))
+                          f"[{answer.mode}] {answer.raw}", "ok" if attempt == 0 else "repair", answer.seconds, sent))
         if not problems:
             trace.append(Step("P12, P6", "Host", "Check the question, then insert known values", "no digit, station or promise in the model's words"))
             data = answer.data if answer.data is not None else {}
