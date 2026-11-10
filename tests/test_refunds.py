@@ -3,8 +3,10 @@ from __future__ import annotations
 
 import json
 
-from ontology import service
+import pytest
 from test_regression import DAY, client, load, stop  # noqa: F401  (client is a fixture)
+
+from ontology import service
 
 ORIGIN, DESTINATION, VIA = 1, 2, 3
 
@@ -111,3 +113,76 @@ def test_a_departure_beaten_by_a_later_one_is_not_offered(client):
                   stop("ic", ORIGIN, "08:10"), stop("ic", DESTINATION, "09:10")])
     offered = client.query("?- x[offered(?E) -> ?A] AND ?E[scheduledDepartureEpoch -> ?D].")["bindings"]
     assert [int(r["D"]) for r in offered] == [epoch("08:10")]
+
+
+# --------------------------------------------------------------------
+# Refund policy (47-refund-policy.fx): Sheet 2 thresholds and payout
+# --------------------------------------------------------------------
+
+def delayed_by(client, minutes, price=None):
+    """One direct train planned 08:00 to 09:00, arriving `minutes` late."""
+    arrival = 9 * 60 + minutes  # Swiss clock minutes after midnight
+    actual = f"{arrival // 60:02d}:{arrival % 60:02d}"
+    case(client, [stop("ic", ORIGIN, "08:00"), late("ic", DESTINATION, "09:00", actual)])
+    check(client, "08:00")
+    if price is not None:
+        client.add(source=f"y[ticketPriceRappen -> {price}].")
+
+
+@pytest.mark.parametrize("minutes, percent, status", [
+    (0, 0, "notEntitled"), (59, 0, "notEntitled"),
+    (60, 25, "entitled"), (119, 25, "entitled"),
+    (120, 50, "entitled"), (130, 50, "entitled"),
+])
+def test_the_delay_band_decides_the_refund_share(client, minutes, percent, status):
+    delayed_by(client, minutes)
+    assert value(client, "delayMinutes") == [minutes]
+    assert value(client, "refundPercent") == [percent]
+    assert value(client, "refundStatus") == [status]
+    assert value(client, "handOff") == []
+
+
+def test_without_a_price_there_is_no_amount(client):
+    delayed_by(client, 70)
+    assert value(client, "refundPercent") == [25]
+    assert value(client, "refundRappen") == []
+    assert value(client, "paidOut") == []
+
+
+def test_a_refund_under_five_francs_is_entitled_but_not_paid_out(client):
+    delayed_by(client, 70, price=1960)  # 25 % of CHF 19.60 = CHF 4.90
+    assert value(client, "refundRappen") == [490]
+    assert value(client, "refundStatus") == ["entitled"]
+    assert value(client, "paidOut") == [False]
+
+
+def test_a_refund_of_five_francs_or_more_is_paid_out(client):
+    delayed_by(client, 130, price=4400)  # 50 % of CHF 44.00
+    assert value(client, "refundRappen") == [2200]
+    assert value(client, "paidOut") == [True]
+
+
+def test_no_refund_has_no_amount_even_with_a_price(client):
+    delayed_by(client, 45, price=4400)
+    assert value(client, "refundStatus") == ["notEntitled"]
+    assert value(client, "refundRappen") == []
+
+
+def test_an_unmeasured_delay_gets_no_verdict_and_goes_to_customer_service(client):
+    rows = [stop("ic", ORIGIN, "08:00"),
+            dict(stop("ic", DESTINATION, "09:00"), an_prognose_status="PROGNOSE"),
+            stop("next", ORIGIN, "10:00"), stop("next", DESTINATION, "11:00")]
+    case(client, rows)
+    check(client, "08:00")
+    # The next train suggests 120 minutes, but the plan is not on record.
+    assert value(client, "refundStatus") == []
+    assert value(client, "refundPercent") == []
+    assert value(client, "handOff") == ["the planned train's arrival at the destination has no recorded actual time"]
+
+
+def test_a_day_outside_the_data_cannot_be_checked(client):
+    case(client, [stop("ic", ORIGIN, "08:00"), stop("ic", DESTINATION, "09:00")])
+    client.add(source=f'z:RefundCase[origin -> sp_{ORIGIN}; destination -> sp_{DESTINATION}; '
+                      f'onDay -> "2026-11-08"; windowFrom -> 0; windowTo -> 1; transferSeconds -> 300].')
+    assert client.query('?- z[notCheckable -> ?V].').get("bindings")
+    assert not client.query('?- x[notCheckable -> ?V].').get("bindings")

@@ -30,3 +30,8 @@ build-backend = "hatchling.build"
 [tool.hatch.build.targets.wheel]
 # Application packages live under src/; hatchling strips that prefix.
 packages = ["src/cli", "src/data", "src/ontology", "src/runtime"]
+
+[tool.ruff.lint.per-file-ignores]
+# Tests import pytest fixtures (e.g. `client`) from test_regression; using them as
+# parameters is not a redefinition bug.
+"tests/*" = ["F811"]
