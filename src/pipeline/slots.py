@@ -168,9 +168,10 @@ def read_slots(model: LanguageModel, knowledge: Knowledge, conv: Conversation) -
     previous: list[Problem] = []
     problems: list[Problem] = []
     for attempt in range(MAX_REPAIRS + 1):
-        answer = model.ask_json(EXTRACT_PROMPT, json.dumps(request, ensure_ascii=False, sort_keys=True))
+        sent = json.dumps(request, ensure_ascii=False, sort_keys=True)
+        answer = model.ask_json(EXTRACT_PROMPT, sent)
         conv.trace.append(Step("P3", "GPT-5 mini", "Translate the passenger's words into slots",
-                               f"[{answer.mode}] {answer.raw}", "ok" if attempt == 0 else "repair", answer.seconds))
+                               f"[{answer.mode}] {answer.raw}", "ok" if attempt == 0 else "repair", answer.seconds, sent))
         if answer.data is None:
             reading, problems = Reading(), [Problem("reply", "wrong_format")]
         else:

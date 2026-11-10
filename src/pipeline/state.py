@@ -17,6 +17,7 @@ class Step:
     detail: str = ""
     status: str = "ok"  # ok | repair | refused | unknown | handed_on | failed
     seconds: float = 0.0
+    sent: str = ""  # what the host sent to the model, for the workflow view
 
 
 @dataclass

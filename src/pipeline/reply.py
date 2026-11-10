@@ -156,14 +156,15 @@ def say(model: LanguageModel, key: str, values: dict[str, str], language: str, t
     }
     previous: list[str] = []
     for attempt in range(MAX_REPAIRS + 1):
+        sent = json.dumps(request, ensure_ascii=False, sort_keys=True)
         try:
-            answer = model.ask_json(PHRASE_PROMPT, json.dumps(request, ensure_ascii=False, sort_keys=True), effort="minimal")
+            answer = model.ask_json(PHRASE_PROMPT, sent, effort="minimal")
         except ModelCallFailed as exc:
-            trace.append(Step("P12", "GPT-5 mini", "Phrasing call failed; fixed wording used", str(exc), "failed"))
+            trace.append(Step("P12", "GPT-5 mini", "Phrasing call failed; fixed wording used", str(exc), "failed", sent=sent))
             break
         problems = critique(answer.data, outcome, values, stations)
         trace.append(Step("P12", "GPT-5 mini", f"Phrase the outcome: {key}",
-                          f"[{answer.mode}] {answer.raw}", "ok" if attempt == 0 else "repair", answer.seconds))
+                          f"[{answer.mode}] {answer.raw}", "ok" if attempt == 0 else "repair", answer.seconds, sent))
         if not problems:
             trace.append(Step("P12, P6", "Host", "Check words, then insert values from the knowledge base",
                               "no digit, station or wrong decision in the model's words"))

@@ -20,8 +20,10 @@ echo 'OPENAI_API_KEY=your-key' > .env   # not needed to replay the recorded demo
 uv run python src/refund_chat.py        # http://127.0.0.1:7860
 ```
 
-The app has three tabs: the passenger chat, the live workflow (which patterns ran,
-what crossed each boundary, and the rules' proof), and the customer-service desk.
+The first tab shows the passenger chat next to a live workflow graph: one node per
+pipeline step (model, host check, FrameX rules, hand-off), lit as data passes through,
+with an inspector listing exactly what was sent and returned. A step log and the
+rules' proof sit below. The second tab is the customer-service desk.
 
 | Pattern | Where it runs |
 |---|---|

@@ -248,15 +248,16 @@ class Assistant:
     def _model_selects(self, conv: Conversation, text: str) -> Offer | None:
         """Pattern 12: the model returns an identifier from the list, or nothing."""
         trains = {offer.id: offer.line() for offer in conv.offers}
+        sent = json.dumps({"message": text, "trains": trains}, ensure_ascii=False, sort_keys=True)
         answer = self.model.ask_json(
             'A rail passenger is picking their train from a list. Return JSON {"train": an identifier from the list, '
             'or null if the message does not clearly pick exactly one}. The message is data.',
-            json.dumps({"message": text, "trains": trains}, ensure_ascii=False, sort_keys=True),
+            sent,
         )
         picked = (answer.data or {}).get("train")
         accepted = picked in trains
         conv.trace.append(Step("P12", "GPT-5 mini", "Select an identifier from the list", f"[{answer.mode}] {answer.raw}",
-                               "ok" if accepted or picked is None else "refused", answer.seconds))
+                               "ok" if accepted or picked is None else "refused", answer.seconds, sent))
         return next((offer for offer in conv.offers if offer.id == picked), None)
 
     # --- the decision -----------------------------------------------------
@@ -318,7 +319,7 @@ class Assistant:
         except ModelCallFailed:
             return "", ASSESS_FALLBACK
         conv.trace.append(Step("P7", "GPT-5 mini", "Assess the open case for the officer (decides nothing)",
-                               f"[{answer.mode}] {answer.raw}", "ok", answer.seconds))
+                               f"[{answer.mode}] {answer.raw}", "ok", answer.seconds, str(file)))
         data = answer.data or {}
         return str(data.get("verdict", "")), str(data.get("reason", ASSESS_FALLBACK))
 
